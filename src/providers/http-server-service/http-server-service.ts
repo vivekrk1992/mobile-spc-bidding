@@ -57,5 +57,9 @@ export class HttpServerServiceProvider {
     return this.http.get(this.base_url + 'main/serve/domestic/quote/', {headers: this.headers})
       .map((res) => res.json());
   }
+  
+  registerDomesticBid(domestic_quote) {
+    return this.http.post(this.base_url + 'main/register/domestic/bid/', domestic_quote, {headers: this.headers});
+  }
 
 }
