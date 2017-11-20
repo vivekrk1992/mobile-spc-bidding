@@ -1,3 +1,48 @@
 page-home {
 
 }
+
+.scroll-content{
+    padding: 0px !important;
+    background-color: cadetblue !important;
+}
+
+.tiny-date-row {
+    font-size: smaller;
+    font-style: italic;
+    color: rgb(128, 87, 0);
+    
+}
+
+.form, input, optgroup, select {
+    width: 100px;
+}
+
+.header-text {
+    font-weight: bold
+}
+
+ion-col {
+    text-align: center
+}
+
+.card-header-md {
+    font-size: 1 rem;
+    color: #222;
+    padding: 6px, 6px, 20px, 6px;
+}
+
+.col {
+    padding-top: 5px;
+    padding-left: 0px;
+}
+
+
+.card-md {
+    border-radius: 0px;
+    // border-bottom-right-radius: 0px;
+    // border-bottom-left-radius: 0px;
+}
+.bidding-trail-card {
+    background-color: rgb(0, 140, 255);
+}

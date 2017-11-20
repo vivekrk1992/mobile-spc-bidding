@@ -9,31 +9,39 @@
   <ion-refresher (ionRefresh)="doRefresh($event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
-  <span *ngFor="let domestic_quote of domestic_quotes; let i = index">
+  <ion-col *ngFor="let domestic_quote of domestic_quotes; let i = index">
     <ion-card style="padding-bottom:0px; margin-bottom:0px" [ngClass]="{active: isLevel1Shown('idx'+i)}">
       <ion-card-header>
-        <ion-row>
-          <ion-col (click)="toggleLevel1('idx'+i)">rate: {{domestic_quote.rate}} </ion-col><ion-col><input type="number" [(ngModel)]="accept_quantity" placeholder="Quantity" style="background-color:bisque"></ion-col>
+        <ion-row class="tiny-date-row">
+              <ion-col>Quote for : {{domestic_quote.date}}; Valid: Until 8 PM</ion-col><ion-col>.</ion-col>
         </ion-row>
         <ion-row>
-          <ion-col (click)="toggleLevel1('idx'+i)">date: {{domestic_quote.date}} </ion-col><ion-col><button ion-button (click)="acceptBid(accept_quantity, domestic_quote.id, 'bid_accepted')">accept</button></ion-col>
+          <ion-col (click)="toggleLevel1('idx'+i)"><span class="header-text">Q-Price</span><br>(Rs/Kg)<br><br>{{domestic_quote.rate}}</ion-col>
+          <ion-col (click)="toggleLevel1('idx'+i)"><span class="header-text">Last Bid</span><br>(Rs/Kg)<br><br>{{domestic_quote.rate}}</ion-col>
+          <ion-col> <span class="header-text">Quantity</span><br>(Kgs)<br><br><input type="number" [(ngModel)]="accept_quantity" placeholder="Quantity" style="background-color:bisque"></ion-col>
+          <ion-col>
+            <button ion-button color="secondary" (click)="acceptBid(accept_quantity, domestic_quote.id, 'bid_accepted')">Order</button>
+            <br>
+            <button ion-button color="dark" (click)="toggleLevel1('idx'+i)" >Bid</button>
+          </ion-col>
         </ion-row>
       </ion-card-header>  
     </ion-card>
 
-    <ion-card style="transition: width 2s, height 2s, transform 2s;" *ngIf="isLevel1Shown('idx'+i)">
+    <ion-card class="bidding-trail-card" style="transition: width 2s, height 2s, transform 2s;" *ngIf="isLevel1Shown('idx'+i)">
       <ion-row>
-        <ion-col>
-          <input type="number" placeholder="Rate" [(ngModel)]="rate" style="background-color:bisque">
-        </ion-col>
-        <ion-col>
-          <input type="number" placeholder="Quantity" [(ngModel)]="quantity" style="background-color:bisque">
-        </ion-col>
-        <ion-col><input type="date" [(ngModel)]="todate"></ion-col>
-        <ion-col>
-          <button ion-button (click)="bidding(quantity, domestic_quote.id, 'bidding', rate)">Bid</button>
-        </ion-col>
+        <span><i>Bidding trail:</i></span>
+      </ion-row>
+      <!-- <ion-row> -->
+          <!-- <ion-col><span class="header-text">ETA</span><br><input type="date" [(ngModel)]="todate"></ion-col>   -->
+      <!-- </ion-row> -->
+      <ion-row>
+          <span><i>Bid Now:</i></span>
+      </ion-row>
+      <ion-row>
+        <ion-col><span class="header-text">Rate(Rs/Kg)</span><br><input type="number" placeholder="Rate" [(ngModel)]="rate" style="background-color:bisque"></ion-col>
+        <ion-col><span class="header-text">Quantity</span><br><input type="number" placeholder="Quantity" [(ngModel)]="quantity" style="background-color:bisque"></ion-col>        <ion-col><button ion-button (click)="bidding(quantity, domestic_quote.id, 'bidding', rate)">Bid</button></ion-col>
       </ion-row>
     </ion-card>
-    </span>
+    </ion-col>
 </ion-content>
