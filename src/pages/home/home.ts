@@ -88,6 +88,7 @@ export class HomePage{
     console.log(rate);
     this.httpServerServiceProvider.registerDomesticBid({'id': quote_id, 'quantity': quantity, 'status': status, 'rate': rate, 'date': this.todate}).subscribe((data) => {
       console.log(data);
+      this.bidding_history.push(data);
       this.displayToast('Bidding registered successfully!');
     }, (error) => {
       this.displayToast('Error!');

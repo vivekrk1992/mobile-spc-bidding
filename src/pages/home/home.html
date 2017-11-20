@@ -62,16 +62,16 @@
       <br>
       <br>
       <span *ngIf="latest_bid_status!=3">
-      <hr>
+        <hr>
 
-      <ion-card-header>
-          <span><i><b>Bid Now</b></i></span>
-      </ion-card-header>
-      <ion-row>
-        <ion-col><span class="header-text">Rate(Rs/Kg)</span><br><input type="number" placeholder="Rate" [(ngModel)]="rate" style="background-color:bisque"></ion-col>
-        <ion-col><span class="header-text">Quantity</span><br><input type="number" placeholder="Quantity" [(ngModel)]="quantity" style="background-color:bisque"></ion-col>        <ion-col><button ion-button (click)="bidding(quantity, domestic_quote.id, 'bidding', rate)">Bid</button></ion-col>
-      </ion-row>
-    </span>
+        <ion-card-header>
+            <span><i><b>Bid Now</b></i></span>
+        </ion-card-header>
+        <ion-row>
+          <ion-col><span class="header-text">Rate(Rs/Kg)</span><br><input type="number" placeholder="Rate" [(ngModel)]="rate" style="background-color:bisque"></ion-col>
+          <ion-col><span class="header-text">Quantity</span><br><input type="number" placeholder="Quantity" [(ngModel)]="quantity" style="background-color:bisque"></ion-col>        <ion-col><button ion-button (click)="bidding(quantity, domestic_quote.id, 'bidding', rate)">Bid</button></ion-col>
+        </ion-row>
+      </span>
     </ion-card>
     </ion-col>
 </ion-content>
