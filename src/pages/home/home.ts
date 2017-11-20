@@ -14,7 +14,9 @@ export class HomePage{
   showLevel1 = null;
   todate: any = new Date().toISOString().split('T')[0];
   bidding_history: any[];
-  
+  latest_spc_rate: any;
+  latest_buyer_rate: any;
+
   constructor(public navCtrl: NavController, private httpServerServiceProvider: HttpServerServiceProvider, private storage: Storage, private toastCtrl: ToastController) {
     this.httpServerServiceProvider.getAllDomesticList().subscribe((data) => {
       console.log(data);
@@ -54,14 +56,18 @@ export class HomePage{
       this.httpServerServiceProvider.getDomesticBiddingHistoryByQuote(quote_id).subscribe((data) => {
         console.log(data);
         this.bidding_history = data;
+
+        // set latest buyer/spc rates
+        this.latest_buyer_rate = data[data.length-1].buyer_rate;
+        this.latest_spc_rate = data[data.length-1].spc_rate;
       })
     }
     console.log(this.showLevel1);
   };
   
   isLevel1Shown(idx) {
-    console.log('level shown')
-    console.log(this.showLevel1);
+    // console.log('level shown')
+    // console.log(this.showLevel1);
     return this.showLevel1 === idx;
   };
 

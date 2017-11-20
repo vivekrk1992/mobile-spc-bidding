@@ -17,12 +17,12 @@
         </ion-row>
         <ion-row>
           <ion-col (click)="toggleLevel1('idx'+i)"><span class="header-text">Q-Price</span><br>(Rs/Kg)<br><br>{{domestic_quote.rate}}</ion-col>
-          <ion-col (click)="toggleLevel1('idx'+i)"><span class="header-text">Last Bid</span><br>(spc | You)<br><br>138 | 136</ion-col>
+          <ion-col (click)="toggleLevel1('idx'+i)"><span class="header-text">Last Bid</span><br>(spc | You)<br><br>{{latest_spc_rate}} | {{latest_buyer_rate}}</ion-col>
           <ion-col> <span class="header-text">Quantity</span><br>(Kgs)<br><br><input type="number" [(ngModel)]="accept_quantity" placeholder="Quantity" style="background-color:bisque"></ion-col>
           <ion-col>
-            <button ion-button color="secondary" (click)="acceptBid(accept_quantity, domestic_quote.id, 'bid_accepted')">Order</button>
-            <br>
-            <button ion-button color="dark" (click)="toggleLevel1('idx'+i)" >Bid</button>
+              <button ion-button color="dark" (click)="toggleLevel1('idx'+i, domestic_quote.id)">Bid</button>
+              <br>
+              <button ion-button color="secondary" (click)="acceptBid(accept_quantity, domestic_quote.id, 'bid_accepted')">Order</button>
           </ion-col>
         </ion-row>
       </ion-card-header>  
@@ -32,14 +32,31 @@
       <ion-card-header>
         <span><i>Bidding trail</i></span>
       </ion-card-header>
-      <ion-card *ngFor="let bidding of bidding_history">
-          <ion-card-header>
-            buyer_rate: {{bidding.buyer_rate}} - spc_rate: {{bidding.spc_rate}}
-          </ion-card-header>
-        </ion-card>
-      <!-- <ion-row> -->
-          <!-- <ion-col><span class="header-text">ETA</span><br><input type="date" [(ngModel)]="todate"></ion-col>   -->
-      <!-- </ion-row> -->
+
+      <span  *ngFor="let bidding of bidding_history">
+        <div [ngClass]="bidding.last_bidder.name=='owner' ? 'speech-bubble-owner' : 'speech-bubble-buyer'">
+          <!-- <div> -->
+          <div class="speech-bubble">
+            <!-- <div class="arrow bottom right"></div> -->
+            <span *ngIf="bidding.last_bidder.name=='owner'">
+              <span class="chat-bubble-name">Spc:</span>
+              {{bidding.spc_rate}} Rs.
+            </span>  
+            <span *ngIf="bidding.last_bidder.name!='owner'">
+                <span class="chat-bubble-name">You:</span>
+                {{bidding.buyer_rate}} Rs. ({{bidding.buyer_quantity}} Kgs)
+              </span>  
+  
+          </div>
+        </div>
+        <br>
+        <br>
+      </span>
+
+      <br>
+      <br>
+      <br>
+      <hr>
       <ion-card-header>
           <span><i>Bid Now</i></span>
       </ion-card-header>
