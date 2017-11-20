@@ -58,7 +58,7 @@
     <br>
     <span class="bidding-status" *ngIf="latest_bid_status==3">Bid Accepted & Closed</span>
     <span class="bidding-status" *ngIf="latest_bid_status==2">Bidding Expired!</span>
-    <span class="bidding-status" *ngIf="latest_bid_status==1">Bidding is still Open</span>
+    <span class="bidding-status loading" *ngIf="latest_bid_status==1">Accepting Bidding</span>
       <br>
       <br>
       <br>

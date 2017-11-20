@@ -58,6 +58,13 @@ export class HttpServerServiceProvider {
       .map((res) => res.json());
   }
   
+  getAllDomesticQuotesWithLatestBid() {
+    console.log('get domestic quote along with latest bid info!');
+    console.log(this.headers);
+    return this.http.get(this.base_url + 'main/serve/domestic/quote/with/latestbid/', {headers: this.headers})
+      .map((res) => res.json());
+  }
+  
   registerDomesticBid(domestic_quote) {
     return this.http.post(this.base_url + 'main/register/domestic/bid/', domestic_quote, {headers: this.headers})
       .map((res) => res.json());
