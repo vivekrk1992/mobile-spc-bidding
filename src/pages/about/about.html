@@ -1,20 +1,34 @@
 <ion-header>
   <ion-navbar>
     <ion-title>
-      About
+      Quote/Order History
     </ion-title>
   </ion-navbar>
 </ion-header>
 
 <ion-content padding>
-  <ion-refresher (ionRefresh)="getBiddingList($event)">
+  <span style="float:right; color:chocolate;font-size:17px; font-weight:bold">logout</span>
+  <ion-refresher (ionRefresh)="doRefresh($event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
-  <span *ngFor="let bid of bidding_list">
-    <ion-card>
+  <ion-col *ngFor="let domestic_quote of domestic_quotes; let i = index">
+    <ion-card style="padding-bottom:0px; margin-bottom:0px">
       <ion-card-header>
-        date: {{bid.date}} - rate: {{bid.rate}}
-      </ion-card-header>
+        <ion-row class="tiny-date-row">
+              <ion-col>Quote Date: {{domestic_quote.date}}</ion-col><ion-col>Status: </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col><span class="header-text">Q-Price</span><br>(Rs/Kg)<br><br>{{domestic_quote.rate}}</ion-col>
+          <ion-col><span class="header-text">Last Bid</span><br>(spc | You)<br>{{domestic_quote.latest_bid_info.spc_rate}}| {{domestic_quote.latest_bid_info.buyer_rate}}</ion-col>
+          <ion-col><span class="header-text">Quantity</span><br>(Kgs)<br><br><input type="number" [(ngModel)]="order_quantity" placeholder="Quantity" style="background-color:bisque"></ion-col>
+          <ion-col>
+              <button ion-button color="dark">Bid/Trace</button>
+              <br>
+              <button ion-button color="secondary">Order</button>
+          </ion-col>
+        </ion-row>
+      </ion-card-header>  
     </ion-card>
-  </span>
+  </ion-col>
 </ion-content>
+  
