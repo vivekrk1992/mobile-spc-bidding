@@ -4,6 +4,7 @@ import { NavController, ToastController } from 'ionic-angular';
 import { HttpServerServiceProvider } from '../../providers/http-server-service/http-server-service';
 import { Storage } from '@ionic/storage';
 import { stagger } from '@angular/core/src/animation/dsl';
+import { dashCaseToCamelCase } from '@angular/compiler/src/util';
 
 @Component({
   selector: 'page-home',
@@ -18,6 +19,7 @@ export class HomePage{
   latest_spc_rate: any;
   latest_buyer_rate: any;
   latest_bid_status: any;
+  quantity: any;
   order_quantity: any;
 
   constructor(public navCtrl: NavController, private httpServerServiceProvider: HttpServerServiceProvider, private storage: Storage, private toastCtrl: ToastController) {
@@ -64,6 +66,7 @@ export class HomePage{
         this.latest_buyer_rate = data[data.length-1].buyer_rate;
         this.latest_spc_rate = data[data.length-1].spc_rate;
         this.latest_bid_status = data[data.length-1].bid_status;
+        this.quantity = data[data.length-1].buyer_quantity;
       })
     }
     console.log(this.showLevel1);
@@ -92,17 +95,22 @@ export class HomePage{
   }
 
   bidding(quantity, quote_id, status, rate) {
-    console.log(quantity);
-    console.log(quote_id);
-    console.log(status);
-    console.log(rate);
-    this.httpServerServiceProvider.registerDomesticBid({'id': quote_id, 'quantity': quantity, 'status': status, 'rate': rate, 'date': this.todate}).subscribe((data) => {
-      console.log(data);
-      this.bidding_history.push(data);
-      this.displayToast('Bidding registered successfully!');
-    }, (error) => {
-      this.displayToast('Error!');
-    });
+    if (rate > this.latest_spc_rate) {
+      alert('Your bidding rate higher than spc rate');
+    } else if (rate <= this.latest_buyer_rate) {
+      alert('Your bidding can not equal or less than your previous bidding!');
+    } else {
+      this.httpServerServiceProvider.registerDomesticBid({'id': quote_id, 'quantity': quantity, 'status': status, 'rate': rate, 'date': this.todate}).subscribe((data) => {
+        console.log(data);
+        this.bidding_history.push(data);
+        this.latest_buyer_rate = data.buyer_rate;
+        this.latest_spc_rate = data.spc_rate;
+        this.latest_bid_status = data.bid_status;
+        this.displayToast('Bidding registered successfully!');
+      }, (error) => {
+        this.displayToast('Error!');
+      });
+    }
   }
 
   displayToast(display_message) {
