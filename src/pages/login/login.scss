@@ -11,7 +11,16 @@
 .input{
     margin: 5px;
     border-radius:5px; 
-    background-color: black;
     color: wheat;
     font-size: 15; 
+}
+
+.input-field {
+    border-radius: 5px;
+    margin-top: 10px;
+    height: 30px;
+    width: 70%;
+    display: block;
+    margin-right: auto;
+    margin-left: auto;
 }

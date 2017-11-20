@@ -7,5 +7,14 @@
 </ion-header>
 
 <ion-content padding>
-
+  <ion-refresher (ionRefresh)="getBiddingList($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+  <span *ngFor="let bid of bidding_list">
+    <ion-card>
+      <ion-card-header>
+        date: {{bid.date}} - rate: {{bid.rate}}
+      </ion-card-header>
+    </ion-card>
+  </span>
 </ion-content>
