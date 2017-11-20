@@ -1,6 +1,6 @@
 import { StatusBar } from '@ionic-native/status-bar';
 import { Component } from '@angular/core';
-import { NavController } from 'ionic-angular';
+import { NavController, ToastController } from 'ionic-angular';
 import { HttpServerServiceProvider } from '../../providers/http-server-service/http-server-service';
 import { Storage } from '@ionic/storage';
 import { stagger } from '@angular/core/src/animation/dsl';
@@ -13,8 +13,9 @@ export class HomePage{
   domestic_quotes: any[];
   showLevel1 = null;
   todate: any = new Date().toISOString().split('T')[0];
+  bidding_history: any[];
   
-  constructor(public navCtrl: NavController, private httpServerServiceProvider: HttpServerServiceProvider, private storage: Storage) {
+  constructor(public navCtrl: NavController, private httpServerServiceProvider: HttpServerServiceProvider, private storage: Storage, private toastCtrl: ToastController) {
     this.httpServerServiceProvider.getAllDomesticList().subscribe((data) => {
       console.log(data);
       this.domestic_quotes = data;
@@ -43,12 +44,17 @@ export class HomePage{
 
 
   // accordian card
-  toggleLevel1(idx) {
+  toggleLevel1(idx, quote_id) {
     console.log('toggle')
     if (this.isLevel1Shown(idx)) {
       this.showLevel1 = null;
     } else {
       this.showLevel1 = idx;
+      console.log(quote_id);
+      this.httpServerServiceProvider.getDomesticBiddingHistoryByQuote(quote_id).subscribe((data) => {
+        console.log(data);
+        this.bidding_history = data;
+      })
     }
     console.log(this.showLevel1);
   };
@@ -74,7 +80,18 @@ export class HomePage{
     console.log(rate);
     this.httpServerServiceProvider.registerDomesticBid({'id': quote_id, 'quantity': quantity, 'status': status, 'rate': rate, 'date': this.todate}).subscribe((data) => {
       console.log(data);
+      this.displayToast('Bidding registered successfully!');
+    }, (error) => {
+      this.displayToast('Error!');
     });
   }
 
+  displayToast(display_message) {
+    let toast = this.toastCtrl.create({
+      message: display_message,
+      duration: 3000,
+      position: 'top'
+    });
+    toast.present();
+  }
 }

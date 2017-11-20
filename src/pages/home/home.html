@@ -17,7 +17,7 @@
         </ion-row>
         <ion-row>
           <ion-col (click)="toggleLevel1('idx'+i)"><span class="header-text">Q-Price</span><br>(Rs/Kg)<br><br>{{domestic_quote.rate}}</ion-col>
-          <ion-col (click)="toggleLevel1('idx'+i)"><span class="header-text">Last Bid</span><br>(Rs/Kg)<br><br>{{domestic_quote.rate}}</ion-col>
+          <ion-col (click)="toggleLevel1('idx'+i)"><span class="header-text">Last Bid</span><br>(spc | You)<br><br>138 | 136</ion-col>
           <ion-col> <span class="header-text">Quantity</span><br>(Kgs)<br><br><input type="number" [(ngModel)]="accept_quantity" placeholder="Quantity" style="background-color:bisque"></ion-col>
           <ion-col>
             <button ion-button color="secondary" (click)="acceptBid(accept_quantity, domestic_quote.id, 'bid_accepted')">Order</button>
@@ -29,15 +29,20 @@
     </ion-card>
 
     <ion-card class="bidding-trail-card" style="transition: width 2s, height 2s, transform 2s;" *ngIf="isLevel1Shown('idx'+i)">
-      <ion-row>
-        <span><i>Bidding trail:</i></span>
-      </ion-row>
+      <ion-card-header>
+        <span><i>Bidding trail</i></span>
+      </ion-card-header>
+      <ion-card *ngFor="let bidding of bidding_history">
+          <ion-card-header>
+            buyer_rate: {{bidding.buyer_rate}} - spc_rate: {{bidding.spc_rate}}
+          </ion-card-header>
+        </ion-card>
       <!-- <ion-row> -->
           <!-- <ion-col><span class="header-text">ETA</span><br><input type="date" [(ngModel)]="todate"></ion-col>   -->
       <!-- </ion-row> -->
-      <ion-row>
-          <span><i>Bid Now:</i></span>
-      </ion-row>
+      <ion-card-header>
+          <span><i>Bid Now</i></span>
+      </ion-card-header>
       <ion-row>
         <ion-col><span class="header-text">Rate(Rs/Kg)</span><br><input type="number" placeholder="Rate" [(ngModel)]="rate" style="background-color:bisque"></ion-col>
         <ion-col><span class="header-text">Quantity</span><br><input type="number" placeholder="Quantity" [(ngModel)]="quantity" style="background-color:bisque"></ion-col>        <ion-col><button ion-button (click)="bidding(quantity, domestic_quote.id, 'bidding', rate)">Bid</button></ion-col>
