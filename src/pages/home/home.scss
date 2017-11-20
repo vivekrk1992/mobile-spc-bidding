@@ -81,13 +81,24 @@ ion-col {
 
 div .speech-bubble-buyer {
     float: right !important;
+    margin-right: 5px;
 }
 
 .speech-bubble-owner {
    float: left;
+   margin-left: 5px;
 }
 
 .chat-bubble-name {
     font-style: italic;
     color: brown;
+}
+
+.bidding-status {
+    background-color: #41c261;
+    border: 1px solid #41c261;
+    border-radius: 5px;
+    text-align: center;
+    padding: 7px;
+    position: relative;
 }

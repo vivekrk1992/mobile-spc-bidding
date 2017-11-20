@@ -16,6 +16,7 @@ export class HomePage{
   bidding_history: any[];
   latest_spc_rate: any;
   latest_buyer_rate: any;
+  latest_bid_status: any;
 
   constructor(public navCtrl: NavController, private httpServerServiceProvider: HttpServerServiceProvider, private storage: Storage, private toastCtrl: ToastController) {
     this.httpServerServiceProvider.getAllDomesticList().subscribe((data) => {
@@ -60,6 +61,7 @@ export class HomePage{
         // set latest buyer/spc rates
         this.latest_buyer_rate = data[data.length-1].buyer_rate;
         this.latest_spc_rate = data[data.length-1].spc_rate;
+        this.latest_bid_status = data[data.length-1].bid_status;
       })
     }
     console.log(this.showLevel1);

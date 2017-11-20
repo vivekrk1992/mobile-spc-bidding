@@ -30,9 +30,10 @@
 
     <ion-card class="bidding-trail-card" style="transition: width 2s, height 2s, transform 2s;" *ngIf="isLevel1Shown('idx'+i)">
       <ion-card-header>
-        <span><i>Bidding trail</i></span>
+        <span><i><b>Bidding trail</b></i></span>
       </ion-card-header>
 
+      
       <span  *ngFor="let bidding of bidding_history">
         <div [ngClass]="bidding.last_bidder.name=='owner' ? 'speech-bubble-owner' : 'speech-bubble-buyer'">
           <!-- <div> -->
@@ -45,25 +46,32 @@
             <span *ngIf="bidding.last_bidder.name!='owner'">
                 <span class="chat-bubble-name">You:</span>
                 {{bidding.buyer_rate}} Rs. ({{bidding.buyer_quantity}} Kgs)
-              </span>  
-  
+            </span>  
           </div>
+          
         </div>
+        
         <br>
         <br>
-      </span>
-
+    </span>
+    <br>
+    <br>
+    <span class="bidding-status" *ngIf="latest_bid_status==3">Bid Accepted & Closed</span>
+    <span class="bidding-status" *ngIf="latest_bid_status==1">Bidding is still Open</span>
       <br>
       <br>
       <br>
+      <span *ngIf="latest_bid_status!=3">
       <hr>
+
       <ion-card-header>
-          <span><i>Bid Now</i></span>
+          <span><i><b>Bid Now</b></i></span>
       </ion-card-header>
       <ion-row>
         <ion-col><span class="header-text">Rate(Rs/Kg)</span><br><input type="number" placeholder="Rate" [(ngModel)]="rate" style="background-color:bisque"></ion-col>
         <ion-col><span class="header-text">Quantity</span><br><input type="number" placeholder="Quantity" [(ngModel)]="quantity" style="background-color:bisque"></ion-col>        <ion-col><button ion-button (click)="bidding(quantity, domestic_quote.id, 'bidding', rate)">Bid</button></ion-col>
       </ion-row>
+    </span>
     </ion-card>
     </ion-col>
 </ion-content>
