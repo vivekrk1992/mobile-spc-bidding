@@ -23,9 +23,9 @@ export class HttpServerServiceProvider {
       if(token != null) {
         console.log('token not null')
         this.headers.append('Authorization', 'Token ' + token);
-        this.getAllDomesticList().subscribe((data) => {
-          console.log(data);
-        })    
+        // this.getAllDomesticList().subscribe((data) => {
+        //   console.log(data);
+        // })    
       }
     });
   }
