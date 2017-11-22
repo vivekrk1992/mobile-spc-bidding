@@ -52,7 +52,7 @@ export class HomePage{
 
   // accordian card
   toggleLevel1(idx, quote_id) {
-    console.log('toggle')
+    console.log('toggle');
     if (this.isLevel1Shown(idx)) {
       this.showLevel1 = null;
     } else {
@@ -71,15 +71,15 @@ export class HomePage{
     }
     console.log(this.showLevel1);
   };
-  
+
   isLevel1Shown(idx) {
     // console.log('level shown')
     // console.log(this.showLevel1);
     return this.showLevel1 === idx;
   };
 
-  orderItem(quantity, quote_id, latest_spc_rate, latest_buyer_rate, status) {
-    console.log(quantity);    
+  onOrderItem(quantity, quote_id, latest_spc_rate, latest_buyer_rate, status) {
+    console.log(quantity);
     console.log(quote_id);
     if (latest_buyer_rate < latest_spc_rate){
       let diff = latest_spc_rate - latest_buyer_rate;
@@ -91,7 +91,7 @@ export class HomePage{
     }
     this.httpServerServiceProvider.registerDomesticBid({'id': quote_id, 'quantity': quantity, 'status': status}).subscribe((data) => {
       console.log(data);
-    }); 
+    });
   }
 
   bidding(quantity, quote_id, status, rate) {
@@ -113,17 +113,16 @@ export class HomePage{
     }
   }
 
-  onSendMessage(message, quote_id, bidding_id) {
+  onSendMessage(message, quote_id) {
     console.log(quote_id);
-    console.log(bidding_id);
     console.log(message);
-    // this.httpServerServiceProvider.registerDomesticBidMsg({'message': message, 'quote_id': quote_id, 'bidding_id': bidding_id}).subscribe((data) => {
-    //   console.log(data);
-    //   // this.bidding_history.push(data);
-    //   this.displayToast('Bidding registered successfully!');
-    // }, (error) => {
-    //   this.displayToast('Error!');
-    // });
+    this.httpServerServiceProvider.registerDomesticBidMsg({'message': message, 'quote_id': quote_id}).subscribe((data) => {
+      console.log(data);
+      // this.bidding_history.push(data);
+      this.displayToast('Message sent!');
+    }, (error) => {
+      this.displayToast('Error!');
+    });
 }
 
 

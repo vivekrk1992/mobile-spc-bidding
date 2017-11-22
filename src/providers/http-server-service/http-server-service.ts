@@ -10,7 +10,7 @@ import { Storage} from '@ionic/storage';
 export class HttpServerServiceProvider {
   user_id: number;
   user_type: string;
-  
+
   headers: Headers;
   base_url: string = "http://127.0.0.1:8000/";
   // base_url: string = "http://192.168.0.104:8000/";
@@ -25,7 +25,7 @@ export class HttpServerServiceProvider {
         this.headers.append('Authorization', 'Token ' + token);
         this.getAllDomesticList().subscribe((data) => {
           console.log(data);
-        })    
+        })
       }
     });
   }
@@ -46,7 +46,7 @@ export class HttpServerServiceProvider {
   setTokenHeader(token) {
     console.log(token);
     this.headers = new Headers();
-    this.headers.append('Authorization', 'Token ' + token);    
+    this.headers.append('Authorization', 'Token ' + token);
     console.log('token setted into header');
   }
 
@@ -57,24 +57,24 @@ export class HttpServerServiceProvider {
     return this.http.get(this.base_url + 'main/serve/domestic/quote/', {headers: this.headers})
       .map((res) => res.json());
   }
-  
+
   getAllDomesticQuotesWithLatestBid() {
     console.log('get domestic quote along with latest bid info!');
     console.log(this.headers);
     return this.http.get(this.base_url + 'main/serve/domestic/quote/with/latestbid/', {headers: this.headers})
       .map((res) => res.json());
   }
-  
-  registerDomesticBid(domestic_quote) {
-    return this.http.post(this.base_url + 'main/register/domestic/bid/', domestic_quote, {headers: this.headers})
+
+  registerDomesticBid(data) {
+    return this.http.post(this.base_url + 'main/register/domestic/bid/', data, {headers: this.headers})
       .map((res) => res.json());
   }
-  
-  registerDomesticBidMsg(message, quote_id, bidding_id) {
-    return this.http.post(this.base_url + 'main/register/domestic/bid/', domestic_quote, {headers: this.headers})
+
+  registerDomesticBidMsg(data) {
+    return this.http.post(this.base_url + 'main/register/domestic/bid/msg/', data, {headers: this.headers})
       .map((res) => res.json());
   }
-  
+
 
   getDomesticBiddingListByBuyer() {
     return this.http.get(this.base_url + 'main/serve/domestic/bidding/list/by/buyer/', {headers: this.headers})

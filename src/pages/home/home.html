@@ -5,10 +5,14 @@
 </ion-header>
 
 <ion-content padding>
+  <!--logout link-->
   <span style="float:right; color:chocolate;font-size:17px; font-weight:bold" (click)="logout()">logout</span>
+
+  <!--refresh page-->
   <ion-refresher (ionRefresh)="doRefresh($event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
+
   <ion-col *ngFor="let domestic_quote of domestic_quotes; let i = index">
     <ion-card style="padding-bottom:0px; margin-bottom:0px" [ngClass]="{active: isLevel1Shown('idx'+i)}">
       <ion-card-header>
@@ -20,12 +24,12 @@
           <ion-col (click)="toggleLevel1('idx'+i)"><span class="header-text">Last Bid</span><br>(spc | You)<br><br>{{latest_spc_rate}} | {{latest_buyer_rate}}</ion-col>
           <ion-col> <span class="header-text">Quantity</span><br>(Kgs)<br><br><input type="number" [(ngModel)]="order_quantity" placeholder="Quantity" style="background-color:bisque"></ion-col>
           <ion-col>
-              <button ion-button color="dark" (click)="toggleLevel1('idx'+i, domestic_quote.id)">Bid/Trace</button>
-              <br>
-              <button ion-button color="secondary" (click)="orderItem(order_quantity, domestic_quote.id, latest_spc_rate, latest_buyer_rate, latest_bid_status)">Order</button>
+            <button ion-button color="dark" (click)="toggleLevel1('idx'+i, domestic_quote.id)">Bid/Trace</button>
+            <br>
+            <button ion-button color="secondary" (click)="onOrderItem(order_quantity, domestic_quote.id, latest_spc_rate, latest_buyer_rate, latest_bid_status)">Order</button>
           </ion-col>
         </ion-row>
-      </ion-card-header>  
+      </ion-card-header>
     </ion-card>
 
     <ion-card class="bidding-trail-card" style="transition: width 2s, height 2s, transform 2s;" *ngIf="isLevel1Shown('idx'+i)">
@@ -33,53 +37,48 @@
         <span><i><b>Bidding trail</b></i></span>
       </ion-card-header>
 
-      
+
       <span  *ngFor="let bidding of bidding_history">
         <div [ngClass]="bidding.last_bidder.name=='owner' ? 'speech-bubble-owner' : 'speech-bubble-buyer'">
-          <!-- <div> -->
           <div class="speech-bubble">
             <!-- <div class="arrow bottom right"></div> -->
             <span *ngIf="bidding.last_bidder.name=='owner'">
               <span class="chat-bubble-name">Spc:</span>
               {{bidding.spc_rate}} Rs.
-            </span>  
+            </span>
             <span *ngIf="bidding.last_bidder.name!='owner'">
                 <span class="chat-bubble-name">You:</span>
                 {{bidding.buyer_rate}} Rs. ({{bidding.buyer_quantity}} Kgs)
-            </span>  
+            </span>
           </div>
-          
         </div>
-        
         <br>
         <br>
-    </span>
-    <br>
-    <br>
-    <span class="bidding-status" *ngIf="latest_bid_status==3">Bid Accepted & Closed</span>
-    <span class="bidding-status" *ngIf="latest_bid_status==2">Bidding Expired!</span>
-    <span class="bidding-status loading" *ngIf="latest_bid_status==1">Accepting Bidding</span>
+      </span>
+      <br>
+      <br>
+      <span class="bidding-status" *ngIf="latest_bid_status==3">Bid Accepted & Closed</span>
+      <span class="bidding-status" *ngIf="latest_bid_status==2">Bidding Expired!</span>
+      <span class="bidding-status loading" *ngIf="latest_bid_status==1">Accepting Bidding</span>
       <br>
       <br>
       <br>
-      <span *ngIf="latest_bid_status!=3">
-      <hr>
-      <ion-row>
-        <ion-col><input type="text" placeholder="message" [(ngModel)]="message" style="background-color:rgb(255, 255, 255)"></ion-col>
-        <ion-col><button ion-button (click)="onSendMessage('hell', 5, 1)">Send</button></ion-col>
-      </ion-row>
-      
-      <hr>
-
-      <ion-card-header>
-          <span><i><b>Bid Now</b></i></span>
-      </ion-card-header>
-      <ion-row>
-        <ion-col><span class="header-text">Rate(Rs/Kg)</span><br><input type="number" placeholder="Rate" [(ngModel)]="rate" style="background-color:bisque"></ion-col>
-        <ion-col><span class="header-text">Quantity</span><br><input type="number" placeholder="Quantity" [(ngModel)]="quantity" style="background-color:bisque"></ion-col>        
-        <ion-col><button ion-button (click)="bidding(quantity, domestic_quote.id, 'bidding', rate)">Bid</button></ion-col>
-      </ion-row>
-    </span>
+      <ion-card class="message-bidform-card">
+        <span *ngIf="latest_bid_status!=3">
+          <ion-row>
+            <ion-col><input type="text" placeholder="message" [(ngModel)]="message" style="background-color:rgb(255, 255, 255); width: 200px" padding-left="10px"></ion-col>
+            <ion-col><button ion-button (click)="onSendMessage(message, domestic_quote.id)">Send</button></ion-col>
+          </ion-row>
+          <hr>
+          <!--<ion-card-header><span><i><b>Bid Now</b></i></span></ion-card-header>-->
+          <ion-row>
+            <ion-col><ion-card-header><span><i><b>Bid:</b></i></span></ion-card-header></ion-col>
+            <ion-col><span class="header-text">Rate(Rs/Kg)</span><br><input type="number" placeholder="Rate" [(ngModel)]="rate" style="background-color:bisque"></ion-col>
+            <ion-col><span class="header-text">Quantity</span><br><input type="number" placeholder="Quantity" [(ngModel)]="quantity" style="background-color:bisque"></ion-col>
+            <ion-col><button ion-button (click)="bidding(quantity, domestic_quote.id, 'bidding', rate)">Bid</button></ion-col>
+          </ion-row>
+        </span>
+      </ion-card>
     </ion-card>
-    </ion-col>
+  </ion-col>
 </ion-content>
