@@ -63,7 +63,13 @@
       <br>
       <br>
       <span *ngIf="latest_bid_status!=3">
-        <hr>
+      <hr>
+      <ion-row>
+        <ion-col><input type="text" placeholder="message" [(ngModel)]="message" style="background-color:rgb(255, 255, 255)"></ion-col>
+        <ion-col><button ion-button (click)="onSendMessage('hell', 5, 1)">Send</button></ion-col>
+      </ion-row>
+      
+      <hr>
 
       <ion-card-header>
           <span><i><b>Bid Now</b></i></span>

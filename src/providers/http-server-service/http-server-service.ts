@@ -69,6 +69,12 @@ export class HttpServerServiceProvider {
     return this.http.post(this.base_url + 'main/register/domestic/bid/', domestic_quote, {headers: this.headers})
       .map((res) => res.json());
   }
+  
+  registerDomesticBidMsg(message, quote_id, bidding_id) {
+    return this.http.post(this.base_url + 'main/register/domestic/bid/', domestic_quote, {headers: this.headers})
+      .map((res) => res.json());
+  }
+  
 
   getDomesticBiddingListByBuyer() {
     return this.http.get(this.base_url + 'main/serve/domestic/bidding/list/by/buyer/', {headers: this.headers})

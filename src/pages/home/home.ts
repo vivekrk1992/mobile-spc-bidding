@@ -105,6 +105,20 @@ export class HomePage{
     });
   }
 
+  onSendMessage(message, quote_id, bidding_id) {
+    console.log(quote_id);
+    console.log(bidding_id);
+    console.log(message);
+    // this.httpServerServiceProvider.registerDomesticBidMsg({'message': message, 'quote_id': quote_id, 'bidding_id': bidding_id}).subscribe((data) => {
+    //   console.log(data);
+    //   // this.bidding_history.push(data);
+    //   this.displayToast('Bidding registered successfully!');
+    // }, (error) => {
+    //   this.displayToast('Error!');
+    // });
+}
+
+
   displayToast(display_message) {
     let toast = this.toastCtrl.create({
       message: display_message,
@@ -114,3 +128,5 @@ export class HomePage{
     toast.present();
   }
 }
+
+
