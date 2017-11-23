@@ -28,6 +28,7 @@
       </ion-card-header>  
     </ion-card>
 
+    <!-- bidding trace/history card -->
     <ion-card class="bidding-trail-card" style="transition: width 2s, height 2s, transform 2s;" *ngIf="isLevel1Shown('idx'+i)">
       <ion-card-header>
         <span><i><b>Bidding trail</b></i></span>
@@ -61,7 +62,7 @@
       <span class="bidding-status" *ngIf="domestic_quote.latest_bid_info.bid_status==2">Bidding Expired!</span>
       <span class="bidding-status loading" *ngIf="domestic_quote.latest_bid_info.bid_status==1">Accepting Bidding</span>
     </span>
-    <span *ngIf="!domestic_quote.hasOwnProperty('latest_bid_info')">Accepting Bidding</span>
+    <span class="bidding-status loading" *ngIf="!domestic_quote.hasOwnProperty('latest_bid_info')">Accepting Bidding</span>
       <br>
       <br>
       <br>
@@ -78,5 +79,25 @@
         </ion-row>
       </span>
     </ion-card>
+
+    <!-- delevery option card -->
+    <ion-card *ngIf="show_delevery_option" style="padding-top:0px; margin-top:0px">
+      <ion-card-header>
+        <ion-item>
+          <ion-label>Door delivery</ion-label>
+          <ion-checkbox (ionChange)=doorDelivery($event,domestic_quote.latest_bid_info.spc_rate)></ion-checkbox>
+        </ion-item>
+        <ion-item>
+          <ion-label>Date of deliver</ion-label>
+          <ion-input type="date" [(ngModel)]="delivery_date"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label>Hold</ion-label>
+          <ion-checkbox (ionChange)=doorDelivery($event,domestic_quote.latest_bid_info.spc_rate)></ion-checkbox>
+        </ion-item>
+        Total amount = {{total_delivery_amount}}
+      </ion-card-header>  
+    </ion-card>
+
     </ion-col>
 </ion-content>

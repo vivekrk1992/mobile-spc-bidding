@@ -11,6 +11,8 @@ import { dashCaseToCamelCase } from '@angular/compiler/src/util';
   templateUrl: 'home.html'
 })
 export class HomePage{
+  show_delevery_option: boolean = false;
+  total_delivery_amount: number;
   domestic_quotes: any[];
   showLevel1 = null;
   todate: any = new Date().toISOString().split('T')[0];
@@ -18,6 +20,7 @@ export class HomePage{
   latest_bid_info = {};
   quantity: any;
   order_quantity: any;
+  delivery_date = new Date().toISOString().split('T')[0];
 
   constructor(public navCtrl: NavController, private httpServerServiceProvider: HttpServerServiceProvider, private storage: Storage) {
     try {
@@ -87,19 +90,28 @@ export class HomePage{
   };
 
   orderItem(quantity, quote_id, latest_spc_rate, latest_buyer_rate, status) {
-    console.log(quantity);    
-    console.log(quote_id);
-    if (latest_buyer_rate < latest_spc_rate){
-      let diff = latest_spc_rate - latest_buyer_rate;
-      alert("Warning: SPC price is " + diff + " Rs higher than your last bid price!. Are you sure to order the item at " + latest_spc_rate + "Rs/Kg rate?")
+    console.log('within order');
+    if (this.show_delevery_option) {
+      this.show_delevery_option = false;
+      console.log('with in if');
+    } else {
+      this.show_delevery_option = true;
+      console.log('with in else');
     }
-    if (latest_buyer_rate > latest_spc_rate){
-      let diff = latest_buyer_rate - latest_spc_rate;
-      alert("Warning: SPC price is " + diff + " Rs lower than your last bid price!. So, order will be placed at SPC's cheaper rates. @" + latest_spc_rate + "Rs/Kg!!!")
-    }
-    this.httpServerServiceProvider.registerDomesticBid({'id': quote_id, 'quantity': quantity, 'status': status}).subscribe((data) => {
-      console.log(data);
-    }); 
+    
+    // console.log(quantity);    
+    // console.log(quote_id);
+    // if (latest_buyer_rate < latest_spc_rate){
+    //   let diff = latest_spc_rate - latest_buyer_rate;
+    //   alert("Warning: SPC price is " + diff + " Rs higher than your last bid price!. Are you sure to order the item at " + latest_spc_rate + "Rs/Kg rate?")
+    // }
+    // if (latest_buyer_rate > latest_spc_rate){
+    //   let diff = latest_buyer_rate - latest_spc_rate;
+    //   alert("Warning: SPC price is " + diff + " Rs lower than your last bid price!. So, order will be placed at SPC's cheaper rates. @" + latest_spc_rate + "Rs/Kg!!!")
+    // }
+    // this.httpServerServiceProvider.registerDomesticBid({'id': quote_id, 'quantity': quantity, 'status': status, 'rate': latest_spc_rate}).subscribe((data) => {
+    //   console.log(data);
+    // }); 
   }
 
   bidding(quantity, quote_id, status, rate, index) {
@@ -115,5 +127,18 @@ export class HomePage{
       this.bidding_history.push(data);
     }, (error) => {
     });
+  }
+
+  // door delivery
+  doorDelivery(event, spc_rate) {
+    console.log(spc_rate);
+    let door_delivery_rate: number = 300;
+    if (event.value) {
+      this.total_delivery_amount = spc_rate * this.order_quantity + door_delivery_rate;
+      console.log(this.total_delivery_amount);
+    } else {
+      this.total_delivery_amount = spc_rate * this.order_quantity;
+      console.log(this.total_delivery_amount);
+    }
   }
 }
