@@ -66,6 +66,7 @@ export class HomePage{
       console.log(quote_id);
       this.httpServerServiceProvider.getDomesticBiddingHistoryByQuote(quote_id).subscribe((data) => {
         this.bidding_history = data;
+        console.log(this.bidding_history)
         if (data.length > 0) {
           console.log('with in if');
           let higher_index = data.length - 1;
@@ -141,6 +142,7 @@ export class HomePage{
       duration: 3000,
       position: 'top'
     });
+    toast.present()
   }
 }
 

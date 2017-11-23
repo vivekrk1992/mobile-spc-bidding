@@ -39,24 +39,36 @@
 
 
       <span  *ngFor="let bidding of bidding_history">
-        <div [ngClass]="bidding.last_bidder.name=='owner' ? 'speech-bubble-owner' : 'speech-bubble-buyer'">
-          <div class="speech-bubble">
-            <!-- <div class="arrow bottom right"></div> -->
-            <span *ngIf="bidding.last_bidder.name=='owner'">
-              <span class="chat-bubble-name">Spc:</span>
-              {{bidding.spc_rate}} Rs.
-            </span>
-            <span *ngIf="bidding.last_bidder.name!='owner'">
-                <span class="chat-bubble-name">You:</span>
-                {{bidding.buyer_rate}} Rs. ({{bidding.buyer_quantity}} Kgs)
-            </span>
+        <!--owner side of things-->
+        <span *ngIf="bidding.last_bidder.name=='owner'">
+          <div class="quote-bubble" [ngClass]="bidding.last_bidder.name=='owner' ? 'speech-bubble-owner' : 'speech-bubble-buyer'">
+            <span class="chat-bubble-name">Spc:</span> {{bidding.spc_rate}} Rs.
           </div>
-        </div>
+          <span *ngIf="bidding.hasOwnProperty('bid_board_messages')">
+            <div class="message-bubble" *ngFor="let message of bidding.bid_board_messages" [ngClass]="bidding.last_bidder.name=='owner' ? 'speech-bubble-owner' : 'speech-bubble-buyer'">
+              {{message}}
+            </div>
+          </span>
+        </span>
+
+        <!--buyer side of things-->
+        <span *ngIf="bidding.last_bidder.name!='owner'" >
+            <div class="quote-bubble" [ngClass]="bidding.last_bidder.name=='owner' ? 'speech-bubble-owner' : 'speech-bubble-buyer'">
+              <span class="chat-bubble-name">You:</span>
+              {{bidding.buyer_rate}} Rs. ({{bidding.buyer_quantity}} Kgs)
+            </div>
+            <div *ngIf="bidding.hasOwnProperty('bid_board_messages')">
+              <br>
+              <br>
+              <div class="message-bubble" *ngFor="let message of bidding.bid_board_messages" [ngClass]="bidding.last_bidder.name=='owner' ? 'speech-bubble-owner' : 'speech-bubble-buyer'">
+                  {{message}}
+              </div>
+            </div>
+        </span>
         <br>
         <br>
     </span>
-    <br>
-    <br>
+
     <span *ngIf="domestic_quote.hasOwnProperty('latest_bid_info')">
       <span class="bidding-status" *ngIf="domestic_quote.latest_bid_info.bid_status==3">Bid Accepted & Closed</span>
       <span class="bidding-status" *ngIf="domestic_quote.latest_bid_info.bid_status==2">Bidding Expired!</span>
