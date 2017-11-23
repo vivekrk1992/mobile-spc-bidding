@@ -85,11 +85,13 @@ ion-col {
 div .speech-bubble-buyer {
     float: right !important;
     margin-right: 5px;
+    max-width: 300px;
 }
 
 div .speech-bubble-owner {
    float: left;
    margin-left: 5px;
+   max-width: 300px;
 }
 
 .chat-bubble-name {

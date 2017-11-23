@@ -45,7 +45,7 @@
             <span class="chat-bubble-name">Spc:</span> {{bidding.spc_rate}} Rs.
           </div>
           <span *ngIf="bidding.hasOwnProperty('bid_board_messages')">
-            <div class="message-bubble" *ngFor="let message of bidding.bid_board_messages" [ngClass]="bidding.last_bidder.name=='owner' ? 'speech-bubble-owner' : 'speech-bubble-buyer'">
+            <div class="message-bubble" *ngFor="let message of bidding.bid_board_messages" [ngClass]="message[1]==1 ? 'speech-bubble-owner' : 'speech-bubble-buyer'">
               {{message}}
             </div>
           </span>
@@ -53,20 +53,22 @@
 
         <!--buyer side of things-->
         <span *ngIf="bidding.last_bidder.name!='owner'" >
-            <div class="quote-bubble" [ngClass]="bidding.last_bidder.name=='owner' ? 'speech-bubble-owner' : 'speech-bubble-buyer'">
-              <span class="chat-bubble-name">You:</span>
-              {{bidding.buyer_rate}} Rs. ({{bidding.buyer_quantity}} Kgs)
-            </div>
+            <ion-row class="quote-bubble" [ngClass]="bidding.last_bidder.name=='owner' ? 'speech-bubble-owner' : 'speech-bubble-buyer'">
+              <ion-col>
+                <span class="chat-bubble-name">You:</span>
+                {{bidding.buyer_rate}} Rs. ({{bidding.buyer_quantity}} Kgs)
+              </ion-col>
+            </ion-row>
             <div *ngIf="bidding.hasOwnProperty('bid_board_messages')">
               <br>
               <br>
-              <div class="message-bubble" *ngFor="let message of bidding.bid_board_messages" [ngClass]="bidding.last_bidder.name=='owner' ? 'speech-bubble-owner' : 'speech-bubble-buyer'">
-                  {{message}}
-              </div>
+              <ion-row class="message-bubble" *ngFor="let message of bidding.bid_board_messages" [ngClass]="message[1]==1 ? 'speech-bubble-owner' : 'speech-bubble-buyer'">
+                  <ion-col>{{message}}</ion-col>
+              </ion-row>
             </div>
         </span>
-        <br>
-        <br>
+        <!--<br>-->
+        <!--<br>-->
     </span>
 
     <span *ngIf="domestic_quote.hasOwnProperty('latest_bid_info')">
