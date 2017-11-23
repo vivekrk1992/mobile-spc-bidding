@@ -5,10 +5,14 @@
 </ion-header>
 
 <ion-content padding>
+  <!--logout link-->
   <span style="float:right; color:chocolate;font-size:17px; font-weight:bold" (click)="logout()">logout</span>
+
+  <!--refresh page-->
   <ion-refresher (ionRefresh)="doRefresh($event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
+
   <ion-col *ngFor="let domestic_quote of domestic_quotes; let i = index">
     <ion-card style="padding-bottom:0px; margin-bottom:0px" [ngClass]="{active: isLevel1Shown('idx'+i)}">
       <ion-card-header>
@@ -16,16 +20,16 @@
               <ion-col>Quote for : {{domestic_quote.date}}; Valid: Until 8 PM</ion-col><ion-col>.</ion-col>
         </ion-row>
         <ion-row>
-          <ion-col (click)="toggleLevel1('idx'+i)"><span class="header-text">Q-Price</span><br>(Rs/Kg)<br><br>{{domestic_quote.rate}}</ion-col>
-          <ion-col (click)="toggleLevel1('idx'+i)"><span class="header-text">Last Bid</span><br>(spc | You)<br><br><span *ngIf="domestic_quote.hasOwnProperty('latest_bid_info')">{{domestic_quote.latest_bid_info.spc_rate}}</span> | <span *ngIf="domestic_quote.hasOwnProperty('latest_bid_info')">{{domestic_quote.latest_bid_info.buyer_rate}}</span></ion-col>
-          <ion-col> <span class="header-text">Quantity</span><br>(Kgs)<br><br><input type="number" [(ngModel)]="order_quantity" placeholder="Quantity" style="background-color:bisque"></ion-col>
+          <ion-col (click)="toggleLevel1('idx'+i)"><span class="header-text">Q-Price</span><br>(Rs/Kg)<br>{{domestic_quote.rate}}</ion-col>
+          <ion-col (click)="toggleLevel1('idx'+i)"><span class="header-text">Last Bid</span><br>(spc | You)<br><span *ngIf="domestic_quote.hasOwnProperty('latest_bid_info')">{{domestic_quote.latest_bid_info.spc_rate}}</span> | <span *ngIf="domestic_quote.hasOwnProperty('latest_bid_info')">{{domestic_quote.latest_bid_info.buyer_rate}}</span></ion-col>
+          <ion-col> <span class="header-text">Quantity</span><br>(Kgs)<br><input type="number" [(ngModel)]="order_quantity" placeholder="Quantity" style="background-color:bisque"></ion-col>
           <ion-col>
-              <button ion-button color="dark" (click)="toggleLevel1('idx'+i, domestic_quote.id, i)">Bid/Trace</button>
+              <button ion-button color="dark" (click)="toggleLevel1('idx'+i, domestic_quote.id, i)">Bid/Trace {{ i }}</button>
               <br>
               <button ion-button color="secondary" (click)="orderItem(order_quantity, domestic_quote.id, domestic_quote.latest_bid_info.spc_rate, domestic_quote.latest_bid_info.buyer_rate, domestic_quote.latest_bid_info.bid_status)">Order</button>
           </ion-col>
         </ion-row>
-      </ion-card-header>  
+      </ion-card-header>
     </ion-card>
 
     <!-- bidding trace/history card -->
@@ -34,26 +38,23 @@
         <span><i><b>Bidding trail</b></i></span>
       </ion-card-header>
 
-      
-      <span  *ngFor="let bidding of bidding_history">
-        <div [ngClass]="bidding.last_bidder.name=='owner' ? 'speech-bubble-owner' : 'speech-bubble-buyer'">
-          <!-- <div> -->
-          <div class="speech-bubble">
-            <!-- <div class="arrow bottom right"></div> -->
-            <span *ngIf="bidding.last_bidder.name=='owner'">
-              <span class="chat-bubble-name">Spc:</span>
-              {{bidding.spc_rate}} Rs.
-            </span>  
-            <span *ngIf="bidding.last_bidder.name!='owner'">
-                <span class="chat-bubble-name">You:</span>
-                {{bidding.buyer_rate}} Rs. ({{bidding.buyer_quantity}} Kgs)
-            </span>  
-          </div>
-          
+
+    <span  *ngFor="let bidding of bidding_history">
+      <div [ngClass]="bidding.last_bidder.name=='owner' ? 'speech-bubble-owner' : 'speech-bubble-buyer'">
+        <div class="speech-bubble">
+          <!-- <div class="arrow bottom right"></div> -->
+          <span *ngIf="bidding.last_bidder.name=='owner'">
+            <span class="chat-bubble-name">Spc:</span>
+            {{bidding.spc_rate}} Rs.
+          </span>
+          <span *ngIf="bidding.last_bidder.name!='owner'">
+              <span class="chat-bubble-name">You:</span>
+              {{bidding.buyer_rate}} Rs. ({{bidding.buyer_quantity}} Kgs)
+          </span>
         </div>
-        
-        <br>
-        <br>
+      </div>
+      <br>
+      <br>
     </span>
     <br>
     <br>
@@ -63,21 +64,42 @@
       <span class="bidding-status loading" *ngIf="domestic_quote.latest_bid_info.bid_status==1">Accepting Bidding</span>
     </span>
     <span class="bidding-status loading" *ngIf="!domestic_quote.hasOwnProperty('latest_bid_info')">Accepting Bidding</span>
-      <br>
-      <br>
-      <br>
+    <br>
+    <br>
+    <span class="bidding-status" *ngIf="domestic_quote.latest_bid_info.bid_status==3">Bid Accepted & Closed</span>
+    <span class="bidding-status" *ngIf="domestic_quote.latest_bid_info.bid_status==2">Bidding Expired!</span>
+    <span class="bidding-status loading" *ngIf="domestic_quote.latest_bid_info.bid_status==1">Accepting Bidding</span>
+    <br>
+    <br>
+    <br>
+    <ion-card class="message-bidform-card">
       <span *ngIf="(domestic_quote.hasOwnProperty('latest_bid_info') && domestic_quote.latest_bid_info.bid_status!=3) || !domestic_quote.hasOwnProperty('latest_bid_info')">
+        <ion-row>
+          <ion-col><input type="text" placeholder="message" [(ngModel)]="message" style="background-color:rgb(255, 255, 255); width: 200px" padding-left="10px"></ion-col>
+          <ion-col><button ion-button (click)="onSendMessage(message, domestic_quote.id)">Send</button></ion-col>
+        </ion-row>
         <hr>
+        <!--<ion-card-header><span><i><b>Bid Now</b></i></span></ion-card-header>-->
+        <ion-row>
+          <ion-col><ion-card-header><span><i><b>Bid:</b></i></span></ion-card-header></ion-col>
+          <ion-col><span class="header-text">Rate(Rs/Kg)</span><br><input type="number" placeholder="Rate" [(ngModel)]="rate" style="background-color:bisque"></ion-col>
+          <ion-col><span class="header-text">Quantity</span><br><input type="number" placeholder="Quantity" [(ngModel)]="quantity" style="background-color:bisque"></ion-col>
+          <ion-col><button ion-button (click)="bidding(quantity, domestic_quote.id, 'bidding', rate)">Bid</button></ion-col>
+        </ion-row>
+      </span>
+    </ion-card>
+    <!-- <span *ngIf="(domestic_quote.hasOwnProperty('latest_bid_info') && domestic_quote.latest_bid_info.bid_status!=3) || !domestic_quote.hasOwnProperty('latest_bid_info')">
+      <hr>
 
       <ion-card-header>
         <span><i><b>Bid Now</b></i></span>
         </ion-card-header>
         <ion-row>
           <ion-col><span class="header-text">Rate(Rs/Kg)</span><br><input type="number" placeholder="Rate" [(ngModel)]="rate" style="background-color:bisque"></ion-col>
-          <ion-col><span class="header-text">Quantity</span><br><input type="number" placeholder="Quantity" [(ngModel)]="quantity" style="background-color:bisque"></ion-col>        
+          <ion-col><span class="header-text">Quantity</span><br><input type="number" placeholder="Quantity" [(ngModel)]="quantity" style="background-color:bisque"></ion-col>
           <ion-col><button ion-button (click)="bidding(quantity, domestic_quote.id, 'bidding', rate, i)">Bid</button></ion-col>
         </ion-row>
-      </span>
+    </span> -->
     </ion-card>
 
     <!-- delevery option card -->

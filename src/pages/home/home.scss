@@ -11,7 +11,7 @@ page-home {
     font-size: smaller;
     font-style: italic;
     color: rgb(128, 87, 0);
-    
+
 }
 
 .form, input, optgroup, select {
@@ -48,6 +48,10 @@ ion-col {
     background-color: rgba(59, 104, 105, 0.253)
 }
 
+.message-bidform-card {
+  background-color: rgba(59, 104, 105, 0.253)
+}
+
 .speech-bubble {
     background-color: #f8f8f8;
     border: 1px solid #c8c8c8;
@@ -62,7 +66,7 @@ ion-col {
     border-style: solid;
     position: absolute;
 }
- 
+
 .bottom {
     border-color: #c8c8c8 transparent transparent transparent;
     border-width: 8px 8px 0px 8px;
@@ -108,7 +112,7 @@ div .speech-bubble-buyer {
 //     overflow: hidden;
 //     display: inline-block;
 //     vertical-align: bottom;
-//     -webkit-animation: ellipsis steps(4,end) 900ms infinite;      
+//     -webkit-animation: ellipsis steps(4,end) 900ms infinite;
 //     animation: ellipsis steps(4,end) 900ms infinite;
 //     content: "\2026"; /* ascii code for the ellipsis character */
 //     width: 0px;
@@ -117,12 +121,12 @@ div .speech-bubble-buyer {
 
 // @keyframes ellipsis {
 //     to {
-//       width: 1.25em;    
+//       width: 1.25em;
 //     }
 //   }
-  
+
 //   @-webkit-keyframes ellipsis {
 //     to {
-//       width: 1.25em;    
+//       width: 1.25em;
 //     }
 //   }

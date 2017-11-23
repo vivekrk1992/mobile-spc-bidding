@@ -1,6 +1,6 @@
 import { StatusBar } from '@ionic-native/status-bar';
 import { Component } from '@angular/core';
-import { NavController } from 'ionic-angular';
+import {NavController, Toast, ToastController} from 'ionic-angular';
 import { HttpServerServiceProvider } from '../../providers/http-server-service/http-server-service';
 import { Storage } from '@ionic/storage';
 import { stagger } from '@angular/core/src/animation/dsl';
@@ -22,7 +22,7 @@ export class HomePage{
   order_quantity: any;
   delivery_date = new Date().toISOString().split('T')[0];
 
-  constructor(public navCtrl: NavController, private httpServerServiceProvider: HttpServerServiceProvider, private storage: Storage) {
+  constructor(public navCtrl: NavController, private httpServerServiceProvider: HttpServerServiceProvider, private storage: Storage, private toastCtrl: ToastController) {
     try {
     this.httpServerServiceProvider.getAllDomesticList().subscribe((data) => {
       console.log(data);
@@ -58,22 +58,24 @@ export class HomePage{
 
   // accordian card
   toggleLevel1(idx, quote_id, index) {
-    console.log('toggle')
+    console.log(idx);
+    console.log(quote_id);
+    console.log(index);
+    console.log('toggle');
     if (this.isLevel1Shown(idx)) {
       this.showLevel1 = null;
     } else {
       this.showLevel1 = idx;
       console.log(quote_id);
       this.httpServerServiceProvider.getDomesticBiddingHistoryByQuote(quote_id).subscribe((data) => {
-        console.log(data);
         this.bidding_history = data;
-        console.log(data.length);
         if (data.length > 0) {
           console.log('with in if');
           let higher_index = data.length - 1;
           console.log(higher_index);
           console.log(data[higher_index]);
           console.log(this.domestic_quotes[index]['latest_bid_info']);
+          this.domestic_quotes[index]['latest_bid_info'] = {};
           this.domestic_quotes[index]['latest_bid_info']['spc_rate'] = data[higher_index].spc_rate;
           this.domestic_quotes[index]['latest_bid_info']['buyer_rate'] = data[higher_index].buyer_rate;
           this.domestic_quotes[index]['latest_bid_info']['status'] = data[higher_index].bid_status;
@@ -84,7 +86,7 @@ export class HomePage{
     }
     console.log(this.showLevel1);
   };
-  
+
   isLevel1Shown(idx) {
     return this.showLevel1 === idx;
   };
@@ -114,6 +116,7 @@ export class HomePage{
     // }); 
   }
 
+
   bidding(quantity, quote_id, status, rate, index) {
     this.httpServerServiceProvider.registerDomesticBid({'id': quote_id, 'quantity': quantity, 'status': status, 'rate': rate, 'date': this.todate}).subscribe((data) => {
       console.log(data);
@@ -126,7 +129,30 @@ export class HomePage{
       this.domestic_quotes[index]['latest_bid_info']['buyer_quantity'] = data.buyer_quantity;
       this.bidding_history.push(data);
     }, (error) => {
+      this.displayToast('Error!');
+      });
+    }
+
+  onSendMessage(message, quote_id){
+    console.log(quote_id);
+    console.log(message);
+    this.httpServerServiceProvider.registerDomesticBidMsg({'message': message, 'quote_id': quote_id}).subscribe((data) => {
+      console.log(data);
+      // this.bidding_history.push(data);
+      this.displayToast('Message sent!');
+    }, (error) => {
+      this.displayToast('Error!');
     });
+  }
+
+
+  displayToast(display_message){
+    let toast = this.toastCtrl.create({
+      message: display_message,
+      duration: 3000,
+      position: 'top'
+    });
+    toast.present();
   }
 
   // door delivery
@@ -142,3 +168,5 @@ export class HomePage{
     }
   }
 }
+
+
