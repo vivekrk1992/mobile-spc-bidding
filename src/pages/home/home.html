@@ -21,12 +21,12 @@
         </ion-row>
         <ion-row>
           <ion-col (click)="toggleLevel1('idx'+i)"><span class="header-text">Q-Price</span><br>(Rs/Kg)<br><br>{{domestic_quote.rate}}</ion-col>
-          <ion-col (click)="toggleLevel1('idx'+i)"><span class="header-text">Last Bid</span><br>(spc | You)<br><br>{{latest_spc_rate}} | {{latest_buyer_rate}}</ion-col>
+          <ion-col (click)="toggleLevel1('idx'+i)"><span class="header-text">Last Bid</span><br>(spc | You)<br><br><span *ngIf="domestic_quote.hasOwnProperty('latest_bid_info')">{{domestic_quote.latest_bid_info.spc_rate}}</span> | <span *ngIf="domestic_quote.hasOwnProperty('latest_bid_info')">{{domestic_quote.latest_bid_info.buyer_rate}}</span></ion-col>
           <ion-col> <span class="header-text">Quantity</span><br>(Kgs)<br><br><input type="number" [(ngModel)]="order_quantity" placeholder="Quantity" style="background-color:bisque"></ion-col>
           <ion-col>
-            <button ion-button color="dark" (click)="toggleLevel1('idx'+i, domestic_quote.id)">Bid/Trace</button>
-            <br>
-            <button ion-button color="secondary" (click)="onOrderItem(order_quantity, domestic_quote.id, latest_spc_rate, latest_buyer_rate, latest_bid_status)">Order</button>
+              <button ion-button color="dark" (click)="toggleLevel1('idx'+i, domestic_quote.id, i)">Bid/Trace {{ i }}</button>
+              <br>
+              <button ion-button color="secondary" (click)="orderItem(order_quantity, domestic_quote.id, domestic_quote.latest_bid_info.spc_rate, domestic_quote.latest_bid_info.buyer_rate, domestic_quote.latest_bid_info.bid_status)">Order</button>
           </ion-col>
         </ion-row>
       </ion-card-header>
@@ -54,7 +54,15 @@
         </div>
         <br>
         <br>
-      </span>
+    </span>
+    <br>
+    <br>
+    <span *ngIf="domestic_quote.hasOwnProperty('latest_bid_info')">
+      <span class="bidding-status" *ngIf="domestic_quote.latest_bid_info.bid_status==3">Bid Accepted & Closed</span>
+      <span class="bidding-status" *ngIf="domestic_quote.latest_bid_info.bid_status==2">Bidding Expired!</span>
+      <span class="bidding-status loading" *ngIf="domestic_quote.latest_bid_info.bid_status==1">Accepting Bidding</span>
+    </span>
+    <span *ngIf="!domestic_quote.hasOwnProperty('latest_bid_info')">Accepting Bidding</span>
       <br>
       <br>
       <span class="bidding-status" *ngIf="latest_bid_status==3">Bid Accepted & Closed</span>
@@ -79,6 +87,18 @@
           </ion-row>
         </span>
       </ion-card>
+      <span *ngIf="(domestic_quote.hasOwnProperty('latest_bid_info') && domestic_quote.latest_bid_info.bid_status!=3) || !domestic_quote.hasOwnProperty('latest_bid_info')">
+        <hr>
+
+      <ion-card-header>
+        <span><i><b>Bid Now</b></i></span>
+        </ion-card-header>
+        <ion-row>
+          <ion-col><span class="header-text">Rate(Rs/Kg)</span><br><input type="number" placeholder="Rate" [(ngModel)]="rate" style="background-color:bisque"></ion-col>
+          <ion-col><span class="header-text">Quantity</span><br><input type="number" placeholder="Quantity" [(ngModel)]="quantity" style="background-color:bisque"></ion-col>
+          <ion-col><button ion-button (click)="bidding(quantity, domestic_quote.id, 'bidding', rate, i)">Bid</button></ion-col>
+        </ion-row>
+      </span>
     </ion-card>
   </ion-col>
 </ion-content>

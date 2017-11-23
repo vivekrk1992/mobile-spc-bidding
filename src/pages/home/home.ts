@@ -1,6 +1,6 @@
 import { StatusBar } from '@ionic-native/status-bar';
 import { Component } from '@angular/core';
-import { NavController, ToastController } from 'ionic-angular';
+import {NavController, Toast, ToastController} from 'ionic-angular';
 import { HttpServerServiceProvider } from '../../providers/http-server-service/http-server-service';
 import { Storage } from '@ionic/storage';
 import { stagger } from '@angular/core/src/animation/dsl';
@@ -16,17 +16,20 @@ export class HomePage{
   todate: any = new Date().toISOString().split('T')[0];
   bidding_history: any[];
   latest_bid_info = {};
-  latest_spc_rate: any;
-  latest_buyer_rate: any;
-  latest_bid_status: any;
   quantity: any;
   order_quantity: any;
 
   constructor(public navCtrl: NavController, private httpServerServiceProvider: HttpServerServiceProvider, private storage: Storage, private toastCtrl: ToastController) {
+    try {
     this.httpServerServiceProvider.getAllDomesticList().subscribe((data) => {
       console.log(data);
       this.domestic_quotes = data;
     });
+  }
+  catch(e) {
+    console.log('ther is an error to assing a latest values');
+    console.log(e);
+  }
   }
 
   doRefresh(event) {
@@ -51,7 +54,10 @@ export class HomePage{
 
 
   // accordian card
-  toggleLevel1(idx, quote_id) {
+  toggleLevel1(idx, quote_id, index) {
+    console.log(idx);
+    console.log(quote_id);
+    console.log(index);
     console.log('toggle');
     if (this.isLevel1Shown(idx)) {
       this.showLevel1 = null;
@@ -59,22 +65,26 @@ export class HomePage{
       this.showLevel1 = idx;
       console.log(quote_id);
       this.httpServerServiceProvider.getDomesticBiddingHistoryByQuote(quote_id).subscribe((data) => {
-        console.log(data);
         this.bidding_history = data;
-
-        // set latest buyer/spc rates
-        this.latest_buyer_rate = data[data.length-1].buyer_rate;
-        this.latest_spc_rate = data[data.length-1].spc_rate;
-        this.latest_bid_status = data[data.length-1].bid_status;
-        this.quantity = data[data.length-1].buyer_quantity;
-      })
+        if (data.length > 0) {
+          console.log('with in if');
+          let higher_index = data.length - 1;
+          console.log(higher_index);
+          console.log(data[higher_index]);
+          console.log(this.domestic_quotes[index]['latest_bid_info']);
+          this.domestic_quotes[index]['latest_bid_info'] = {};
+          this.domestic_quotes[index]['latest_bid_info']['spc_rate'] = data[higher_index].spc_rate;
+          this.domestic_quotes[index]['latest_bid_info']['buyer_rate'] = data[higher_index].buyer_rate;
+          this.domestic_quotes[index]['latest_bid_info']['status'] = data[higher_index].bid_status;
+          this.domestic_quotes[index]['latest_bid_info']['buyer_quantity'] = data[higher_index].buyer_quantity;
+        }
+        console.log(this.domestic_quotes[index]['latest_bid_info'])
+      });
     }
     console.log(this.showLevel1);
   };
 
   isLevel1Shown(idx) {
-    // console.log('level shown')
-    // console.log(this.showLevel1);
     return this.showLevel1 === idx;
   };
 
@@ -94,45 +104,43 @@ export class HomePage{
     });
   }
 
-  bidding(quantity, quote_id, status, rate) {
-    if (rate > this.latest_spc_rate) {
-      alert('Your bidding rate higher than spc rate');
-    } else if (rate <= this.latest_buyer_rate) {
-      alert('Your bidding can not equal or less than your previous bidding!');
-    } else {
-      this.httpServerServiceProvider.registerDomesticBid({'id': quote_id, 'quantity': quantity, 'status': status, 'rate': rate, 'date': this.todate}).subscribe((data) => {
-        console.log(data);
-        this.bidding_history.push(data);
-        this.latest_buyer_rate = data.buyer_rate;
-        this.latest_spc_rate = data.spc_rate;
-        this.latest_bid_status = data.bid_status;
-        this.displayToast('Bidding registered successfully!');
-      }, (error) => {
-        this.displayToast('Error!');
+
+  bidding(quantity, quote_id, status, rate, index) {
+    this.httpServerServiceProvider.registerDomesticBid({'id': quote_id, 'quantity': quantity, 'status': status, 'rate': rate, 'date': this.todate}).subscribe((data) => {
+      console.log(data);
+      if (!this.domestic_quotes[index].hasOwnProperty('latest_bid_info')) {
+        this.domestic_quotes[index]['latest_bid_info'] = {};
+      }
+      this.domestic_quotes[index]['latest_bid_info']['spc_rate'] = data.spc_rate;
+      this.domestic_quotes[index]['latest_bid_info']['buyer_rate'] = data.buyer_rate;
+      this.domestic_quotes[index]['latest_bid_info']['bid_status'] = data.bid_status;
+      this.domestic_quotes[index]['latest_bid_info']['buyer_quantity'] = data.buyer_quantity;
+      this.bidding_history.push(data);
+    }, (error) => {
+      this.displayToast('Error!');
       });
     }
-  }
 
-  onSendMessage(message, quote_id) {
+  onSendMessage(message, quote_id){
     console.log(quote_id);
     console.log(message);
     this.httpServerServiceProvider.registerDomesticBidMsg({'message': message, 'quote_id': quote_id}).subscribe((data) => {
       console.log(data);
       // this.bidding_history.push(data);
       this.displayToast('Message sent!');
+      // todo: vivek this display toas ti not working
     }, (error) => {
       this.displayToast('Error!');
     });
-}
+  }
 
 
-  displayToast(display_message) {
+  displayToast(display_message){
     let toast = this.toastCtrl.create({
       message: display_message,
       duration: 3000,
       position: 'top'
     });
-    toast.present();
   }
 }
 

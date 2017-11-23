@@ -21,11 +21,11 @@ export class HttpServerServiceProvider {
     this.headers = new Headers();
     this.storage.get('token').then((token) => {
       if(token != null) {
-        console.log('token not null')
+        console.log('token not null');
         this.headers.append('Authorization', 'Token ' + token);
         this.getAllDomesticList().subscribe((data) => {
           console.log(data);
-        })
+        });
       }
     });
   }
