@@ -18,9 +18,9 @@
               <ion-col>Quote Date: {{domestic_quote.date}}</ion-col><ion-col>Status: Final</ion-col>
         </ion-row>
         <ion-row>
-          <ion-col><span class="header-text">Q-Price</span><br>(Rs/Kg)<br><br>{{domestic_quote.rate}}</ion-col>
-          <ion-col><span class="header-text">Last Bid</span><br>(spc | You)<br><span *ngIf="domestic_quote.hasOwnProperty('latest_bid_info')">{{domestic_quote.latest_bid_info.spc_rate}}</span>| <span *ngIf="domestic_quote.hasOwnProperty('latest_bid_info')">{{domestic_quote.latest_bid_info.buyer_rate}}</span></ion-col>
-          <ion-col><span class="header-text">Quantity</span><br>(Kgs)<br><br>20000 Kgs</ion-col>
+          <ion-col><span class="header-text">Q-Price</span><br>(Rs/Kg)<br>{{domestic_quote.rate}}</ion-col>
+          <ion-col><span class="header-text">Last Bid</span><br>(spc | You)<br><span *ngIf="domestic_quote.hasOwnProperty('latest_bid_info')">{{domestic_quote.latest_bid_info.spc_rate}}</span>| <span *ngIf="domestic_quote.hasOwnProperty('latest_bid_info')">{{domestic_quote.latest_bid_info.buyer_rate}}</span> </ion-col>
+          <ion-col><span class="header-text">Quantity</span><br>(Kgs)<br>20000 Kgs</ion-col>
         </ion-row>
       </ion-card-header>  
     </ion-card>
