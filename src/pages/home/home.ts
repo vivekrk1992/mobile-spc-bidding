@@ -21,6 +21,7 @@ export class HomePage{
   quantity: any;
   order_quantity: any;
   delivery_date = new Date().toISOString().split('T')[0];
+  rate: any;
 
   constructor(public navCtrl: NavController, private httpServerServiceProvider: HttpServerServiceProvider, private storage: Storage, private toastCtrl: ToastController) {
     try {
@@ -71,21 +72,20 @@ export class HomePage{
         this.bidding_history = data;
         console.log(this.bidding_history)
         if (data.length > 0) {
-          console.log('with in if');
           let higher_index = data.length - 1;
-          console.log(higher_index);
-          console.log(data[higher_index]);
-          console.log(this.domestic_quotes[index]['latest_bid_info']);
           this.domestic_quotes[index]['latest_bid_info'] = {};
           this.domestic_quotes[index]['latest_bid_info']['spc_rate'] = data[higher_index].spc_rate;
           this.domestic_quotes[index]['latest_bid_info']['buyer_rate'] = data[higher_index].buyer_rate;
           this.domestic_quotes[index]['latest_bid_info']['status'] = data[higher_index].bid_status;
           this.domestic_quotes[index]['latest_bid_info']['buyer_quantity'] = data[higher_index].buyer_quantity;
+          this.rate = null;
+          this.quantity = data[higher_index].buyer_quantity;
+        } else {  // Quote bid doesn't have history assign rate and quantity empty for fill input field purpose
+          this.rate = null;
+          this.quantity = null;
         }
-        console.log(this.domestic_quotes[index]['latest_bid_info'])
       });
     }
-    console.log(this.showLevel1);
   };
 
   isLevel1Shown(idx) {
