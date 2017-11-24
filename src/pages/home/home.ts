@@ -69,6 +69,7 @@ export class HomePage{
       console.log(quote_id);
       this.httpServerServiceProvider.getDomesticBiddingHistoryByQuote(quote_id).subscribe((data) => {
         this.bidding_history = data;
+        console.log(this.bidding_history)
         if (data.length > 0) {
           console.log('with in if');
           let higher_index = data.length - 1;
@@ -119,7 +120,9 @@ export class HomePage{
 
   bidding(quantity, quote_id, status, rate, index) {
     this.httpServerServiceProvider.registerDomesticBid({'id': quote_id, 'quantity': quantity, 'status': status, 'rate': rate, 'date': this.todate}).subscribe((data) => {
-      console.log(data);
+      console.log(this.domestic_quotes);
+      console.log(index);
+      console.log(this.domestic_quotes[index]);
       if (!this.domestic_quotes[index].hasOwnProperty('latest_bid_info')) {
         this.domestic_quotes[index]['latest_bid_info'] = {};
       }
