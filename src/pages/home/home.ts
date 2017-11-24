@@ -6,21 +6,27 @@ import { Storage } from '@ionic/storage';
 import { stagger } from '@angular/core/src/animation/dsl';
 import { dashCaseToCamelCase } from '@angular/compiler/src/util';
 
+
 @Component({
   selector: 'page-home',
   templateUrl: 'home.html'
 })
 export class HomePage{
+  selected_pickup_point_option: string;
+  door_delivery_cost: number = 0;
   show_delevery_option: boolean = false;
   total_delivery_amount: number;
   domestic_quotes: any[];
   showLevel1 = null;
+  show_order = null;
   todate: any = new Date().toISOString().split('T')[0];
   bidding_history: any[];
   latest_bid_info = {};
-  quantity: any;
+  quantity: number = null;
   order_quantity: any;
-  delivery_date = new Date().toISOString().split('T')[0];
+  myDate = new Date();
+  today_date = this.myDate.toISOString().split('T')[0];
+  delivery_date: any;
   rate: any;
 
   constructor(public navCtrl: NavController, private httpServerServiceProvider: HttpServerServiceProvider, private storage: Storage, private toastCtrl: ToastController) {
@@ -28,7 +34,18 @@ export class HomePage{
     this.httpServerServiceProvider.getAllDomesticList().subscribe((data) => {
       console.log(data);
       this.domestic_quotes = data;
+
+      // work on dates
+      this.myDate.setDate(this.myDate.getDate() + 1);
+      console.log(this.myDate);
+      this.delivery_date = this.myDate.toISOString().split('T')[0];
+      console.log(this.delivery_date)
+      console.log(this.today_date);
+      console.log(typeof(this.today_date));
+
+
     });
+
   }
   catch(e) {
     console.log('ther is an error to assing a latest values');
@@ -101,8 +118,8 @@ export class HomePage{
       this.show_delevery_option = true;
       console.log('with in else');
     }
-    
-    // console.log(quantity);    
+
+    // console.log(quantity);
     // console.log(quote_id);
     // if (latest_buyer_rate < latest_spc_rate){
     //   let diff = latest_spc_rate - latest_buyer_rate;
@@ -114,7 +131,7 @@ export class HomePage{
     // }
     // this.httpServerServiceProvider.registerDomesticBid({'id': quote_id, 'quantity': quantity, 'status': status, 'rate': latest_spc_rate}).subscribe((data) => {
     //   console.log(data);
-    // }); 
+    // });
   }
 
 
@@ -168,6 +185,38 @@ export class HomePage{
     } else {
       this.total_delivery_amount = spc_rate * this.order_quantity;
       console.log(this.total_delivery_amount);
+    }
+  }
+
+  toggleOrder(idx) {
+    if (this.isOrderShown(idx)) {
+      this.show_order = null;
+      this.door_delivery_cost = 0;
+    } else {
+      this.show_order = idx;
+    }
+  };
+  isOrderShown(idx) {
+    return this.show_order === idx;
+  };
+
+  selfPickupSelected(pickup_point) {
+    console.log('selfpickup selected');
+    this.selected_pickup_point_option = pickup_point;
+    this.door_delivery_cost = 0;
+  }
+  doorDeliveryPickupSelected(pickup_point) {
+    console.log('door delivery selected');
+    this.selected_pickup_point_option = pickup_point;
+    this.door_delivery_cost = 300;
+  }
+  
+  isPossitiveInterger() {
+    if (this.quantity >= 0) {
+      console.log(true);
+    } else {
+      alert('Quantity field accept only possitive value');
+      this.quantity = null;
     }
   }
 }
