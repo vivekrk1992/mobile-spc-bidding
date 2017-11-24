@@ -23,6 +23,8 @@
           <ion-col (click)="toggleLevel1('idx'+i)"><span class="header-text">Q-Price</span><br>(Rs/Kg)<br><br>{{domestic_quote.rate}}</ion-col>
           <ion-col (click)="toggleLevel1('idx'+i)"><span class="header-text">Last Bid</span><br>(spc | You)<br><br><span *ngIf="domestic_quote.hasOwnProperty('latest_bid_info')">{{domestic_quote.latest_bid_info.spc_rate}}</span> | <span *ngIf="domestic_quote.hasOwnProperty('latest_bid_info')">{{domestic_quote.latest_bid_info.buyer_rate}}</span></ion-col>
           <ion-col> <span class="header-text">Quantity</span><br>(Kgs)<br><br><input type="number" [(ngModel)]="order_quantity" placeholder="Quantity" style="background-color:bisque"></ion-col>
+          <ion-col> <span class="header-text">ETA</span><br><br><br><input type="date" [(ngModel)]="order_eta" placeholder="" style="background-color:bisque"></ion-col>
+          <ion-col><ion-datetime displayFormat="MM/DD/YYYY" [(ngModel)]="myDate"></ion-datetime></ion-col>
           <ion-col>
               <button ion-button color="dark" (click)="toggleLevel1('idx'+i, domestic_quote.id, i)">Bid/Trace {{ i }}</button>
               <br>

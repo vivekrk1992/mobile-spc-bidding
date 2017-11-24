@@ -5,6 +5,8 @@ import { HttpServerServiceProvider } from '../../providers/http-server-service/h
 import { Storage } from '@ionic/storage';
 import { stagger } from '@angular/core/src/animation/dsl';
 import { dashCaseToCamelCase } from '@angular/compiler/src/util';
+import { DatePicker } from '@ionic-native/date-picker';
+
 
 @Component({
   selector: 'page-home',
@@ -25,6 +27,7 @@ export class HomePage{
       console.log(data);
       this.domestic_quotes = data;
     });
+
   }
   catch(e) {
     console.log('ther is an error to assing a latest values');
