@@ -39,15 +39,15 @@ ion-col {
     border-radius: 0px;
     background-color: cadetblue;
     font-size: small;
-    // border-bottom-right-radius: 0px;
-    // border-bottom-left-radius: 0px;
+    border-radius: 5px;
 }
 .bidding-trail-card {
     background-color: rgba(59, 104, 105, 0.253)
 }
 
 .message-bidform-card {
-  background-color: rgba(59, 104, 105, 0.253)
+  background-color: rgba(59, 104, 105, 0.253);
+  margin: 10px 0px 0px 0px;
 }
 
 .quote-bubble, .message-bubble {
@@ -109,4 +109,29 @@ div .speech-bubble-owner {
     text-align: center;
     padding: 7px;
     position: relative;
+}
+
+
+.message-input-box {
+  background-color: rgb(255, 255, 255);
+  width: 250px;
+  height: 50px;
+  border-radius: 10px;
+  border-color: transparent;
+  padding-left: 10px;
+  margin-left: 10px;
+  margin-top: 10px;
+}
+
+.send-button {
+  border-radius: 25px;
+  margin-top: 15px;
+}
+
+.rate-quantity-input-box {
+  background-color: #f1f1f1;
+  height: 30px;
+  border-radius: 4px;
+  padding-left: 10px;
+  margin-top: 5px;
 }
