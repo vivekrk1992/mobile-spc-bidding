@@ -22,8 +22,7 @@ export class HomePage{
   todate: any = new Date().toISOString().split('T')[0];
   bidding_history: any[];
   latest_bid_info = {};
-  quantity: number = null;
-  order_quantity: any;
+  quantity: number[] = [];
   myDate = new Date();
   today_date = this.myDate.toISOString().split('T')[0];
   delivery_date: any;
@@ -96,10 +95,10 @@ export class HomePage{
           this.domestic_quotes[index]['latest_bid_info']['status'] = data[higher_index].bid_status;
           this.domestic_quotes[index]['latest_bid_info']['buyer_quantity'] = data[higher_index].buyer_quantity;
           this.rate = null;
-          this.quantity = data[higher_index].buyer_quantity;
+          this.quantity[index] = data[higher_index].buyer_quantity;
         } else {  // Quote bid doesn't have history assign rate and quantity empty for fill input field purpose
           this.rate = null;
-          this.quantity = null;
+          this.quantity[index] = null;
         }
       });
     }
@@ -180,20 +179,24 @@ export class HomePage{
     console.log(spc_rate);
     let door_delivery_rate: number = 300;
     if (event.value) {
-      this.total_delivery_amount = spc_rate * this.order_quantity + door_delivery_rate;
+      // this.total_delivery_amount = spc_rate * this.order_quantity + door_delivery_rate;
       console.log(this.total_delivery_amount);
     } else {
-      this.total_delivery_amount = spc_rate * this.order_quantity;
+      // this.total_delivery_amount = spc_rate * this.order_quantity;
       console.log(this.total_delivery_amount);
     }
   }
 
-  toggleOrder(idx) {
+  toggleOrder(idx, index) {
     if (this.isOrderShown(idx)) {
+      console.log('door delivery cost will be zero');
       this.show_order = null;
-      this.door_delivery_cost = 0;
     } else {
+      this.door_delivery_cost = 0;
       this.show_order = idx;
+      if (isNaN(this.quantity[index])) {
+        this.quantity[index] = null;
+      }
     }
   };
   isOrderShown(idx) {
@@ -211,14 +214,12 @@ export class HomePage{
     this.door_delivery_cost = 300;
   }
   
-  isPossitiveInterger() {
-    if (this.quantity >= 0) {
+  isPossitiveInterger(index) {
+    if (this.quantity[index] >= 0) {
       console.log(true);
     } else {
       alert('Quantity field accept only possitive value');
-      this.quantity = null;
+      this.quantity[index] = null;
     }
   }
 }
-
-
