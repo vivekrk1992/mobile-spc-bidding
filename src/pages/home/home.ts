@@ -133,9 +133,9 @@ export class HomePage{
       let diff = latest_buyer_rate - latest_spc_rate;
       alert("Warning: SPC price is " + diff + " Rs lower than your last bid price!. So, order will be placed at SPC's cheaper rates. @" + latest_spc_rate + "Rs/Kg!!!")
     }
-    // this.httpServerServiceProvider.registerDomesticBid({'id': quote_id, 'quantity': quantity, 'status': status, 'rate': latest_spc_rate}).subscribe((data) => {
-    //   console.log(data);
-    // });
+    this.httpServerServiceProvider.confirmDomesticBid({'id': quote_id, 'quantity': quantity, 'status': status, 'rate': latest_spc_rate}).subscribe((data) => {
+      console.log(data);
+    });
     
   }
 

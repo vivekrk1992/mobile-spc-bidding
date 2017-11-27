@@ -83,7 +83,7 @@
       </div>
 
       <button ion-button small style="background-color: #C0B283" (click)="toggleLevel1('idx'+i, domestic_quote.id, i)">Bid {{ i }}</button>
-      <button ion-button small style="background-color: rgba(255, 145, 121, 0.95)" (click)="toggleOrder('order'+i)">Order</button>
+      <button ion-button small style="background-color: rgba(255, 145, 121, 0.95)" (click)="toggleOrder('order'+i, i)">Order</button>
       <!-- <button ion-button color="secondary" (click)="orderItem(order_quantity, domestic_quote.id, domestic_quote.latest_bid_info.spc_rate, domestic_quote.latest_bid_info.buyer_rate, domestic_quote.latest_bid_info.bid_status)">Order</button> -->
       <button ion-button small style="background-color: rgba(55, 55, 55, 0.62)" (click)="orderItem(quantity[i], domestic_quote.id, domestic_quote.latest_bid_info.spc_rate, domestic_quote.latest_bid_info.buyer_rate, domestic_quote.latest_bid_info.bid_status)">Hold Price</button>
 

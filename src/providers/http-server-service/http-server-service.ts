@@ -12,8 +12,8 @@ export class HttpServerServiceProvider {
   user_type: string;
 
   headers: Headers;
-  base_url: string = "http://127.0.0.1:8000/";
-  // base_url: string = "http://192.168.0.104:8000/";
+  // base_url: string = "http://127.0.0.1:8000/";
+  base_url: string = "http://192.168.0.108:8000/";
   // base_url: string = "http://localhost:8000/";
 
   constructor(public http: Http, private storage: Storage) {
@@ -84,6 +84,10 @@ export class HttpServerServiceProvider {
   getDomesticBiddingHistoryByQuote(quote_id) {
     return this.http.post(this.base_url + 'main/serve/domestic/bidding/history/by/quote/', {'quote_id': quote_id}, {headers: this.headers})
       .map((response) => response.json());
+  }
+
+  confirmDomesticBid(data) {
+    return this.http.post(this.base_url + 'main/confirm/domestic/bid/by/buyer/', data, {headers: this.headers});
   }
 
 }
