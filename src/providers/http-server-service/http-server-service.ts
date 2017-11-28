@@ -90,4 +90,15 @@ export class HttpServerServiceProvider {
     return this.http.post(this.base_url + 'main/confirm/domestic/bid/by/buyer/', data, {headers: this.headers});
   }
 
+  // stock
+  getStockDetails() {
+    return this.http.get(this.base_url + 'main/serve/stock/details/', {headers: this.headers})
+      .map((response) => response.json());
+  }
+
+  checkStockAvailability(data) {
+    return this.http.post(this.base_url + 'main/check/availability/', data, {headers: this.headers})
+      .map((response) => response.json());
+  }
+
 }
