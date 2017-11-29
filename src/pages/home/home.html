@@ -69,10 +69,13 @@
           </ion-row>
           <hr>
           <ion-row>
-            <ion-col col-3><button ion-button (click)="checkAvailability(domestic_quote.latest_bid_info.buyer_quantity, delivery_date)">aval</button></ion-col>
+            <ion-col col-3 *ngIf="domestic_quote.hasOwnProperty('latest_bid_info')"><button ion-button (click)="checkAvailability(domestic_quote.latest_bid_info.buyer_quantity, delivery_date)">aval</button></ion-col>
+            <ion-col col-3 *ngIf="!domestic_quote.hasOwnProperty('latest_bid_info')">
+              <button ion-button (click)="checkAvailability(quantity[i], delivery_date, i)">aval<ion-icon *ngIf="is_stock_available == true" name="checkmark" style="font-size:30px;color:green"></ion-icon></button>
+            </ion-col> 
             <ion-col col-3>
-              <button *ngIf="domestic_quote.hasOwnProperty('latest_bid_info')" ion-button (click)="confirmOrder(domestic_quote.latest_bid_info.buyer_quantity, domestic_quote.id, domestic_quote.latest_bid_info.spc_rate, delivery_date)">confirm</button>
-              <button *ngIf="!domestic_quote.hasOwnProperty('latest_bid_info')" ion-button (click)="confirmOrder(quantity[i], domestic_quote.id, domestic_quote.rate, delivery_date)">confirm</button>
+              <button *ngIf="domestic_quote.hasOwnProperty('latest_bid_info')" ion-button (click)="confirmOrder(domestic_quote.latest_bid_info.buyer_quantity, domestic_quote.id, domestic_quote.latest_bid_info.spc_rate, delivery_date, i)">confirm</button>
+              <button *ngIf="!domestic_quote.hasOwnProperty('latest_bid_info')" ion-button (click)="confirmOrder(quantity[i], domestic_quote.id, domestic_quote.rate, delivery_date, i)">confirm</button>
             </ion-col>
             <ion-col align-item-center>Total</ion-col>
             <ion-col *ngIf="domestic_quote.hasOwnProperty('latest_bid_info')" align-item-center >{{domestic_quote.latest_bid_info.spc_rate * domestic_quote.latest_bid_info.buyer_quantity + 2 * domestic_quote.latest_bid_info.buyer_quantity + door_delivery_cost}}</ion-col>
@@ -128,6 +131,7 @@
         <br>
     </span>
 
+      <!-- display bidding status -->
       <span *ngIf="domestic_quote.hasOwnProperty('latest_bid_info')">
         <span class="bidding-status" *ngIf="domestic_quote.latest_bid_info.bid_status==3">Bid Accepted & Closed</span>
         <span class="bidding-status" *ngIf="domestic_quote.latest_bid_info.bid_status==2">Bidding Expired!</span>

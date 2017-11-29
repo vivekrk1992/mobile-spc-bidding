@@ -28,6 +28,7 @@ export class HomePage{
   delivery_date: any;
   rate: any;
   stock_details: any[] = [];
+  is_stock_available: boolean = false;
 
   constructor(public navCtrl: NavController, private httpServerServiceProvider: HttpServerServiceProvider, private storage: Storage, private toastCtrl: ToastController) {
     try {
@@ -83,7 +84,7 @@ export class HomePage{
           this.domestic_quotes[index]['latest_bid_info'] = {};
           this.domestic_quotes[index]['latest_bid_info']['spc_rate'] = data[higher_index].spc_rate;
           this.domestic_quotes[index]['latest_bid_info']['buyer_rate'] = data[higher_index].buyer_rate;
-          this.domestic_quotes[index]['latest_bid_info']['status'] = data[higher_index].bid_status;
+          this.domestic_quotes[index]['latest_bid_info']['bid_status'] = data[higher_index].bid_status;
           this.domestic_quotes[index]['latest_bid_info']['buyer_quantity'] = data[higher_index].buyer_quantity;
           this.rate = null;
           this.quantity[index] = data[higher_index].buyer_quantity;
@@ -92,6 +93,7 @@ export class HomePage{
           this.quantity[index] = null;
         }
       });
+      console.log(this.domestic_quotes[index])
     }
   };
 
@@ -109,7 +111,7 @@ export class HomePage{
     }
   }
 
-  confirmOrder(quantity, quote_id, latest_spc_rate, delivery_date, latest_buyer_rate?, status?) {
+  confirmOrder(quantity, quote_id, latest_spc_rate, delivery_date, index, latest_buyer_rate?, status?) {
     console.log('with in confirm order');
     console.log(quantity);
     console.log(this.stock_details['in_possession']);
@@ -127,6 +129,7 @@ export class HomePage{
     }
     this.httpServerServiceProvider.confirmDomesticBid({'id': quote_id, 'quantity': quantity, 'status': status, 'rate': latest_spc_rate, 'delivery_date': delivery_date}).subscribe((data) => {
       console.log(data);
+      this.domestic_quotes[index]['latest_bid_info'] = data;
     });
     
   }
@@ -175,6 +178,7 @@ export class HomePage{
   toggleOrder(idx, index) {
     if (this.isOrderShown(idx)) {
       console.log('door delivery cost will be zero');
+      this.is_stock_available = false;
       this.show_order = null;
     } else {
       this.door_delivery_cost = 0;
@@ -216,6 +220,7 @@ export class HomePage{
     let data = {'quantity': quantity, 'date': date};
     this.httpServerServiceProvider.checkStockAvailability(data).subscribe((data) => {
       console.log(data);
-    })
+      this.is_stock_available = data['status'];
+    });
   }
 }
