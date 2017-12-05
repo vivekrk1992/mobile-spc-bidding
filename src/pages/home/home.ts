@@ -175,7 +175,7 @@ export class HomePage{
     toast.present();
   }
   // show order option when click order button
-  toggleOrder(idx, index) {
+  toggleOrder(idx, quantity, index) {
     if (this.isOrderShown(idx)) {
       console.log('door delivery cost will be zero');
       this.is_stock_available = false;
@@ -184,6 +184,8 @@ export class HomePage{
       this.door_delivery_cost = 0;
       this.show_order = idx;
       if (isNaN(this.quantity[index])) {
+        console.log('true');
+        console.log(index);
         this.quantity[index] = null;
       }
     }

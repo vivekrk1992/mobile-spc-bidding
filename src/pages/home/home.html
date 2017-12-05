@@ -53,7 +53,7 @@
             
             <!-- if quote doesn't have a bidding history -->
             <ion-col col-9 *ngIf="!domestic_quote.hasOwnProperty('latest_bid_info')" align-item-center>Copra Cost ({{domestic_quote.rate}} Rs * {{quantity[i]}} bags * 50 Kgs)</ion-col>
-            <ion-col col-3 *ngIf="!domestic_quote.hasOwnProperty('latest_bid_info')" align-item-center>{{domestic_quote.rate}} * {{quantity[i]}}</ion-col>
+            <ion-col col-3 *ngIf="!domestic_quote.hasOwnProperty('latest_bid_info')" align-item-center>{{domestic_quote.rate * quantity[i] * 50}}</ion-col>
           </ion-row>
           <ion-row>
             <ion-col col-3 align-item-center>Shipping to pickup point</ion-col>
