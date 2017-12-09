@@ -143,8 +143,8 @@
               <hr>
 
               <ion-row>
-                <ion-col><span class="header-text">Rate(Rs/Kg)</span><br><input type="number" placeholder="Rate" [(ngModel)]="rate" style="background-color:bisque"></ion-col>
-                <ion-col><span class="header-text">Quantity</span><br><input type="number" placeholder="Quantity" [(ngModel)]="quantity[i]" style="background-color:bisque"></ion-col>
+                <ion-col><input class="bid-input-box" type="number" placeholder="Rate" [(ngModel)]="rate"></ion-col>
+                <ion-col><input class="bid-input-box" type="number" placeholder="Quantity" [(ngModel)]="quantity[i]"></ion-col>
                 <ion-col><button ion-button (click)="bidding(quantity[i], domestic_quote.id, 'bidding', rate, i)">Bid</button></ion-col>
               </ion-row>
             </span>
