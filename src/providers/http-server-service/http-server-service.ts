@@ -30,13 +30,13 @@ export class HttpServerServiceProvider {
     });
   }
 
-  // login
+// login
   login(data) {
     return this.http.post(this.base_url+"main/mobile/login/", data)
       .map(res => res.json());
   }
 
-  // logout
+// logout
   logout() {
     let data = {'puspose': 'logout'};
     return this.http.post(this.base_url+'main/mobile/logout/',data , {headers: this.headers})
@@ -50,7 +50,7 @@ export class HttpServerServiceProvider {
     console.log('token setted into header');
   }
 
-  // Domestic
+// Domestic
   getAllDomesticList() {
     console.log('get domestic quote');
     console.log(this.headers);
@@ -90,7 +90,12 @@ export class HttpServerServiceProvider {
     return this.http.post(this.base_url + 'main/confirm/domestic/bid/by/buyer/', data, {headers: this.headers});
   }
 
-  // stock
+  getDomesticDeliveryExpense() {
+    return this.http.get(this.base_url + 'main/serve/domestic/delivery/expense/', {headers: this.headers})
+      .map((response) => response.json());
+  }
+
+// stock
   getStockDetails() {
     return this.http.get(this.base_url + 'main/serve/stock/details/', {headers: this.headers})
       .map((response) => response.json());

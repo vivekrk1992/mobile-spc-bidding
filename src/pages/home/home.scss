@@ -59,8 +59,8 @@ ion-col {
     text-align: left;
     padding: 7px;
     position: relative;
-    margin-left: 100px;
-    max-width: 250px;
+    margin-left: 200px;
+    // max-width: 250px;
 }
 
 .message-bubble {
@@ -69,8 +69,6 @@ ion-col {
 
 div .speech-bubble-buyer {
   float: right !important;
-  margin-right: 5px;
-  //max-width: 300px;
 }
 
 div .speech-bubble-owner {
@@ -109,6 +107,7 @@ div .speech-bubble-owner {
     text-align: center;
     padding: 7px;
     position: relative;
+    width: 100%;
 }
 
 

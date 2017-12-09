@@ -29,6 +29,7 @@ export class HomePage{
   rate: any;
   stock_details: any[] = [];
   is_stock_available: boolean = false;
+  expense = {};
 
   constructor(public navCtrl: NavController, private httpServerServiceProvider: HttpServerServiceProvider, private storage: Storage, private toastCtrl: ToastController) {
     try {
@@ -48,6 +49,12 @@ export class HomePage{
       console.log(data);
       this.stock_details = data;
     });
+
+    // get expense for delivery point
+    this.httpServerServiceProvider.getDomesticDeliveryExpense().subscribe((data) => {
+      console.log(data);
+      this.expense = data;
+    });
   }
 
   doRefresh(event) {
@@ -57,6 +64,12 @@ export class HomePage{
       event.complete();
     }, (error) => {
       event.complete();
+    });
+
+  // get expense for delivery point
+    this.httpServerServiceProvider.getDomesticDeliveryExpense().subscribe((data) => {
+      console.log(data);
+      this.expense = data;
     });
   }
 
@@ -174,22 +187,28 @@ export class HomePage{
     });
     toast.present();
   }
-  // show order option when click order button
+
+// show order option when click order button
   toggleOrder(idx, quantity, index) {
+    if (typeof(this.domestic_quotes[index].latest_bid_info) != 'undefined') {
+      if (this.domestic_quotes[index].latest_bid_info.bid_status == 3) {
+        alert('bid is already accepted and closed');
+        let new_order = confirm('You already order for this quote, do you want another order?');
+        console.log(new_order);
+      }
+    }
     if (this.isOrderShown(idx)) {
-      console.log('door delivery cost will be zero');
       this.is_stock_available = false;
       this.show_order = null;
     } else {
       this.door_delivery_cost = 0;
       this.show_order = idx;
       if (isNaN(this.quantity[index])) {
-        console.log('true');
-        console.log(index);
         this.quantity[index] = null;
       }
     }
   };
+
   isOrderShown(idx) {
     return this.show_order === idx;
   };
@@ -199,13 +218,15 @@ export class HomePage{
     this.selected_pickup_point_option = pickup_point;
     this.door_delivery_cost = 0;
   }
+
   doorDeliveryPickupSelected(pickup_point) {
     console.log('door delivery selected');
     this.selected_pickup_point_option = pickup_point;
-    this.door_delivery_cost = 300;
+    // this.door_delivery_cost = 300;
+    this.door_delivery_cost = this.expense['door_cost'];
   }
   
-  // check quantity is possitive
+// check quantity is possitive
   isPossitiveInterger(index) {
     if (this.quantity[index] >= 0) {
       console.log(true);
@@ -215,7 +236,7 @@ export class HomePage{
     }
   }
 
-  // check stock availability for particular date and quantity
+// check stock availability for particular date and quantity
   checkAvailability(quantity, date) {
     console.log(quantity);
     console.log(date);
@@ -225,4 +246,5 @@ export class HomePage{
       this.is_stock_available = data['status'];
     });
   }
+
 }
