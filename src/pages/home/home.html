@@ -1,20 +1,22 @@
 <ion-header>
   <ion-navbar>
-    <ion-title>Home</ion-title>
+    <ion-title>Quotes & Bids</ion-title>
   </ion-navbar>
 </ion-header>
 
 <ion-content padding>
   <!--logout link-->
-  <span style="float:right; color:chocolate;font-size:17px; font-weight:bold" (click)="logout()">logout</span>
+  <span class="logout-button" (click)="logout()">logout</span>
 
   <!--refresh page-->
   <ion-refresher (ionRefresh)="doRefresh($event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
 
+  <h3 class="page-header">Your active Quotes and Bids:</h3>
+
   <ion-col *ngFor="let domestic_quote of domestic_quotes; let i = index">
-    <ion-card style="padding-bottom:0px; margin-bottom:0px" [ngClass]="{active: isLevel1Shown('idx'+i)}">
+    <ion-card class="quote-card" [ngClass]="{active: isLevel1Shown('idx'+i)}">
       <ion-card-header>
         <ion-row class="tiny-date-row">
               <ion-col>Quote for : {{domestic_quote.date}}; Valid: Until 8 PM</ion-col><ion-col>.</ion-col>
@@ -22,8 +24,8 @@
         <ion-row>
           <ion-col (click)="toggleLevel1('idx'+i)"><span class="header-text">Q-Price</span><br>(Rs/Kg)<br><br>{{domestic_quote.rate}}</ion-col>
           <ion-col (click)="toggleLevel1('idx'+i)"><span class="header-text">Last Bid</span><br>(spc | You)<br><br><span *ngIf="domestic_quote.hasOwnProperty('latest_bid_info')">{{domestic_quote.latest_bid_info.spc_rate}}</span> | <span *ngIf="domestic_quote.hasOwnProperty('latest_bid_info')">{{domestic_quote.latest_bid_info.buyer_rate}}</span></ion-col>
-          <ion-col> <span class="header-text">Quantity</span><br>(Kgs)<br><input type="number" [(ngModel)]="quantity[i]" placeholder="Quantity" class="rate-quantity-input-box"></ion-col>
-          <ion-col> <span class="header-text">ETA</span><br><br><input type="date" [(ngModel)]="delivery_date" min="{{today_date}}" class="rate-quantity-input-box"></ion-col>
+          <ion-col> <span class="header-text"># Bags</span><br><br><input type="number" [(ngModel)]="quantity[i]" placeholder="50 Kgs bags" class="rate-quantity-input-box"></ion-col>
+          <ion-col> <span class="header-text">ETA</span><br><br><input type="date" [(ngModel)]="delivery_date" min="{{today_date}}" class="rate-quantity-input-box date-input-box"></ion-col>
         </ion-row>
 
         <!-- Order delevery option card -->
@@ -51,7 +53,7 @@
           <!-- if qutoe have a bidding history -->
           <ion-col col-9 *ngIf="domestic_quote.hasOwnProperty('latest_bid_info')" align-item-center>Copra Cost ({{domestic_quote.latest_bid_info.spc_rate}} Rs * {{domestic_quote.latest_bid_info.buyer_quantity}} bags * 50 Kgs)</ion-col>
           <ion-col col-3 *ngIf="domestic_quote.hasOwnProperty('latest_bid_info')" align-item-center>{{domestic_quote.latest_bid_info.spc_rate * domestic_quote.latest_bid_info.buyer_quantity * 50}} Kgs</ion-col>
-          
+
           <!-- if quote doesn't have a bidding history -->
           <ion-col col-9 *ngIf="!domestic_quote.hasOwnProperty('latest_bid_info')" align-item-center>Copra Cost ({{domestic_quote.rate}} Rs * {{quantity[i]}} bags * 50 Kgs)</ion-col>
           <ion-col col-3 *ngIf="!domestic_quote.hasOwnProperty('latest_bid_info')" align-item-center>{{domestic_quote.rate}} * {{quantity[i]}}</ion-col>
@@ -107,7 +109,7 @@
             <br>
             <br>
             <span class="message-bubble" *ngFor="let message of bidding.bid_board_messages" [ngClass]="message[1]==1 ? 'speech-bubble-owner' : 'speech-bubble-buyer'">
-              {{message}}
+              <span class="chat-bubble-name">Spc: </span>{{message}}
             </span>
           </span>
         </span>
@@ -116,11 +118,11 @@
         <span *ngIf="bidding.last_bidder.name!='owner'" >
             <span class="quote-bubble" [ngClass]="bidding.last_bidder.name=='owner' ? 'speech-bubble-owner' : 'speech-bubble-buyer'">
                 <span class="chat-bubble-name">You:</span>
-                {{bidding.buyer_rate}} Rs. ({{bidding.buyer_quantity}} Kgs)
+                {{bidding.buyer_rate}} Rs. ({{bidding.buyer_quantity}} bags)
             </span>
             <div *ngIf="bidding.hasOwnProperty('bid_board_messages')">
               <div class="message-bubble" *ngFor="let message of bidding.bid_board_messages" [ngClass]="message[1]==1 ? 'speech-bubble-owner' : 'speech-bubble-buyer'">
-                <div>{{message[0]}}</div>
+                <div><span class="chat-bubble-name">You: </span>{{message[0]}}</div>
               </div>
             </div>
         </span>
@@ -150,8 +152,8 @@
               <hr>
 
               <ion-row>
-                <ion-col><span class="header-text">Rate(Rs/Kg)</span><br><input type="number" placeholder="Rate" [(ngModel)]="rate" style="background-color:bisque"></ion-col>
-                <ion-col><span class="header-text">Quantity</span><br><input type="number" placeholder="Quantity" [(ngModel)]="quantity[i]" style="background-color:bisque"></ion-col>
+                <ion-col><span class="header-text">Rate(Rs/Kg)</span><br><input type="number" placeholder="Rate" [(ngModel)]="rate" class="rate-quantity-input-box"></ion-col>
+                <ion-col><span class="header-text">Quantity (# bags)</span><br><input type="number" placeholder="50 Kgs bags" [(ngModel)]="quantity[i]" class="rate-quantity-input-box"></ion-col>
                 <ion-col><button ion-button (click)="bidding(quantity[i], domestic_quote.id, 'bidding', rate, i)">Bid</button></ion-col>
               </ion-row>
             </span>

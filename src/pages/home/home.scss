@@ -1,6 +1,19 @@
+.page-header {
+  padding-top: 10px;
+  padding-left: 10px;
+  color: saddlebrown;
+}
+
+.logout-button{
+  float:right;
+  color:chocolate;
+  font-size:17px;
+  font-weight:bold;
+  padding-right: 10px;
+  padding-top: 10px;
+}
 .scroll-content{
     padding: 0px !important;
-    // background-color: cadetblue !important;
 }
 
 .tiny-date-row {
@@ -36,13 +49,24 @@ ion-col {
 
 
 .card-md {
-    border-radius: 0px;
     background-color: #78c2c4;
     font-size: small;
     border-radius: 5px;
 }
+
+.quote-card {
+  padding-bottom:0px;
+  margin-bottom:0px;
+  border-bottom-left-radius: 0px;
+  border-bottom-right-radius: 0px;
+}
+
 .bidding-trail-card {
-    background-color: rgba(59, 104, 105, 0.253)
+  background-color: rgba(59, 104, 105, 0.253);
+  position:relative;
+  border-top-left-radius: 0px;
+  border-top-right-radius: 0px;
+  //z-index: -1;
 }
 
 .message-bidform-card {
@@ -134,4 +158,9 @@ div .speech-bubble-owner {
   border-radius: 4px;
   padding-left: 10px;
   margin-top: 5px;
+  width: 85px;
+}
+
+.date-input-box {
+  width: 120px;
 }
