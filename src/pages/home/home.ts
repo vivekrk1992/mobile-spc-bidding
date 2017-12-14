@@ -30,6 +30,7 @@ export class HomePage{
   stock_details: any[] = [];
   is_stock_available: boolean = false;
   expense = {};
+  message: string = '';
 
   constructor(public navCtrl: NavController, private httpServerServiceProvider: HttpServerServiceProvider, private storage: Storage, private toastCtrl: ToastController) {
     try {
@@ -57,6 +58,7 @@ export class HomePage{
     });
   }
 
+// pull down the page get quote list from serve
   doRefresh(event) {
     this.httpServerServiceProvider.getAllDomesticList().subscribe((data) => {
       console.log(data);
@@ -84,7 +86,7 @@ export class HomePage{
   }
 
 
-  // accordian card
+// when click bid button; show bidding char card
   toggleLevel1(idx, quote_id, index) {
     if (this.isLevel1Shown(idx)) {
       this.showLevel1 = null;
@@ -92,6 +94,7 @@ export class HomePage{
       this.showLevel1 = idx;
       this.httpServerServiceProvider.getDomesticBiddingHistoryByQuote(quote_id).subscribe((data) => {
         this.bidding_history = data;
+        console.log(data);
         if (data.length > 0) {
           let higher_index = data.length - 1;
           this.domestic_quotes[index]['latest_bid_info'] = {};
@@ -114,6 +117,7 @@ export class HomePage{
     return this.showLevel1 === idx;
   };
 
+// when click a oreder button show oreder options
   orderItem(quantity, index) {
     console.log('with in order item')
     if (this.show_delevery_option) {
@@ -124,10 +128,8 @@ export class HomePage{
     }
   }
 
+// order copra directly click a order button and confirm that order
   confirmOrder(quantity, quote_id, latest_spc_rate, delivery_date, index, latest_buyer_rate?, status?) {
-    console.log('with in confirm order');
-    console.log(quantity);
-    console.log(this.stock_details['in_possession']);
     if (quantity > this.stock_details['in_possession']) {
       alert('you will get a goods after two days');
     }
@@ -143,16 +145,16 @@ export class HomePage{
     this.httpServerServiceProvider.confirmDomesticBid({'id': quote_id, 'quantity': quantity, 'status': status, 'rate': latest_spc_rate, 'delivery_date': delivery_date}).subscribe((data) => {
       console.log(data);
       this.domestic_quotes[index]['latest_bid_info'] = data;
+      this.displayToast('Order placed successfully!');
+    }, (error) => {
+      this.displayToast('Error!');
     });
     
   }
 
-
+// bid a rate; in server side if owner and buyer rate will be match accept this bid and add into sale table
   bidding(quantity, quote_id, status, rate, index) {
     this.httpServerServiceProvider.registerDomesticBid({'id': quote_id, 'quantity': quantity, 'status': status, 'rate': rate, 'date': this.todate}).subscribe((data) => {
-      console.log(this.domestic_quotes);
-      console.log(index);
-      console.log(this.domestic_quotes[index]);
       if (!this.domestic_quotes[index].hasOwnProperty('latest_bid_info')) {
         this.domestic_quotes[index]['latest_bid_info'] = {};
       }
@@ -166,19 +168,25 @@ export class HomePage{
       });
     }
 
-  onSendMessage(message, quote_id){
-    console.log(quote_id);
-    console.log(message);
+// send bidding message to server; is success also push into local
+  onSendMessage(message, quote_id, index){
+    // find maximum length of bidding history lenght
+    let max_lenght_of_bidding_history = this.bidding_history.length - 1;
+
     this.httpServerServiceProvider.registerDomesticBidMsg({'message': message, 'quote_id': quote_id}).subscribe((data) => {
-      console.log(data);
-      // this.bidding_history.push(data);
+      if(this.bidding_history[max_lenght_of_bidding_history].hasOwnProperty('bid_board_messages')) {
+        this.bidding_history[max_lenght_of_bidding_history]['bid_board_messages'].push(data.message);
+      } else {
+        this.bidding_history.push({'bid_board_messages': [data.message], 'last_bidder':{'id': data.message[1], 'name': 'buyer'}});        
+      }
+      this.message = '';
       this.displayToast('Message sent!');
     }, (error) => {
       this.displayToast('Error!');
     });
   }
 
-
+// display toast received message
   displayToast(display_message){
     let toast = this.toastCtrl.create({
       message: display_message,
@@ -201,7 +209,6 @@ export class HomePage{
       this.is_stock_available = false;
       this.show_order = null;
     } else {
-      this.door_delivery_cost = 0;
       this.show_order = idx;
       if (isNaN(this.quantity[index])) {
         this.quantity[index] = null;
@@ -212,18 +219,23 @@ export class HomePage{
   isOrderShown(idx) {
     return this.show_order === idx;
   };
-
+  
+// when click a selfpickup
   selfPickupSelected(pickup_point) {
     console.log('selfpickup selected');
     this.selected_pickup_point_option = pickup_point;
     this.door_delivery_cost = 0;
   }
 
-  doorDeliveryPickupSelected(pickup_point) {
-    console.log('door delivery selected');
-    this.selected_pickup_point_option = pickup_point;
-    // this.door_delivery_cost = 300;
-    this.door_delivery_cost = this.expense['door_cost'];
+// cheked door deliver option
+  doorDeliveryPickupSelected(event) {
+    console.log(this.expense['door_cost'])
+    if (event.checked) {
+      this.door_delivery_cost = this.expense['door_cost'];
+    } else {
+      this.door_delivery_cost = 0;
+    }
+    console.log(this.door_delivery_cost);
   }
   
 // check quantity is possitive

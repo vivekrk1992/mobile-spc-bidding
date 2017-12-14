@@ -6,16 +6,34 @@
 .tiny-date-row {
     font-size: small;
     font-style: italic;
-    color: rgb(128, 87, 0);
-
+    color: rgba(255, 255, 255, 0.5);
 }
+
 
 .form, input, optgroup, select {
     width: 100px;
 }
 
 .header-text {
-    font-weight: bold
+    font-weight: bold;
+    color: darkorange;
+}
+
+.content-text {
+    font-weight: bold;
+    color: #f1f1f1;
+}
+.sub-header-text {
+    font-weight: bold;
+    color: #a7845b;
+}
+.bidding-rate {
+    color: #9ee237;
+    font-weight: bold;
+}
+
+.bid-history-title {
+    color: #c8c8c8;
 }
 
 ion-col {
@@ -37,9 +55,12 @@ ion-col {
 
 .card-md {
     border-radius: 0px;
-    background-color: #78c2c4;
+    background-color: #275777;
     font-size: small;
     border-radius: 5px;
+}
+.bidding-card-main-content {
+    color: #eeeeee;
 }
 .bidding-trail-card {
     background-color: rgba(59, 104, 105, 0.253)
