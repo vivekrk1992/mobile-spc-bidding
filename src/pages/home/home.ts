@@ -149,7 +149,7 @@ export class HomePage{
     }, (error) => {
       this.displayToast('Error!');
     });
-    
+
   }
 
 // bid a rate; in server side if owner and buyer rate will be match accept this bid and add into sale table
@@ -177,7 +177,7 @@ export class HomePage{
       if(this.bidding_history[max_lenght_of_bidding_history].hasOwnProperty('bid_board_messages')) {
         this.bidding_history[max_lenght_of_bidding_history]['bid_board_messages'].push(data.message);
       } else {
-        this.bidding_history.push({'bid_board_messages': [data.message], 'last_bidder':{'id': data.message[1], 'name': 'buyer'}});        
+        this.bidding_history.push({'bid_board_messages': [data.message], 'last_bidder':{'id': data.message[1], 'name': 'buyer'}});
       }
       this.message = '';
       this.displayToast('Message sent!');
@@ -219,7 +219,7 @@ export class HomePage{
   isOrderShown(idx) {
     return this.show_order === idx;
   };
-  
+
 // when click a selfpickup
   selfPickupSelected(pickup_point) {
     console.log('selfpickup selected');
@@ -228,7 +228,7 @@ export class HomePage{
   }
 
 // cheked door deliver option
-  doorDeliveryPickupSelected(event) {
+  onDoorDeliveryPickupSelected(event) {
     console.log(this.expense['door_cost'])
     if (event.checked) {
       this.door_delivery_cost = this.expense['door_cost'];
@@ -237,7 +237,7 @@ export class HomePage{
     }
     console.log(this.door_delivery_cost);
   }
-  
+
 // check quantity is possitive
   isPossitiveInterger(index) {
     if (this.quantity[index] >= 0) {
