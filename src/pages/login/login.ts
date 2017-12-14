@@ -33,15 +33,13 @@ export class LoginPage {
   }
 
   logIn() {
-    this.httpServerServiceProvider.login(this.login_form.value).subscribe(
-      (data) => {
-        console.log(data)
-        this.storage.set('token', data.token);
-        this.storage.set('user_type', data.user_type);
-        this.httpServerServiceProvider.setTokenHeader(data.token);
-        this.navCtrl.setRoot(TabsPage);
-      }
-    );
+    this.httpServerServiceProvider.login(this.login_form.value).subscribe((data) => {
+      console.log(data)
+      this.storage.set('token', data.token);
+      this.storage.set('user_type', data.user_type);
+      this.httpServerServiceProvider.setTokenHeader(data.token);
+      this.navCtrl.setRoot(TabsPage);
+    });
   }
 
 }

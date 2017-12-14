@@ -13,7 +13,7 @@ export class HttpServerServiceProvider {
 
   headers: Headers;
   base_url: string = "http://127.0.0.1:8000/";
-  // base_url: string = "http://192.168.0.104:8000/";
+  // base_url: string = "http://192.168.0.108:8000/";
   // base_url: string = "http://localhost:8000/";
 
   constructor(public http: Http, private storage: Storage) {
@@ -30,13 +30,13 @@ export class HttpServerServiceProvider {
     });
   }
 
-  // login
+// login
   login(data) {
     return this.http.post(this.base_url+"main/mobile/login/", data)
       .map(res => res.json());
   }
 
-  // logout
+// logout
   logout() {
     let data = {'puspose': 'logout'};
     return this.http.post(this.base_url+'main/mobile/logout/',data , {headers: this.headers})
@@ -50,7 +50,7 @@ export class HttpServerServiceProvider {
     console.log('token setted into header');
   }
 
-  // Domestic
+// Domestic
   getAllDomesticList() {
     console.log('get domestic quote');
     console.log(this.headers);
@@ -61,7 +61,8 @@ export class HttpServerServiceProvider {
   getAllDomesticQuotesWithLatestBid() {
     console.log('get domestic quote along with latest bid info!');
     console.log(this.headers);
-    return this.http.get(this.base_url + 'main/serve/domestic/quote/with/latestbid/', {headers: this.headers})
+    return this.http.get(this.base_url + 'main/serve/domestic/qutoe/history/for/buyer/', {headers: this.headers})
+    // return this.http.get(this.base_url + 'main/serve/domestic/quote/with/latestbid/', {headers: this.headers})
       .map((res) => res.json());
   }
 
@@ -83,6 +84,26 @@ export class HttpServerServiceProvider {
 
   getDomesticBiddingHistoryByQuote(quote_id) {
     return this.http.post(this.base_url + 'main/serve/domestic/bidding/history/by/quote/', {'quote_id': quote_id}, {headers: this.headers})
+      .map((response) => response.json());
+  }
+
+  confirmDomesticBid(data) {
+    return this.http.post(this.base_url + 'main/confirm/domestic/bid/by/buyer/', data, {headers: this.headers});
+  }
+
+  getDomesticDeliveryExpense() {
+    return this.http.get(this.base_url + 'main/serve/domestic/delivery/expense/', {headers: this.headers})
+      .map((response) => response.json());
+  }
+
+// stock
+  getStockDetails() {
+    return this.http.get(this.base_url + 'main/serve/stock/details/', {headers: this.headers})
+      .map((response) => response.json());
+  }
+
+  checkStockAvailability(data) {
+    return this.http.post(this.base_url + 'main/check/availability/', data, {headers: this.headers})
       .map((response) => response.json());
   }
 

@@ -27,29 +27,34 @@ export class HomePage{
   today_date = this.myDate.toISOString().split('T')[0];
   delivery_date: any;
   rate: any;
+  stock_details: any[] = [];
+  is_stock_available: boolean = false;
+  expense = {};
 
   constructor(public navCtrl: NavController, private httpServerServiceProvider: HttpServerServiceProvider, private storage: Storage, private toastCtrl: ToastController) {
     try {
-    this.httpServerServiceProvider.getAllDomesticList().subscribe((data) => {
+      this.httpServerServiceProvider.getAllDomesticList().subscribe((data) => {
+        this.domestic_quotes = data;
+        // work on dates
+        this.myDate.setDate(this.myDate.getDate() + 1);
+        console.log(this.myDate);
+        this.delivery_date = this.myDate.toISOString().split('T')[0];
+      });
+    }
+    catch(e) {
+      console.log('ther is an error to assing a latest values');
+      console.log(e);
+    }
+    httpServerServiceProvider.getStockDetails().subscribe((data) => {
       console.log(data);
-      this.domestic_quotes = data;
-
-      // work on dates
-      this.myDate.setDate(this.myDate.getDate() + 1);
-      console.log(this.myDate);
-      this.delivery_date = this.myDate.toISOString().split('T')[0];
-      console.log(this.delivery_date)
-      console.log(this.today_date);
-      console.log(typeof(this.today_date));
-
-
+      this.stock_details = data;
     });
 
-  }
-  catch(e) {
-    console.log('ther is an error to assing a latest values');
-    console.log(e);
-  }
+    // get expense for delivery point
+    this.httpServerServiceProvider.getDomesticDeliveryExpense().subscribe((data) => {
+      console.log(data);
+      this.expense = data;
+    });
   }
 
   doRefresh(event) {
@@ -59,6 +64,12 @@ export class HomePage{
       event.complete();
     }, (error) => {
       event.complete();
+    });
+
+  // get expense for delivery point
+    this.httpServerServiceProvider.getDomesticDeliveryExpense().subscribe((data) => {
+      console.log(data);
+      this.expense = data;
     });
   }
 
@@ -75,24 +86,18 @@ export class HomePage{
 
   // accordian card
   toggleLevel1(idx, quote_id, index) {
-    console.log(idx);
-    console.log(quote_id);
-    console.log(index);
-    console.log('toggle');
     if (this.isLevel1Shown(idx)) {
       this.showLevel1 = null;
     } else {
       this.showLevel1 = idx;
-      console.log(quote_id);
       this.httpServerServiceProvider.getDomesticBiddingHistoryByQuote(quote_id).subscribe((data) => {
         this.bidding_history = data;
-        console.log(this.bidding_history)
         if (data.length > 0) {
           let higher_index = data.length - 1;
           this.domestic_quotes[index]['latest_bid_info'] = {};
           this.domestic_quotes[index]['latest_bid_info']['spc_rate'] = data[higher_index].spc_rate;
           this.domestic_quotes[index]['latest_bid_info']['buyer_rate'] = data[higher_index].buyer_rate;
-          this.domestic_quotes[index]['latest_bid_info']['status'] = data[higher_index].bid_status;
+          this.domestic_quotes[index]['latest_bid_info']['bid_status'] = data[higher_index].bid_status;
           this.domestic_quotes[index]['latest_bid_info']['buyer_quantity'] = data[higher_index].buyer_quantity;
           this.rate = null;
           this.quantity[index] = data[higher_index].buyer_quantity;
@@ -101,6 +106,7 @@ export class HomePage{
           this.quantity[index] = null;
         }
       });
+      console.log(this.domestic_quotes[index])
     }
   };
 
@@ -108,23 +114,24 @@ export class HomePage{
     return this.showLevel1 === idx;
   };
 
-  orderItem(quantity, quote_id, latest_spc_rate, latest_buyer_rate, status) {
-    console.log('within order');
+  orderItem(quantity, index) {
+    console.log('with in order item')
     if (this.show_delevery_option) {
       this.show_delevery_option = false;
-      console.log('with in if');
     } else {
       this.show_delevery_option = true;
-      console.log('with in else');
+      this.quantity[index] = quantity;
     }
   }
 
-  confirmOrder(quantity, quote_id, latest_spc_rate, latest_buyer_rate?, status?) {
-    console.log('confirm order');
+  confirmOrder(quantity, quote_id, latest_spc_rate, delivery_date, index, latest_buyer_rate?, status?) {
+    console.log('with in confirm order');
     console.log(quantity);
-    console.log(quote_id);
-    console.log(latest_buyer_rate);
-    console.log(status);
+    console.log(this.stock_details['in_possession']);
+    if (quantity > this.stock_details['in_possession']) {
+      alert('you will get a goods after two days');
+    }
+
     if (latest_buyer_rate < latest_spc_rate){
       let diff = latest_spc_rate - latest_buyer_rate;
       alert("Warning: SPC price is " + diff + " Rs higher than your last bid price!. Are you sure to order the item at " + latest_spc_rate + "Rs/Kg rate?")
@@ -133,9 +140,10 @@ export class HomePage{
       let diff = latest_buyer_rate - latest_spc_rate;
       alert("Warning: SPC price is " + diff + " Rs lower than your last bid price!. So, order will be placed at SPC's cheaper rates. @" + latest_spc_rate + "Rs/Kg!!!")
     }
-    // this.httpServerServiceProvider.registerDomesticBid({'id': quote_id, 'quantity': quantity, 'status': status, 'rate': latest_spc_rate}).subscribe((data) => {
-    //   console.log(data);
-    // });
+    this.httpServerServiceProvider.confirmDomesticBid({'id': quote_id, 'quantity': quantity, 'status': status, 'rate': latest_spc_rate, 'delivery_date': delivery_date}).subscribe((data) => {
+      console.log(data);
+      this.domestic_quotes[index]['latest_bid_info'] = data;
+    });
     
   }
 
@@ -179,10 +187,18 @@ export class HomePage{
     });
     toast.present();
   }
-  // show order option when click order button
-  toggleOrder(idx, index) {
+
+// show order option when click order button
+  toggleOrder(idx, quantity, index) {
+    if (typeof(this.domestic_quotes[index].latest_bid_info) != 'undefined') {
+      if (this.domestic_quotes[index].latest_bid_info.bid_status == 3) {
+        alert('bid is already accepted and closed');
+        let new_order = confirm('You already order for this quote, do you want another order?');
+        console.log(new_order);
+      }
+    }
     if (this.isOrderShown(idx)) {
-      console.log('door delivery cost will be zero');
+      this.is_stock_available = false;
       this.show_order = null;
     } else {
       this.door_delivery_cost = 0;
@@ -192,6 +208,7 @@ export class HomePage{
       }
     }
   };
+
   isOrderShown(idx) {
     return this.show_order === idx;
   };
@@ -201,13 +218,15 @@ export class HomePage{
     this.selected_pickup_point_option = pickup_point;
     this.door_delivery_cost = 0;
   }
+
   doorDeliveryPickupSelected(pickup_point) {
     console.log('door delivery selected');
     this.selected_pickup_point_option = pickup_point;
-    this.door_delivery_cost = 300;
+    // this.door_delivery_cost = 300;
+    this.door_delivery_cost = this.expense['door_cost'];
   }
   
-  // check quantity is possitive
+// check quantity is possitive
   isPossitiveInterger(index) {
     if (this.quantity[index] >= 0) {
       console.log(true);
@@ -216,4 +235,16 @@ export class HomePage{
       this.quantity[index] = null;
     }
   }
+
+// check stock availability for particular date and quantity
+  checkAvailability(quantity, date) {
+    console.log(quantity);
+    console.log(date);
+    let data = {'quantity': quantity, 'date': date};
+    this.httpServerServiceProvider.checkStockAvailability(data).subscribe((data) => {
+      console.log(data);
+      this.is_stock_available = data['status'];
+    });
+  }
+
 }
