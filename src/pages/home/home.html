@@ -21,8 +21,8 @@
               <ion-col><span class="bid-history-title">Quote for : {{domestic_quote.date}}; Valid: Until 8 PM</span></ion-col><ion-col></ion-col>
         </ion-row>
         <ion-row>
-          <ion-col (click)="toggleLevel1('idx'+i)"><span class="header-text">Q-Price</span><br><span class="sub-header-text">(Rs/Kg)</span><br><br><span class="bidding-rate">{{(domestic_quote.rate + expense['delivery_point_cost'])}}</span></ion-col>
-          <ion-col (click)="toggleLevel1('idx'+i)"><span class="header-text">Last Bid</span><br><span class="sub-header-text">(spc | You)</span><br><br><span class="bidding-rate" *ngIf="domestic_quote.hasOwnProperty('latest_bid_info')">{{domestic_quote.latest_bid_info.spc_rate}}</span> | <span class="bidding-rate" *ngIf="domestic_quote.hasOwnProperty('latest_bid_info')">{{domestic_quote.latest_bid_info.buyer_rate}}</span></ion-col>
+          <ion-col><span class="header-text">Q-Price</span><br><span class="sub-header-text">(Rs/Kg)</span><br><br><span class="bidding-rate">{{(domestic_quote.rate + expense['delivery_point_cost'])}}</span></ion-col>
+          <ion-col><span class="header-text">Last Bid</span><br><span class="sub-header-text">(spc | You)</span><br><br><span class="bidding-rate" *ngIf="domestic_quote.hasOwnProperty('latest_bid_info')">{{domestic_quote.latest_bid_info.spc_rate}}</span> | <span class="bidding-rate" *ngIf="domestic_quote.hasOwnProperty('latest_bid_info')">{{domestic_quote.latest_bid_info.buyer_rate}}</span></ion-col>
           <ion-col> <span class="header-text">Quantity</span><br><span class="sub-header-text">(Bags)</span><br><input type="number" [(ngModel)]="quantity[i]" placeholder="Quantity" class="rate-quantity-input-box"></ion-col>
           <ion-col> <span class="header-text">ETA</span><br>
             <ion-icon name="calendar" class="sub-header-text">
@@ -32,24 +32,24 @@
           </ion-col>
         </ion-row>
 
-        <!-- Order delevery option card -->
-        <ion-list radio-group *ngIf="isOrderShown('order'+i)">
-          <ion-row>
-            <!-- <ion-col>
-              <ion-item style="padding:0px; margin:0px">
-                <ion-label style="padding-top:0px;padding-bottom:0px; margin-top:0px;margin-bottom:0px;">Self Pickup</ion-label>
-                  <ion-radio name="pickup_point" (ionSelect)="selfPickupSelected($event)" value="self_pickup"></ion-radio>
+        <!-- payment option -->
+        <ion-list radio-group>
+        <ion-row>
+          <ion-col>
+              <ion-item style="background-color:inherit">
+                <ion-radio value="payment"></ion-radio>
+                <ion-label>Payment</ion-label>
               </ion-item>
-            </ion-col> -->
-            <!-- <ion-col>
-              <ion-item>
-                <ion-label color="primary">Door delivery</ion-label>
-                  <ion-checkbox></ion-checkbox>
-                <ion-radio (ionSelect)="doorDeliveryPickupSelected($event)" name="pickup_point" value="door_delivery"></ion-radio>
-              </ion-item>
-            </ion-col> -->
-          </ion-row>
-        </ion-list>
+          </ion-col>
+
+          <ion-col>
+            <ion-item style="background-color:inherit">
+              <ion-radio value="credit"></ion-radio>
+              <ion-label>Credit</ion-label>
+            </ion-item>
+          </ion-col>
+        </ion-row>
+      </ion-list>
 
         <!-- order delivery table -->
         <div *ngIf="isOrderShown('order'+i)">
