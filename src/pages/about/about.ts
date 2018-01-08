@@ -45,4 +45,8 @@ export class AboutPage {
     });
   }
 
+  isBidStatusAccepted(bid_status: number) {
+    return bid_status === 3
+  }
+
 }

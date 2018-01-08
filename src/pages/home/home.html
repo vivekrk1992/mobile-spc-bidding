@@ -13,6 +13,21 @@
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
 
+  <!-- contact details -->
+  <br>
+  <br>
+  <ion-row>
+    <ion-col></ion-col>
+    <ion-col>  
+      <ion-row>
+        <ion-col><a href="tel:+919585488448"><ion-icon name="call"></ion-icon></a>  Shravan Malvi 9585488448</ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col><a href="tel:+919894479941"><ion-icon name="call"></ion-icon></a>  Vishal 9894479941</ion-col>
+      </ion-row>
+    </ion-col>
+  </ion-row>  
+
   <h3 class="page-header">Your active Quotes and Bids:</h3>
 
   <ion-col *ngFor="let domestic_quote of domestic_quotes; let i = index">
@@ -23,7 +38,7 @@
               <ion-col><span class="bid-history-title">Quote for : {{domestic_quote.date}}; Valid: Until 8 PM</span></ion-col><ion-col></ion-col>
         </ion-row>
         <ion-row>
-          <ion-col><span class="header-text">Q-Price</span><br><span class="sub-header-text">(Rs/Kg)</span><br><br><span class="bidding-rate">{{(domestic_quote.rate + expense['delivery_point_cost'])}}</span></ion-col>
+          <ion-col><span class="header-text">Q-Price</span><br><span class="sub-header-text">(Rs/Kg)</span><br><br><span class="bidding-rate">{{domestic_quote.rate}}</span></ion-col>
           <ion-col><span class="header-text">Last Bid</span><br><span class="sub-header-text">(spc | You)</span><br><br><span class="bidding-rate" *ngIf="domestic_quote.hasOwnProperty('latest_bid_info')">{{domestic_quote.latest_bid_info.spc_rate}}</span> | <span class="bidding-rate" *ngIf="domestic_quote.hasOwnProperty('latest_bid_info')">{{domestic_quote.latest_bid_info.buyer_rate}}</span></ion-col>
           <ion-col> <span class="header-text">Quantity</span><br><span class="sub-header-text">(Bags)</span><br><input type="number" [(ngModel)]="quantity[i]" placeholder="Quantity" class="rate-quantity-input-box"></ion-col>
           <ion-col> <span class="header-text">ETA</span><br>
@@ -42,47 +57,63 @@
             <ion-col class="content-text" col-3 *ngIf="domestic_quote.hasOwnProperty('latest_bid_info')" align-item-center>{{domestic_quote.latest_bid_info.spc_rate * domestic_quote.latest_bid_info.buyer_quantity * 50 | number: '.0'}} </ion-col>
 
             <!-- if quote doesn't have a bidding history -->
-            <ion-col class="header-text" col-9 *ngIf="!domestic_quote.hasOwnProperty('latest_bid_info')" align-item-center>Copra Cost ({{(domestic_quote.rate + expense['delivery_point_cost'])}} Rs * {{quantity[i]}} bags * 50 Kgs)</ion-col>
-            <ion-col class="content-text" col-3 *ngIf="!domestic_quote.hasOwnProperty('latest_bid_info')" align-item-center>{{(domestic_quote.rate + expense['delivery_point_cost']) * quantity[i] * 50 | number: '.0'}}</ion-col>
+            <ion-col class="header-text" col-9 *ngIf="!domestic_quote.hasOwnProperty('latest_bid_info')" align-item-center>Copra Cost ({{domestic_quote.rate}} Rs * {{quantity[i]}} bags * 50 Kgs)</ion-col>
+            <ion-col class="content-text" col-3 *ngIf="!domestic_quote.hasOwnProperty('latest_bid_info')" align-item-center>{{domestic_quote.rate * quantity[i] * 50 | number: '.0'}}</ion-col>
           </ion-row>
+
+          <!-- distribution cost -->
           <ion-row>
+            <ion-col class="header-text" col-9 *ngIf="domestic_quote.hasOwnProperty('latest_bid_info')">Delivery cost ({{expense['delivery_point_cost']}} Rs * {{domestic_quote.latest_bid_info.buyer_quantity}} Bags * 50 Kgs)</ion-col>
+            <ion-col class="header-text" col-9 *ngIf="!domestic_quote.hasOwnProperty('latest_bid_info')">Delivery cost ({{expense['delivery_point_cost']}} Rs * {{quantity[i]}} Bags * 50 Kgs)</ion-col>
+            
+            <ion-col class="content-text" col-3 *ngIf="domestic_quote.hasOwnProperty('latest_bid_info')">{{expense['delivery_point_cost'] * (domestic_quote.latest_bid_info.buyer_quantity * 50)}}</ion-col>
+            <ion-col class="content-text" col-3 *ngIf="!domestic_quote.hasOwnProperty('latest_bid_info')">{{expense['delivery_point_cost'] * (quantity[i] * 50)}}</ion-col>
+          </ion-row>
+
+          <!-- door delivery cost -->
+          <!-- <ion-row>
             <ion-col class="header-text" col-6 align-item-center>
             </ion-col>
             <ion-col class="header-text" col-3 align-item-center>charge</ion-col>
             <ion-col class="content-text" col-3 align-item-center>{{door_delivery_cost}}</ion-col>
-          </ion-row>
+          </ion-row> -->
           <hr>
           <ion-row>
-            <ion-col col-3 *ngIf="domestic_quote.hasOwnProperty('latest_bid_info')"><button ion-button (click)="checkAvailability(domestic_quote.latest_bid_info.buyer_quantity, delivery_date)">aval</button></ion-col>
+            <!-- <ion-col col-3 *ngIf="domestic_quote.hasOwnProperty('latest_bid_info')"><button ion-button (click)="checkAvailability(domestic_quote.latest_bid_info.buyer_quantity, delivery_date)">aval</button></ion-col>
             <ion-col col-3 *ngIf="!domestic_quote.hasOwnProperty('latest_bid_info')">
               <button ion-button (click)="checkAvailability(quantity[i], delivery_date, i)">aval<ion-icon *ngIf="is_stock_available == true" name="checkmark" style="font-size:30px;color:green"></ion-icon></button>
             </ion-col>
             <ion-col col-3>
               <button *ngIf="domestic_quote.hasOwnProperty('latest_bid_info')" ion-button (click)="confirmOrder(domestic_quote.latest_bid_info.buyer_quantity, domestic_quote.id, domestic_quote.latest_bid_info.spc_rate, delivery_date, i)">confirm</button>
               <button *ngIf="!domestic_quote.hasOwnProperty('latest_bid_info')" ion-button (click)="confirmOrder(quantity[i], domestic_quote.id, domestic_quote.rate, delivery_date, i)">confirm</button>
-            </ion-col>
-            <ion-col class="header-text" align-item-center>Total</ion-col>
-            <ion-col class="content-text" *ngIf="domestic_quote.hasOwnProperty('latest_bid_info')" align-item-center >{{(domestic_quote.latest_bid_info.spc_rate * domestic_quote.latest_bid_info.buyer_quantity * 50) + door_delivery_cost | number:'.0'}}</ion-col>
+            </ion-col> -->
+            <ion-col col-9 class="header-text" align-item-center>Total</ion-col>
+            <ion-col col-3 class="content-text" *ngIf="domestic_quote.hasOwnProperty('latest_bid_info')" align-item-center >{{(domestic_quote.latest_bid_info.spc_rate + expense['delivery_point_cost']) * (domestic_quote.latest_bid_info.buyer_quantity * 50) | number:'.0'}}</ion-col>
             <!-- <ion-col class="content-text" *ngIf="domestic_quote.hasOwnProperty('latest_bid_info')" align-item-center >{{(domestic_quote.latest_bid_info.spc_rate * domestic_quote.latest_bid_info.buyer_quantity) * domestic_quote.latest_bid_info.buyer_quantity + door_delivery_cost}}</ion-col> -->
-            <ion-col class="content-text" *ngIf="!domestic_quote.hasOwnProperty('latest_bid_info')" align-item-center >{{(domestic_quote.rate * (quantity[i] * 50)) + (expense['delivery_point_cost'] * (quantity[i] * 50)) + door_delivery_cost | number: '.0'}}</ion-col>
+            <ion-col col-3 class="content-text" *ngIf="!domestic_quote.hasOwnProperty('latest_bid_info')" align-item-center >{{ (domestic_quote.rate + expense['delivery_point_cost']) * (quantity[i] * 50) | number: '.0' }}</ion-col>
           </ion-row>
           <hr>
         </div>
 
         <ion-row>
+        <!-- door deliver checkbox -->
           <ion-col>
             <ion-list>
               <ion-item style="background-color:inherit; padding:0%; margin:0%">
                 <ion-label color="primary">Door delivery</ion-label>
-                <ion-checkbox style="margin-right: 6px" (ionChange)="onDoorDeliveryPickupSelected($event)"></ion-checkbox>
+                <ion-checkbox [(ngModel)]="door_delivery[i]" style="margin-right: 6px"></ion-checkbox>
               </ion-item>
             </ion-list>
           </ion-col>
+        <!-- credit checkbox -->
           <ion-col>
             <ion-list>
               <ion-item style="background-color:inherit; padding:0%; margin:0%">
                 <ion-label color="primary">Credit</ion-label>
-                <ion-checkbox style="margin-right: 6px" (ionChange)="onCreditDeliverySelected($event)"></ion-checkbox>
+                  <ion-checkbox *ngIf="!user_properties.hasOwnProperty('is_creditable')" disabled="true" style="margin-right: 6px"></ion-checkbox>
+                  <ion-checkbox *ngIf="user_properties.hasOwnProperty('is_creditable') && !domestic_quote.hasOwnProperty('latest_bid_info') && user_properties.is_creditable == 'yes'" [(ngModel)]="credit[i]" style="margin-right: 6px"></ion-checkbox>
+                  <ion-checkbox *ngIf="user_properties.hasOwnProperty('is_creditable') && domestic_quote.hasOwnProperty('latest_bid_info') && user_properties.is_creditable == 'yes'" [(ngModel)]="domestic_quote.latest_bid_info.is_credit" [checked]="domestic_quote.latest_bid_info.is_credit" style="margin-right: 6px"></ion-checkbox>
+                  <ion-checkbox *ngIf="user_properties.hasOwnProperty('is_creditable') && user_properties.is_creditable == 'no'" disabled="true" style="margin-right: 6px"></ion-checkbox>
               </ion-item>
             </ion-list>
           </ion-col>
@@ -92,10 +123,15 @@
             <button ion-button small style="background-color: #C0B283" (click)="toggleLevel1('idx'+i, domestic_quote.id, i)">Bid</button>
           </ion-col>
           <ion-col>
-            <button ion-button small style="background-color: rgba(255, 145, 121, 0.95)" (click)="toggleOrder('order'+i, quantity[i], i)">Order</button>
+            <button *ngIf="!isOrderShown('order'+i)" ion-button small style="background-color: rgba(255, 145, 121, 0.95)" (click)="toggleOrder('order'+i, quantity[i], i)">Order</button>
+            <!-- show only order button clicked -->
+            <button *ngIf="isOrderShown('order'+i)" ion-button small style="background-color: rgba(255, 145, 121, 0.95)" (click)="confirmOrder(quantity[i], domestic_quote.id, domestic_quote.rate, delivery_date, i)">Confirm</button>
+          </ion-col>
+          <ion-col *ngIf="isOrderShown('order'+i)">
+            <ion-icon class="make-icon-big" (click)="toggleOrder('order'+i, quantity[i], i)" name="arrow-dropup"></ion-icon>
           </ion-col>
         </ion-row>
-        <!-- <button ion-button color="secondary" (click)="orderItem(order_quantity, domestic_quote.id, domestic_quote.latest_bid_info.spc_rate, domestic_quote.latest_bid_info.buyer_rate, domestic_quote.latest_bid_info.bid_status)">Order</button> -->
+        <!-- <button ion-button color="secondary" (click)="orderItem(order_quantity, domestic_quote.id, domestic_quote.latest_bid_info.spc_rate, domestic_quote.latest_bid_info.  rate, domestic_quote.latest_bid_info.bid_status)">Order</button> -->
         <!-- <button ion-button small style="background-color: rgba(55, 55, 55, 0.62)" (click)="orderItem(quantity[i], i)">Hold Price</button> -->
 
       </ion-card-header>
@@ -163,7 +199,10 @@
               <ion-row>
                 <ion-col><span class="header-text">Rate(Rs/Kg)</span><br><input type="number" placeholder="Rate" [(ngModel)]="rate" class="rate-quantity-input-box"></ion-col>
                 <ion-col><span class="header-text">Quantity (# bags)</span><br><input type="number" placeholder="50 Kgs bags" [(ngModel)]="quantity[i]" class="rate-quantity-input-box"></ion-col>
-                <ion-col><button ion-button (click)="bidding(quantity[i], domestic_quote.id, 'bidding', rate, i)">Bid</button></ion-col>
+                <ion-col>
+                  <button *ngIf="!domestic_quote.hasOwnProperty('latest_bid_info')" ion-button (click)="bidding(quantity[i], domestic_quote.id, 'bidding', rate, i, credit[i], door_delivery[i])">Bid</button>
+                  <button *ngIf="domestic_quote.hasOwnProperty('latest_bid_info')" ion-button (click)="bidding(quantity[i], domestic_quote.id, 'bidding', rate, i, domestic_quote.latest_bid_info.is_credit, door_delivery[i])">Bid</button>
+                </ion-col>
               </ion-row>
             </span>
           </span>

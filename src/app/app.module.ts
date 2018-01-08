@@ -7,12 +7,14 @@ import { AboutPage } from '../pages/about/about';
 import { ContactPage } from '../pages/contact/contact';
 import { HomePage } from '../pages/home/home';
 import { TabsPage } from '../pages/tabs/tabs';
+import { GrievancePage } from './../pages/grievance/grievance';
 
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { HttpServerServiceProvider } from '../providers/http-server-service/http-server-service';
 import { IonicStorageModule } from '@ionic/storage';
 import { HttpModule } from '@angular/http';
+import { PhonegapLocalNotification } from '@ionic-native/phonegap-local-notification';
 
 @NgModule({
   declarations: [
@@ -20,7 +22,8 @@ import { HttpModule } from '@angular/http';
     AboutPage,
     ContactPage,
     HomePage,
-    TabsPage
+    TabsPage,
+    GrievancePage
   ],
   imports: [
     BrowserModule,
@@ -34,13 +37,15 @@ import { HttpModule } from '@angular/http';
     AboutPage,
     ContactPage,
     HomePage,
-    TabsPage
+    TabsPage,
+    GrievancePage
   ],
   providers: [
     StatusBar,
     SplashScreen,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
-    HttpServerServiceProvider
+    HttpServerServiceProvider,
+    PhonegapLocalNotification
   ]
 })
 export class AppModule {}

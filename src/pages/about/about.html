@@ -12,7 +12,7 @@
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
   <ion-col *ngFor="let domestic_quote of domestic_quotes; let i = index">
-    <ion-card style="padding-bottom:0px; margin-bottom:0px">
+    <ion-card style="padding-bottom:0px; margin-bottom:0px" [ngStyle]="{'background-color': isBidStatusAccepted(domestic_quote.bid_status)? 'green':'#275777'}">
       <ion-card-header>
         <ion-row class="tiny-date-row bidding-card-main-content">
               <ion-col>Quote Date: {{domestic_quote.buyer_date_needed}}</ion-col><ion-col>Status:
@@ -24,7 +24,7 @@
         <ion-row>
           <ion-col><span class="header-text">Q-Price</span><br><span class="sub-header-text">(Rs/Kg)</span><br><span class="content-text">{{domestic_quote.spc_rate}}</span></ion-col>
           <ion-col><span class="header-text">Last Bid</span><br><span class="sub-header-text">(spc | You)</span><br><span class="content-text">{{domestic_quote.spc_rate}}</span> | <span class="content-text">{{domestic_quote.buyer_rate}}</span></ion-col>
-          <ion-col><span class="header-text">Quantity</span><br><span class="sub-header-text">(Kgs)</span><br><span class="content-text">{{domestic_quote.buyer_quantity}}</span></ion-col>
+          <ion-col><span class="header-text">Quantity</span><br><span class="sub-header-text">(Bags)</span><br><span class="content-text">{{domestic_quote.buyer_quantity}}</span></ion-col>
         </ion-row>
       </ion-card-header>
     </ion-card>

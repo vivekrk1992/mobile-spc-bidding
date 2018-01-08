@@ -4,6 +4,7 @@ import { FormGroup, FormBuilder } from '@angular/forms';
 import { TabsPage } from '../tabs/tabs';
 import { Storage } from '@ionic/storage';
 import { HttpServerServiceProvider } from '../../providers/http-server-service/http-server-service';
+import { PhonegapLocalNotification } from '@ionic-native/phonegap-local-notification';
 
 @IonicPage()
 @Component({
@@ -13,7 +14,7 @@ import { HttpServerServiceProvider } from '../../providers/http-server-service/h
 export class LoginPage {
   login_form: FormGroup;
   
-  constructor(public navCtrl: NavController, public navParams: NavParams, private formBuilder: FormBuilder, private storage: Storage, private httpServerServiceProvider: HttpServerServiceProvider) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, private formBuilder: FormBuilder, private storage: Storage, private httpServerServiceProvider: HttpServerServiceProvider, private localNotification: PhonegapLocalNotification) {
     this.login_form = this.formBuilder.group({
       user_name: [''],
       password: [''],
@@ -26,6 +27,22 @@ export class LoginPage {
         this.navCtrl.setRoot(TabsPage);
       }
     });
+
+    this.localNotification.requestPermission().then(
+      (permission) => {
+        if (permission === 'granted') {
+    
+          // Create the notification
+          this.localNotification.create('My Title', {
+            tag: 'message1',
+            body: 'My body',
+            icon: 'assets/icon/favicon.ico'
+          });
+    
+        }
+      }
+    );
+
   }
 
   ionViewDidLoad() {
@@ -37,6 +54,8 @@ export class LoginPage {
       console.log(data)
       this.storage.set('token', data.token);
       this.storage.set('user_type', data.user_type);
+      console.log(data.user_properties);
+      this.storage.set('user_properties', data.user_properties);
       this.httpServerServiceProvider.setTokenHeader(data.token);
       this.navCtrl.setRoot(TabsPage);
     });

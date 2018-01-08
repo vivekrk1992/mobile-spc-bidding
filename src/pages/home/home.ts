@@ -1,9 +1,10 @@
+import { PhonegapLocalNotification } from '@ionic-native/phonegap-local-notification';
 import { StatusBar } from '@ionic-native/status-bar';
-import { Component } from '@angular/core';
-import {NavController, Toast, ToastController} from 'ionic-angular';
+import { Component, OnInit } from '@angular/core';
+import { NavController, Toast, ToastController, Platform } from 'ionic-angular';
 import { HttpServerServiceProvider } from '../../providers/http-server-service/http-server-service';
 import { Storage } from '@ionic/storage';
-import { stagger } from '@angular/core/src/animation/dsl';
+import { stagger, state } from '@angular/core/src/animation/dsl';
 import { dashCaseToCamelCase } from '@angular/compiler/src/util';
 
 
@@ -11,7 +12,7 @@ import { dashCaseToCamelCase } from '@angular/compiler/src/util';
   selector: 'page-home',
   templateUrl: 'home.html'
 })
-export class HomePage{
+export class HomePage implements OnInit{
   selected_pickup_point_option: string;
   door_delivery_cost: number = 0;
   show_delevery_option: boolean = false;
@@ -31,8 +32,12 @@ export class HomePage{
   is_stock_available: boolean = false;
   expense = {};
   message: string = '';
+  user_properties: Object = {};
+  credit: boolean[] = [];
+  door_delivery: boolean[] = [];
 
-  constructor(public navCtrl: NavController, private httpServerServiceProvider: HttpServerServiceProvider, private storage: Storage, private toastCtrl: ToastController) {
+  constructor(public navCtrl: NavController, private httpServerServiceProvider: HttpServerServiceProvider, private storage: Storage, private toastCtrl: ToastController, private platform: Platform, private localNotification: PhonegapLocalNotification) {
+    console.log('constructor');
     try {
       this.httpServerServiceProvider.getAllDomesticList().subscribe((data) => {
         this.domestic_quotes = data;
@@ -56,6 +61,36 @@ export class HomePage{
       console.log(data);
       this.expense = data;
     });
+
+    this.localNotification.requestPermission().then(
+      (permission) => {
+        console.log('with in notification');
+        console.log(permission);
+        if (permission === 'denied') {
+          console.log('with in if condition');
+    
+          // Create the notification
+          this.localNotification.create('My Title', {
+            tag: 'home',
+            body: 'My body',
+            icon: 'assets/icon/favicon.ico'
+          });
+    
+        }
+      }
+    );
+  }
+
+  ngOnInit() {
+    console.log('onint');
+    // platform.ready().then(() => {
+      this.storage.get('user_properties').then((data) => {
+        this.user_properties = data;
+        console.log(this.user_properties);
+      }, (error) => {
+        console.log(error);
+      });
+    // }, () => console.log('platform not ready'));
   }
 
 // pull down the page get quote list from serve
@@ -78,9 +113,11 @@ export class HomePage{
   logout() {
     this.httpServerServiceProvider.logout().subscribe((data) => {
       this.storage.clear();
+      // this.navCtrl.popAll();
       this.navCtrl.setRoot('LoginPage');
     }, (error) => {
       this.storage.clear();
+      // this.navCtrl.popAll();
       this.navCtrl.setRoot('LoginPage');
     });
   }
@@ -130,18 +167,20 @@ export class HomePage{
 
 // order copra directly click a order button and confirm that order
   confirmOrder(quantity, quote_id, latest_spc_rate, delivery_date, index, latest_buyer_rate?, status?) {
-    if (quantity > this.stock_details['in_possession']) {
-      alert('you will get a goods after two days');
-    }
+    console.log(delivery_date);
+    // if (quantity > this.stock_details['in_possession']) {
+    //   alert('you will get a goods after two days');
+    // }
 
-    if (latest_buyer_rate < latest_spc_rate){
-      let diff = latest_spc_rate - latest_buyer_rate;
-      alert("Warning: SPC price is " + diff + " Rs higher than your last bid price!. Are you sure to order the item at " + latest_spc_rate + "Rs/Kg rate?")
-    }
-    if (latest_buyer_rate > latest_spc_rate){
-      let diff = latest_buyer_rate - latest_spc_rate;
-      alert("Warning: SPC price is " + diff + " Rs lower than your last bid price!. So, order will be placed at SPC's cheaper rates. @" + latest_spc_rate + "Rs/Kg!!!")
-    }
+    // if (latest_buyer_rate < latest_spc_rate){
+    //   let diff = latest_spc_rate - latest_buyer_rate;
+    //   alert("Warning: SPC price is " + diff + " Rs higher than your last bid price!. Are you sure to order the item at " + latest_spc_rate + "Rs/Kg rate?")
+    // }
+    // if (latest_buyer_rate > latest_spc_rate){
+    //   let diff = latest_buyer_rate - latest_spc_rate;
+    //   alert("Warning: SPC price is " + diff + " Rs lower than your last bid price!. So, order will be placed at SPC's cheaper rates. @" + latest_spc_rate + "Rs/Kg!!!")
+    // }
+
     this.httpServerServiceProvider.confirmDomesticBid({'id': quote_id, 'quantity': quantity, 'status': status, 'rate': latest_spc_rate, 'delivery_date': delivery_date}).subscribe((data) => {
       console.log(data);
       this.domestic_quotes[index]['latest_bid_info'] = data;
@@ -153,8 +192,15 @@ export class HomePage{
   }
 
 // bid a rate; in server side if owner and buyer rate will be match accept this bid and add into sale table
-  bidding(quantity, quote_id, status, rate, index) {
-    this.httpServerServiceProvider.registerDomesticBid({'id': quote_id, 'quantity': quantity, 'status': status, 'rate': rate, 'date': this.todate}).subscribe((data) => {
+  bidding(quantity, quote_id, status, rate, index, credit: boolean = false, door_delivery: boolean = false) {
+    console.log(quantity)
+    console.log(quote_id)
+    console.log(status)
+    console.log(rate)
+    console.log(index)
+    console.log(credit)
+    
+    this.httpServerServiceProvider.registerDomesticBid({'id': quote_id, 'quantity': quantity, 'status': status, 'rate': rate, 'date': this.delivery_date, 'is_credit': credit, 'is_door_delivery': door_delivery}).subscribe((data) => {
       if (!this.domestic_quotes[index].hasOwnProperty('latest_bid_info')) {
         this.domestic_quotes[index]['latest_bid_info'] = {};
       }
@@ -198,13 +244,13 @@ export class HomePage{
 
 // show order option when click order button
   toggleOrder(idx, quantity, index) {
-    if (typeof(this.domestic_quotes[index].latest_bid_info) != 'undefined') {
-      if (this.domestic_quotes[index].latest_bid_info.bid_status == 3) {
-        alert('bid is already accepted and closed');
-        let new_order = confirm('You already order for this quote, do you want another order?');
-        console.log(new_order);
-      }
-    }
+    // if (typeof(this.domestic_quotes[index].latest_bid_info) != 'undefined') {
+    //   if (this.domestic_quotes[index].latest_bid_info.bid_status == 3) {
+    //     alert('bid is already accepted and closed');
+    //     let new_order = confirm('You already order for this quote, do you want another order?');
+    //     console.log(new_order);
+    //   }
+    // }
     if (this.isOrderShown(idx)) {
       this.is_stock_available = false;
       this.show_order = null;
@@ -227,17 +273,6 @@ export class HomePage{
     this.door_delivery_cost = 0;
   }
 
-// cheked door deliver option
-  onDoorDeliveryPickupSelected(event) {
-    console.log(this.expense['door_cost'])
-    if (event.checked) {
-      this.door_delivery_cost = this.expense['door_cost'];
-    } else {
-      this.door_delivery_cost = 0;
-    }
-    console.log(this.door_delivery_cost);
-  }
-
 // check quantity is possitive
   isPossitiveInterger(index) {
     if (this.quantity[index] >= 0) {
@@ -258,5 +293,6 @@ export class HomePage{
       this.is_stock_available = data['status'];
     });
   }
-
 }
+
+
