@@ -1,3 +1,4 @@
+import { GrievancePage } from './../grievance/grievance';
 import { Component } from '@angular/core';
 import { NavController, ToastController } from 'ionic-angular';
 import { Storage } from '@ionic/storage';
@@ -46,7 +47,11 @@ export class AboutPage {
   }
 
   isBidStatusAccepted(bid_status: number) {
+    console.log(bid_status);
     return bid_status === 3
   }
 
+  routeToGrievancePage(bid_id) {
+    this.navCtrl.push(GrievancePage, {'from': 'history', 'bid_id': bid_id})
+  }
 }

@@ -1,6 +1,7 @@
 <ion-header>
   <ion-navbar>
-    <ion-title>Quotes & Bids</ion-title>
+    <!-- <ion-title>Quotes & Bids</ion-title> -->
+    <ion-row><ion-col col-2><img src="assets/icon/coconut-tree.jpg" class="navbar-icon"></ion-col><ion-col><ion-title>Shree Praswanath Crop.</ion-title></ion-col><ion-col></ion-col></ion-row>
   </ion-navbar>
 </ion-header>
 
@@ -13,21 +14,33 @@
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
 
-  <!-- contact details -->
   <br>
   <br>
   <ion-row>
-    <ion-col></ion-col>
-    <ion-col>  
+
+    <!-- contact details -->    
+    <ion-col style="float:left; padding-left:5px;">  
       <ion-row>
-        <ion-col><a href="tel:+919585488448"><ion-icon name="call"></ion-icon></a>  Shravan Malvi 9585488448</ion-col>
+        <a style="text-decoration:none" href="tel:+919585488448"><ion-icon name="call"></ion-icon> Shravan Malvi 9585488448</a> 
       </ion-row>
-      <ion-row>
-        <ion-col><a href="tel:+919894479941"><ion-icon name="call"></ion-icon></a>  Vishal 9894479941</ion-col>
+      <ion-row style="margin-top:8px">
+        <a style="text-decoration:none" href="tel:+919894479941"><ion-icon name="call"></ion-icon> Vishal 9894479941</a> 
       </ion-row>
     </ion-col>
-  </ion-row>  
 
+
+    <!-- Gps details -->
+    <ion-col>
+      <ion-row style="float:right; padding-right:5px">
+      Jodhpur Distribution point
+      <ion-icon style="font-size:25px" name="navigate"></ion-icon>
+      </ion-row>
+      <ion-row style="float:right; padding-right:5px">
+        Jaisalmir Delivery point
+        <ion-icon style="font-size:25px" name="navigate"></ion-icon>
+      </ion-row>
+    </ion-col>
+  </ion-row>
   <h3 class="page-header">Your active Quotes and Bids:</h3>
 
   <ion-col *ngFor="let domestic_quote of domestic_quotes; let i = index">
@@ -127,6 +140,7 @@
             <!-- show only order button clicked -->
             <button *ngIf="isOrderShown('order'+i)" ion-button small style="background-color: rgba(255, 145, 121, 0.95)" (click)="confirmOrder(quantity[i], domestic_quote.id, domestic_quote.rate, delivery_date, i)">Confirm</button>
           </ion-col>
+          <ion-col *ngIf="!isOrderShown('order'+i)" (click)="routeToGrievance()"><ion-icon style="font-size: 25px" name="outlet"></ion-icon></ion-col>
           <ion-col *ngIf="isOrderShown('order'+i)">
             <ion-icon class="make-icon-big" (click)="toggleOrder('order'+i, quantity[i], i)" name="arrow-dropup"></ion-icon>
           </ion-col>

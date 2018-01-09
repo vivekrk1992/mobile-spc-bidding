@@ -1,3 +1,4 @@
+import { GrievancePage } from './../grievance/grievance';
 import { PhonegapLocalNotification } from '@ionic-native/phonegap-local-notification';
 import { StatusBar } from '@ionic-native/status-bar';
 import { Component, OnInit } from '@angular/core';
@@ -35,6 +36,7 @@ export class HomePage implements OnInit{
   user_properties: Object = {};
   credit: boolean[] = [];
   door_delivery: boolean[] = [];
+  user = {};
 
   constructor(public navCtrl: NavController, private httpServerServiceProvider: HttpServerServiceProvider, private storage: Storage, private toastCtrl: ToastController, private platform: Platform, private localNotification: PhonegapLocalNotification) {
     console.log('constructor');
@@ -79,18 +81,19 @@ export class HomePage implements OnInit{
         }
       }
     );
+    this.storage.get('user').then((user_data) => {
+      this.user = user_data;
+    });
   }
 
   ngOnInit() {
     console.log('onint');
-    // platform.ready().then(() => {
       this.storage.get('user_properties').then((data) => {
         this.user_properties = data;
         console.log(this.user_properties);
       }, (error) => {
         console.log(error);
       });
-    // }, () => console.log('platform not ready'));
   }
 
 // pull down the page get quote list from serve
@@ -292,6 +295,10 @@ export class HomePage implements OnInit{
       console.log(data);
       this.is_stock_available = data['status'];
     });
+  }
+
+  routeToGrievance(): void {
+    this.navCtrl.push(GrievancePage, {'from': 'bidding', 'bidding_id': 1})
   }
 }
 

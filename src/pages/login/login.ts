@@ -53,8 +53,8 @@ export class LoginPage {
     this.httpServerServiceProvider.login(this.login_form.value).subscribe((data) => {
       console.log(data)
       this.storage.set('token', data.token);
+      this.storage.set('user', data.user);
       this.storage.set('user_type', data.user_type);
-      console.log(data.user_properties);
       this.storage.set('user_properties', data.user_properties);
       this.httpServerServiceProvider.setTokenHeader(data.token);
       this.navCtrl.setRoot(TabsPage);
