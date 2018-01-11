@@ -107,7 +107,7 @@ export class HttpServerServiceProvider {
   }
   payment(data)
   {
-    return this.http.post(this.base_url + 'main/check/availability/', data, {headers: this.headers})
+    return this.http.post(this.base_url + 'main/add/domestic/sale/payment/', data, {headers: this.headers})
       .map((response) => response.json());
   }
   getmodesofpayment()
