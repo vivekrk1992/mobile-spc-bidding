@@ -27,17 +27,21 @@
       </ion-col>
     </ion-row>
     <ion-row>
-      <ion-col> 
+    <ion-col col-5>
+    <span>
+          <ion-input type="number" class="text-box-midium"  placeholder="Transaction_id" formControlName="transaction_id" [(ngModel)]="transaction_id"> </ion-input>
+        </span>
+        </ion-col>
+      <ion-col col-3> 
         <!-- <span class="header-text" style="margin-left:10px">Date</span> -->
         <br>
         <ion-icon name="calendar" class="header-text">
           <ion-datetime  displayFormat="DD-MMM-YYYY" formControlName="date_sent" [(ngModel)]="date"></ion-datetime>
         </ion-icon>
       </ion-col>
-      <ion-col col-3  >
+      <ion-col col-2  >
         <button ion-button full color="primary" [disabled]="!account_form.valid" style="margin-top: 20px;" type="submit">submit</button>
       </ion-col>  
-      <ion-col col-2></ion-col>
     </ion-row>
   </form>
   </ion-card>

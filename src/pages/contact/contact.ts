@@ -19,6 +19,7 @@ export class ContactPage implements OnInit {
       amount: [null,Validators.required],
       date_sent:[null,Validators.required],
       mode_of_transaction_id:[null,Validators.required],
+      transaction_id:[null,Validators.required],
     });
 
 
