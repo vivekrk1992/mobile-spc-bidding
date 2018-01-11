@@ -105,15 +105,14 @@ export class HttpServerServiceProvider {
     return this.http.post(this.base_url + 'main/check/availability/', data, {headers: this.headers})
       .map((response) => response.json());
   }
-  payment(data)
-  {
+
+  registerPayment(data) {
     return this.http.post(this.base_url + 'main/add/domestic/sale/payment/', data, {headers: this.headers})
       .map((response) => response.json());
   }
-  getmodesofpayment()
-  {
-    return this.http.get(this.base_url + 'main/serve/domestic/sale/payment/modes/', {headers: this.headers})
-      .map((response) => response.json());
+
+  getmodesofpayment() {
+    return this.http.get(this.base_url + 'main/serve/domestic/sale/payment/modes/', {headers: this.headers});
   }
 
 }

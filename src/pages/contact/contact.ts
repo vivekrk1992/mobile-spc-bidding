@@ -38,7 +38,7 @@ export class ContactPage implements OnInit {
 
     // check accout form is valid
     if(!account_form_value.invalid){
-      this.httpServerServiceProvider.payment(account_form_value).subscribe(data => {
+      this.httpServerServiceProvider.registerPayment(account_form_value).subscribe(data => {
       	console.log(data);
        });
     } else {
