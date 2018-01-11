@@ -1,17 +1,44 @@
 <ion-header>
   <ion-navbar>
     <ion-title>
-      Contact
+      Account
     </ion-title>
   </ion-navbar>
 </ion-header>
 
 <ion-content>
-  <ion-list>
-    <ion-list-header>Follow us on Twitter</ion-list-header>
-    <ion-item>
-      <ion-icon name="ionic" item-start></ion-icon>
-      @ionicframework
-    </ion-item>
-  </ion-list>
+  <ion-card>
+  <form [formGroup]="account_form" (ngSubmit)="submitAccountForm(account_form.value)">
+    <ion-row>
+      <ion-col col-6>
+        <span>
+          <ion-input type="number" class="text-box-midium"  placeholder="Amount" formControlName="amount" [(ngModel)]="Amount"> </ion-input>
+        </span>
+      </ion-col>
+
+
+      <ion-col col-6>
+        <ion-item>
+          <ion-label>Mode of transaction</ion-label>
+          <ion-select interface="popover" formControlName="mode_of_transaction_id">
+              <ion-option [value]="item.id" *ngFor="let item of payment">{{item.name}} &nbsp;&nbsp;</ion-option> 
+          </ion-select>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col> 
+        <!-- <span class="header-text" style="margin-left:10px">Date</span> -->
+        <br>
+        <ion-icon name="calendar" class="header-text">
+          <ion-datetime  displayFormat="DD-MMM-YYYY" formControlName="date_sent" [(ngModel)]="date"></ion-datetime>
+        </ion-icon>
+      </ion-col>
+      <ion-col col-3  >
+        <button ion-button full color="primary" [disabled]="!account_form.valid" style="margin-top: 20px;" type="submit">submit</button>
+      </ion-col>  
+      <ion-col col-2></ion-col>
+    </ion-row>
+  </form>
+  </ion-card>
 </ion-content>
