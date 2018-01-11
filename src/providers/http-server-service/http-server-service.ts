@@ -12,9 +12,9 @@ export class HttpServerServiceProvider {
   user_type: string;
 
   headers: Headers;
-  base_url: string = "http://127.0.0.1:8000/";
+  // base_url: string = "http://127.0.0.1:8000/";
   // base_url: string = "http://192.168.0.105:8000/";
-  // base_url: string = "http://api.exportcopra.com/";
+  base_url: string = "http://api.exportcopra.com/";
 
   constructor(public http: Http, private storage: Storage) {
     console.log('Hello HttpServerServiceProvider Provider');
