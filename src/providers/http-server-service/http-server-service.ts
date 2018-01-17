@@ -115,4 +115,9 @@ export class HttpServerServiceProvider {
       .map((response) => response.json());
   }
 
+  getPaymentDetailsForBuyer() {
+    return this.http.get(this.base_url + 'main/serve/payment/details/for/buyer/', {headers: this.headers})
+      .map((response) => response.json());
+  }
+
 }

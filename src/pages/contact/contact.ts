@@ -12,8 +12,10 @@ export class ContactPage implements OnInit {
   account_form:FormGroup;
   payment:any;
   date: any;
+  buyer_payments: any[] = [];
 
   constructor(private httpServerServiceProvider: HttpServerServiceProvider, public formBuilder: FormBuilder) {
+    
     this.date = new Date().toISOString().split('T')[0];    
     this.account_form = formBuilder.group({
       amount: [null,Validators.required],
@@ -23,14 +25,19 @@ export class ContactPage implements OnInit {
     });
 
 
-    this.httpServerServiceProvider.getmodesofpayment().subscribe(data=>{
+    this.httpServerServiceProvider.getmodesofpayment().subscribe((data)=>{
       this.payment = data;
       console.log(this.payment);
     });
+
+    this.httpServerServiceProvider.getPaymentDetailsForBuyer().subscribe((data) => {
+      console.log(data);
+      this.buyer_payments = data;
+    });
+
   }
 
   ngOnInit() {
-
   }
 
   submitAccountForm(account_form_value):void{

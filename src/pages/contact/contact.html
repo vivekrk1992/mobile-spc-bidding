@@ -7,6 +7,7 @@
 </ion-header>
 
 <ion-content>
+  <h2>Enter Payment Details</h2>
   <ion-card>
   <form [formGroup]="account_form" (ngSubmit)="submitAccountForm(account_form.value)">
     <ion-row>
@@ -42,5 +43,21 @@
       </ion-col>  
     </ion-row>
   </form>
-  </ion-card>
+
+</ion-card>
+<h2>Payment History</h2>
+<ion-row class="row-head">
+  <ion-col>From</ion-col>
+  <ion-col>To</ion-col>
+  <ion-col>Date</ion-col>
+  <ion-col>Mode</ion-col>
+  <ion-col>Amount</ion-col>
+</ion-row>
+<ion-row *ngFor="let payment of buyer_payments">
+  <ion-col>{{payment.buyer.first_name}}</ion-col>
+  <ion-col>{{payment.payment_to.first_name}}</ion-col>
+  <ion-col>{{payment.date_sent}}</ion-col>
+  <ion-col>{{payment.mode_of_transaction.name}}</ion-col>
+  <ion-col>{{payment.amount}}</ion-col>
+</ion-row>
 </ion-content>
