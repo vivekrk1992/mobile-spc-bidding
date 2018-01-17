@@ -12,8 +12,8 @@ export class HttpServerServiceProvider {
   user_type: string;
 
   headers: Headers;
-  // base_url: string = "http://127.0.0.1:8000/";
-  base_url: string = "http://192.168.0.105:8000/";
+  base_url: string = "http://127.0.0.1:8000/";
+  // base_url: string = "http://192.168.0.105:8000/";
   // base_url: string = "http://api.exportcopra.com/";
 
   constructor(public http: Http, private storage: Storage) {
@@ -107,12 +107,12 @@ export class HttpServerServiceProvider {
   }
 
   registerPayment(data) {
-    return this.http.post(this.base_url + 'main/add/domestic/sale/payment/', data, {headers: this.headers})
-      .map((response) => response.json());
+    return this.http.post(this.base_url + 'main/add/domestic/sale/payment/', data, {headers: this.headers});
   }
 
   getmodesofpayment() {
-    return this.http.get(this.base_url + 'main/serve/domestic/sale/payment/modes/', {headers: this.headers});
+    return this.http.get(this.base_url + 'main/serve/domestic/sale/payment/modes/', {headers: this.headers})
+      .map((response) => response.json());
   }
 
 }
