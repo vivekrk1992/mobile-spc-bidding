@@ -73,10 +73,10 @@
   <ion-col>Amount</ion-col>
   <ion-col>Status</ion-col>
 </ion-row>
-<ion-row *ngFor="let peritem of payment_per_items">
-  <ion-col>{{format_date}}</ion-col>
-  <ion-col>{{peritem.quantity_50kg_bag}}</ion-col>
-  <ion-col>{{peritem.rate}}</ion-col>
-  <ion-col>{{peritem.payment_status.name}}</ion-col>
+<ion-row *ngFor="let item of payment_per_items">
+  <ion-col>{{item.sale_date.split('T')[0]}}</ion-col>
+  <ion-col>{{item.quantity_50kg_bag}}</ion-col>
+  <ion-col>{{item.rate}}</ion-col>
+  <ion-col>{{item.payment_status.name}}</ion-col>
 </ion-row> 
 </ion-content>
