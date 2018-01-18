@@ -12,7 +12,9 @@ export class ContactPage implements OnInit {
   account_form:FormGroup;
   payment:any;
   date: any;
+  format_date:any;
   buyer_payments: any[] = [];
+  payment_per_items:any[]=[];
 
   constructor(private httpServerServiceProvider: HttpServerServiceProvider, public formBuilder: FormBuilder, private toastCtrl: ToastController) {
     
@@ -25,7 +27,7 @@ export class ContactPage implements OnInit {
     });
 
 
-    this.httpServerServiceProvider.getmodesofpayment().subscribe((data)=>{
+    this.httpServerServiceProvider.getmodesofpayment().subscribe((data) => {
       this.payment = data;
       console.log(this.payment);
     });
@@ -33,6 +35,15 @@ export class ContactPage implements OnInit {
     this.httpServerServiceProvider.getPaymentDetailsForBuyer().subscribe((data) => {
       console.log(data);
       this.buyer_payments = data;
+    });
+
+    this.httpServerServiceProvider.getPaymentDetailsForPerItems().subscribe((data) => {
+      this.payment_per_items = data;
+
+      console.log(this.payment_per_items);
+      for (var i in this.payment_per_items) {
+        this.format_date=this.payment_per_items[i].sale_date.split('T')[0];
+            }      
     });
 
   }

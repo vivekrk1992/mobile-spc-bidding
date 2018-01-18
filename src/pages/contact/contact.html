@@ -65,4 +65,18 @@
   <ion-col>{{payment.mode_of_transaction.name}}</ion-col>
   <ion-col>{{payment.amount}}</ion-col>
 </ion-row>
+
+<h2>Item Wise Payment History</h2>
+<ion-row class="row-head">
+  <ion-col>Date</ion-col>
+  <ion-col>Quantity</ion-col>
+  <ion-col>Amount</ion-col>
+  <ion-col>Status</ion-col>
+</ion-row>
+<ion-row *ngFor="let peritem of payment_per_items">
+  <ion-col>{{format_date}}</ion-col>
+  <ion-col>{{peritem.quantity_50kg_bag}}</ion-col>
+  <ion-col>{{peritem.rate}}</ion-col>
+  <ion-col>{{peritem.payment_status.name}}</ion-col>
+</ion-row> 
 </ion-content>
