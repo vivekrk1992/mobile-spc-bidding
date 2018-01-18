@@ -1,7 +1,7 @@
 import { Component ,OnInit} from '@angular/core';
 import { FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/forms';
 import { HttpServerServiceProvider } from '../../providers/http-server-service/http-server-service';
-import { NavController } from 'ionic-angular';
+import { NavController, ToastController } from 'ionic-angular';
 
 @Component({
   selector: 'page-contact',
@@ -14,7 +14,7 @@ export class ContactPage implements OnInit {
   date: any;
   buyer_payments: any[] = [];
 
-  constructor(private httpServerServiceProvider: HttpServerServiceProvider, public formBuilder: FormBuilder) {
+  constructor(private httpServerServiceProvider: HttpServerServiceProvider, public formBuilder: FormBuilder, private toastCtrl: ToastController) {
     
     this.date = new Date().toISOString().split('T')[0];    
     this.account_form = formBuilder.group({
@@ -37,21 +37,44 @@ export class ContactPage implements OnInit {
 
   }
 
+  doRefresh(event) {
+    this.httpServerServiceProvider.getPaymentDetailsForBuyer().subscribe((data) => {
+      console.log(data);
+      this.buyer_payments = data;
+      event.complete();
+    }, (error) => {
+      event.complete();
+    });
+  }
+
   ngOnInit() {
   }
 
-  submitAccountForm(account_form_value):void{
+  submitAccountForm(account_form_value): void{
     account_form_value.date_sent = new Date(account_form_value.date_sent).toISOString().split('T')[0];
 
     // check accout form is valid
-    if(!account_form_value.invalid){
-      this.httpServerServiceProvider.registerPayment(account_form_value).subscribe(data => {
-      	console.log(data);
+    if (!account_form_value.invalid) {
+      this.httpServerServiceProvider.registerPayment(account_form_value).subscribe((data) => {
+        console.log(data);
+        this.buyer_payments.push(data);
+        this.displayToastMessage('top', 'Payment uploaded successfully!');
+       }, (error) => {
+         this.displayToastMessage('top', 'Error!');
        });
     } else {
       console.log('not valid form')        
     }
   } 
+
+  displayToastMessage(position: string, message: string) {
+    let toast = this.toastCtrl.create({
+      message: message,
+      position: position,
+      duration: 3000
+    });
+    toast.present();
+  }
 
 }
   

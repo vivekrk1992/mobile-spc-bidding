@@ -7,6 +7,11 @@
 </ion-header>
 
 <ion-content>
+
+  <ion-refresher (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
   <h2>Enter Payment Details</h2>
   <ion-card>
   <form [formGroup]="account_form" (ngSubmit)="submitAccountForm(account_form.value)">
