@@ -17,8 +17,8 @@ export class ContactPage implements OnInit {
   payment_per_items:any[]=[];
 
   constructor(private httpServerServiceProvider: HttpServerServiceProvider, public formBuilder: FormBuilder, private toastCtrl: ToastController) {
-    
-    this.date = new Date().toISOString().split('T')[0];    
+
+    this.date = new Date().toISOString().split('T')[0];
     this.account_form = formBuilder.group({
       amount: [null,Validators.required],
       date_sent:[null,Validators.required],
@@ -43,7 +43,7 @@ export class ContactPage implements OnInit {
       console.log(this.payment_per_items);
       for (var i in this.payment_per_items) {
         this.format_date=this.payment_per_items[i].sale_date.split('T')[0];
-            }      
+            }
     });
 
   }
@@ -85,9 +85,9 @@ export class ContactPage implements OnInit {
       duration: 3000
     });
     toast.present();
+
   }
 
 }
-  
 
 

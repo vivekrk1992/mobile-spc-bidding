@@ -31,6 +31,7 @@
     "cordova-plugin-advanced-http": "^1.8.1",
     "cordova-plugin-datepicker": "^0.9.3",
     "cordova-plugin-device": "^1.1.4",
+    "cordova-plugin-dialogs": "^2.0.1",
     "cordova-plugin-file": "^5.0.0",
     "cordova-plugin-ionic-webview": "^1.1.16",
     "cordova-plugin-splashscreen": "^4.0.3",
@@ -60,7 +61,8 @@
       "cordova-plugin-device": {},
       "cordova-plugin-splashscreen": {},
       "cordova-plugin-ionic-webview": {},
-      "phonegap-plugin-local-notification": {}
+      "phonegap-plugin-local-notification": {},
+      "cordova-plugin-dialogs": {}
     },
     "platforms": [
       "android"

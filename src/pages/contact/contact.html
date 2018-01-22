@@ -12,7 +12,7 @@
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
 
-  <h2>Enter Payment Details</h2>
+  <h2 text-center padding-top>Enter Payment Details</h2>
   <ion-card>
   <form [formGroup]="account_form" (ngSubmit)="submitAccountForm(account_form.value)">
     <ion-row>
@@ -50,7 +50,7 @@
   </form>
 
 </ion-card>
-<h2>Payment History</h2>
+<h2 text-center padding-top>Payment History</h2>
 <ion-row class="row-head">
   <ion-col>From</ion-col>
   <ion-col>To</ion-col>
@@ -66,7 +66,7 @@
   <ion-col>{{payment.amount}}</ion-col>
 </ion-row>
 
-<h2>Item Wise Payment History</h2>
+<h2 text-center padding-top>Item Wise Payment History</h2>
 <ion-row class="row-head">
   <ion-col>Date</ion-col>
   <ion-col>Quantity</ion-col>

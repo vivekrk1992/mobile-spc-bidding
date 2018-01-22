@@ -2,7 +2,7 @@ import { GrievancePage } from './../grievance/grievance';
 import { PhonegapLocalNotification } from '@ionic-native/phonegap-local-notification';
 import { StatusBar } from '@ionic-native/status-bar';
 import { Component, OnInit } from '@angular/core';
-import { NavController, Toast, ToastController, Platform } from 'ionic-angular';
+import { NavController, Toast, ToastController, Platform, AlertController } from 'ionic-angular';
 import { HttpServerServiceProvider } from '../../providers/http-server-service/http-server-service';
 import { Storage } from '@ionic/storage';
 import { stagger, state } from '@angular/core/src/animation/dsl';
@@ -38,7 +38,8 @@ export class HomePage implements OnInit{
   door_delivery: boolean[] = [];
   user = {};
 
-  constructor(public navCtrl: NavController, private httpServerServiceProvider: HttpServerServiceProvider, private storage: Storage, private toastCtrl: ToastController, private platform: Platform, private localNotification: PhonegapLocalNotification) {
+  constructor(public navCtrl: NavController, private httpServerServiceProvider: HttpServerServiceProvider, private storage: Storage,
+     private toastCtrl: ToastController, private platform: Platform, private localNotification: PhonegapLocalNotification, private alertCtrl: AlertController) {
     console.log('constructor');
     try {
       this.httpServerServiceProvider.getAllDomesticList().subscribe((data) => {
@@ -81,6 +82,7 @@ export class HomePage implements OnInit{
         }
       }
     );
+
     this.storage.get('user').then((user_data) => {
       this.user = user_data;
     });
@@ -169,52 +171,40 @@ export class HomePage implements OnInit{
   }
 
 // order copra directly click a order button and confirm that order
-  confirmOrder(quantity, quote_id, latest_spc_rate, delivery_date, index, latest_buyer_rate?, status?) {
+  confirmOrder(quantity, quote_id, latest_spc_rate, delivery_date, index, buyer_rate?, status?) {
+  // confirmOrder(quantity, quote_id, latest_spc_rate, delivery_date, index, latest_buyer_rate?, status?) {
+    let data = {'id': quote_id, 'quantity': quantity, 'status': status, 'rate': latest_spc_rate, 'delivery_date': delivery_date};
+    this.presentConfirm(data, index)
     console.log(delivery_date);
-    // if (quantity > this.stock_details['in_possession']) {
-    //   alert('you will get a goods after two days');
-    // }
-
-    // if (latest_buyer_rate < latest_spc_rate){
-    //   let diff = latest_spc_rate - latest_buyer_rate;
-    //   alert("Warning: SPC price is " + diff + " Rs higher than your last bid price!. Are you sure to order the item at " + latest_spc_rate + "Rs/Kg rate?")
-    // }
-    // if (latest_buyer_rate > latest_spc_rate){
-    //   let diff = latest_buyer_rate - latest_spc_rate;
-    //   alert("Warning: SPC price is " + diff + " Rs lower than your last bid price!. So, order will be placed at SPC's cheaper rates. @" + latest_spc_rate + "Rs/Kg!!!")
-    // }
-
-    this.httpServerServiceProvider.confirmDomesticBid({'id': quote_id, 'quantity': quantity, 'status': status, 'rate': latest_spc_rate, 'delivery_date': delivery_date}).subscribe((data) => {
-      console.log(data);
-      this.domestic_quotes[index]['latest_bid_info'] = data;
-      this.displayToast('Order placed successfully!');
-    }, (error) => {
-      this.displayToast('Error!');
-    });
-
   }
 
 // bid a rate; in server side if owner and buyer rate will be match accept this bid and add into sale table
   bidding(quantity, quote_id, status, rate, index, credit: boolean = false, door_delivery: boolean = false) {
-    console.log(quantity)
-    console.log(quote_id)
-    console.log(status)
     console.log(rate)
-    console.log(index)
-    console.log(credit)
-    
-    this.httpServerServiceProvider.registerDomesticBid({'id': quote_id, 'quantity': quantity, 'status': status, 'rate': rate, 'date': this.delivery_date, 'is_credit': credit, 'is_door_delivery': door_delivery}).subscribe((data) => {
-      if (!this.domestic_quotes[index].hasOwnProperty('latest_bid_info')) {
-        this.domestic_quotes[index]['latest_bid_info'] = {};
+    console.log(quantity)
+    if (rate === null || quantity === null) {
+
+        let alert = this.alertCtrl.create({
+          title: 'Error',
+          subTitle: `Rate and Quantity can't be empty!`,
+          buttons: ['Ok']
+        });
+        alert.present();
+      
+    } else {
+      this.httpServerServiceProvider.registerDomesticBid({'id': quote_id, 'quantity': quantity, 'status': status, 'rate': rate, 'date': this.delivery_date, 'is_credit': credit, 'is_door_delivery': door_delivery}).subscribe((data) => {
+        if (!this.domestic_quotes[index].hasOwnProperty('latest_bid_info')) {
+          this.domestic_quotes[index]['latest_bid_info'] = {};
+        }
+        this.domestic_quotes[index]['latest_bid_info']['spc_rate'] = data.spc_rate;
+        this.domestic_quotes[index]['latest_bid_info']['buyer_rate'] = data.buyer_rate;
+        this.domestic_quotes[index]['latest_bid_info']['bid_status'] = data.bid_status;
+        this.domestic_quotes[index]['latest_bid_info']['buyer_quantity'] = data.buyer_quantity;
+        this.bidding_history.push(data);
+      }, (error) => {
+        this.displayToast('Error!');
+        });
       }
-      this.domestic_quotes[index]['latest_bid_info']['spc_rate'] = data.spc_rate;
-      this.domestic_quotes[index]['latest_bid_info']['buyer_rate'] = data.buyer_rate;
-      this.domestic_quotes[index]['latest_bid_info']['bid_status'] = data.bid_status;
-      this.domestic_quotes[index]['latest_bid_info']['buyer_quantity'] = data.buyer_quantity;
-      this.bidding_history.push(data);
-    }, (error) => {
-      this.displayToast('Error!');
-      });
     }
 
 // send bidding message to server; is success also push into local
@@ -299,6 +289,41 @@ export class HomePage implements OnInit{
 
   routeToGrievance(): void {
     this.navCtrl.push(GrievancePage, {'from': 'bidding', 'bidding_id': 1})
+  }
+
+  presentConfirm(data, index) {
+    let alert = this.alertCtrl.create({
+      title: 'Confirm Order',
+      message: 'Do you accept ' + data.rate +' Rs per Kg ?',
+      buttons: [
+        {
+          text: 'Disagree',
+          // role: 'cancel',
+          handler: () => {
+            console.log('Cancel clicked');
+          }
+        },
+        {
+          text: 'Agree',
+          handler: () => {
+            console.log('Buy clicked');
+            this.registerOrder(data, index);
+          }
+        }
+      ]
+    });
+    alert.present();
+  }
+
+  registerOrder(order_data, index) {
+    console.log('register_order')
+    this.httpServerServiceProvider.confirmDomesticBid(order_data).subscribe((data) => {
+      console.log(data);
+      this.domestic_quotes[index]['latest_bid_info'] = data;
+      this.displayToast('Order placed successfully!');
+    }, (error) => {
+      this.displayToast('Error!');
+    });
   }
 }
 
