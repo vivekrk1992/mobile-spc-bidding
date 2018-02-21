@@ -1,13 +1,15 @@
-import { Component ,OnInit} from '@angular/core';
+import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/forms';
 import { HttpServerServiceProvider } from '../../providers/http-server-service/http-server-service';
 import { NavController, ToastController } from 'ionic-angular';
+// import { InterfaceProvider } from './../../providers/interface/interface';
+import { value, Test } from '../../providers/interface/interface'
 
 @Component({
   selector: 'page-contact',
   templateUrl: 'contact.html'
 })
-export class ContactPage implements OnInit {
+export class ContactPage {
 
   account_form:FormGroup;
   payment:any;
@@ -18,6 +20,8 @@ export class ContactPage implements OnInit {
 
   constructor(private httpServerServiceProvider: HttpServerServiceProvider, public formBuilder: FormBuilder, private toastCtrl: ToastController) {
 
+    console.log('contact');
+    console.log(value);
     this.date = new Date().toISOString().split('T')[0];
     this.account_form = formBuilder.group({
       amount: [null,Validators.required],
@@ -27,7 +31,8 @@ export class ContactPage implements OnInit {
     });
 
 
-    this.httpServerServiceProvider.getmodesofpayment().subscribe((data) => {
+
+    this.httpServerServiceProvider.getModesOfPayment().subscribe((data) => {
       this.payment = data;
       console.log(this.payment);
     });
@@ -40,16 +45,18 @@ export class ContactPage implements OnInit {
     this.httpServerServiceProvider.getPaymentDetailsForPerItems().subscribe((data) => {
       this.payment_per_items = data;
 
-<<<<<<< HEAD
       console.log(this.payment_per_items);
       for (var i in this.payment_per_items) {
         this.format_date=this.payment_per_items[i].sale_date.split('T')[0];
             }
-=======
-      console.log(this.payment_per_items);      
->>>>>>> fb62f49787255e50d030913e47359373906800c7
     });
 
+    this.interTest({'name': 'vivek', 'age': 25})
+
+  }
+
+  interTest(data: Test) {
+    console.log(data);
   }
 
   doRefresh(event) {
@@ -60,9 +67,6 @@ export class ContactPage implements OnInit {
     }, (error) => {
       event.complete();
     });
-  }
-
-  ngOnInit() {
   }
 
   submitAccountForm(account_form_value): void{
@@ -78,9 +82,9 @@ export class ContactPage implements OnInit {
          this.displayToastMessage('top', 'Error!');
        });
     } else {
-      console.log('not valid form')        
+      console.log('not valid form')
     }
-  } 
+  }
 
   displayToastMessage(position: string, message: string) {
     let toast = this.toastCtrl.create({
@@ -89,7 +93,10 @@ export class ContactPage implements OnInit {
       duration: 3000
     });
     toast.present();
+  }
 
+  testFun() {
+    // this.interfaceProvider.interFun();
   }
 
 }

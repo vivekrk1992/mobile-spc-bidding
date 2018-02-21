@@ -27,7 +27,7 @@
         <ion-item>
           <ion-label>Mode of transaction</ion-label>
           <ion-select interface="popover" formControlName="mode_of_transaction_id">
-              <ion-option [value]="item.id" *ngFor="let item of payment">{{item.name}} &nbsp;&nbsp;</ion-option> 
+              <ion-option [value]="item.id" *ngFor="let item of payment">{{item.name}} &nbsp;&nbsp;</ion-option>
           </ion-select>
         </ion-item>
       </ion-col>
@@ -38,14 +38,14 @@
           <ion-input type="text" class="text-box-midium"  placeholder="Transaction_id" formControlName="transaction_id" [(ngModel)]="transaction_id"> </ion-input>
         </span>
       </ion-col>
-      <ion-col col-3> 
+      <ion-col col-3>
         <ion-icon name="calendar" class="header-text">
           <ion-datetime  displayFormat="DD-MMM-YYYY" formControlName="date_sent" [(ngModel)]="date"></ion-datetime>
         </ion-icon>
       </ion-col>
       <ion-col col-3>
         <button ion-button full color="primary" [disabled]="!account_form.valid" style="margin-top: 20px;" type="submit">submit</button>
-      </ion-col>  
+      </ion-col>
     </ion-row>
   </form>
 
@@ -76,7 +76,7 @@
 <ion-row *ngFor="let item of payment_per_items">
   <ion-col>{{item.sale_date.split('T')[0]}}</ion-col>
   <ion-col>{{item.quantity_50kg_bag}}</ion-col>
-  <ion-col>{{item.rate}}</ion-col>
+  <ion-col>{{(item.product_cost + item.logistics_cost)}}</ion-col>
   <ion-col>{{item.payment_status.name}}</ion-col>
-</ion-row> 
+</ion-row>
 </ion-content>

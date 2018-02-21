@@ -15,6 +15,10 @@ import { HttpServerServiceProvider } from '../providers/http-server-service/http
 import { IonicStorageModule } from '@ionic/storage';
 import { HttpModule } from '@angular/http';
 import { PhonegapLocalNotification } from '@ionic-native/phonegap-local-notification';
+import {SaleOrderDetailsPage} from "../pages/sale-order-details/sale-order-details";
+import {PipesModule} from "../pipes/pipes.module";
+import { GlobalProvider } from '../providers/global/global';
+// import { InterfaceProvider } from '../providers/interface/interface';
 
 @NgModule({
   declarations: [
@@ -23,13 +27,15 @@ import { PhonegapLocalNotification } from '@ionic-native/phonegap-local-notifica
     ContactPage,
     HomePage,
     TabsPage,
-    GrievancePage
+    GrievancePage,
+    SaleOrderDetailsPage
   ],
   imports: [
     BrowserModule,
     IonicModule.forRoot(MyApp),
     IonicStorageModule.forRoot(),
-    HttpModule
+    HttpModule,
+    PipesModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -38,14 +44,17 @@ import { PhonegapLocalNotification } from '@ionic-native/phonegap-local-notifica
     ContactPage,
     HomePage,
     TabsPage,
-    GrievancePage
+    GrievancePage,
+    SaleOrderDetailsPage
   ],
   providers: [
     StatusBar,
     SplashScreen,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     HttpServerServiceProvider,
-    PhonegapLocalNotification
+    PhonegapLocalNotification,
+    GlobalProvider,
+    // InterfaceProvider,
   ]
 })
 export class AppModule {}

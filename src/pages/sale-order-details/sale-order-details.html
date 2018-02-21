@@ -1,0 +1,29 @@
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>sale-order-details</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+  <ion-refresher (ionRefresh)="getSaleDetailsForBid($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
+  <ion-row>
+    <ion-col> Product cost </ion-col>
+    <ion-col> Logistic cost </ion-col>
+    <ion-col> Date</ion-col>
+    <ion-col> amount-received </ion-col>
+    <ion-col> sale type </ion-col>
+  </ion-row>
+  <ion-row>
+    <ion-col> {{ bid_sale_details.product_cost }} </ion-col>
+    <ion-col> {{ bid_sale_details.logistics_cost }} </ion-col>
+    <ion-col> {{ bid_sale_details.sale_date}} </ion-col>
+    <ion-col> {{ bid_sale_details.amount_received }} </ion-col>
+    <ion-col> {{ bid_sale_details.sale_type }} </ion-col>
+  </ion-row>
+</ion-content>

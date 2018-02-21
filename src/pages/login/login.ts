@@ -13,7 +13,7 @@ import { PhonegapLocalNotification } from '@ionic-native/phonegap-local-notifica
 })
 export class LoginPage {
   login_form: FormGroup;
-  
+
   constructor(public navCtrl: NavController, public navParams: NavParams, private formBuilder: FormBuilder, private storage: Storage, private httpServerServiceProvider: HttpServerServiceProvider, private localNotification: PhonegapLocalNotification) {
     this.login_form = this.formBuilder.group({
       user_name: [''],
@@ -22,8 +22,6 @@ export class LoginPage {
 
     storage.get('token').then((token) => {
       if(token != null){
-        console.log('token not null');
-        // this.httpServerServiceProvider.setTokenHeader(token);        
         this.navCtrl.setRoot(TabsPage);
       }
     });
@@ -31,14 +29,14 @@ export class LoginPage {
     this.localNotification.requestPermission().then(
       (permission) => {
         if (permission === 'granted') {
-    
+
           // Create the notification
           this.localNotification.create('My Title', {
             tag: 'message1',
             body: 'My body',
             icon: 'assets/icon/favicon.ico'
           });
-    
+
         }
       }
     );
@@ -51,7 +49,6 @@ export class LoginPage {
 
   logIn() {
     this.httpServerServiceProvider.login(this.login_form.value).subscribe((data) => {
-      console.log(data)
       this.storage.set('token', data.token);
       this.storage.set('user', data.user);
       this.storage.set('user_type', data.user_type);

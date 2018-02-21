@@ -21,10 +21,8 @@ export class HttpServerServiceProvider {
     this.headers = new Headers();
     this.storage.get('token').then((token) => {
       if(token != null) {
-        console.log('token not null');
         this.headers.append('Authorization', 'Token ' + token);
-        this.getAllDomesticList().subscribe((data) => {
-          console.log(data);
+        this.getAllDomesticList().subscribe(() => {
         });
       }
     });
@@ -44,23 +42,17 @@ export class HttpServerServiceProvider {
   }
 
   setTokenHeader(token) {
-    console.log(token);
     this.headers = new Headers();
     this.headers.append('Authorization', 'Token ' + token);
-    console.log('token setted into header');
   }
 
 // Domestic
   getAllDomesticList() {
-    console.log('get domestic quote');
-    console.log(this.headers);
     return this.http.get(this.base_url + 'main/serve/domestic/quote/', {headers: this.headers})
       .map((res) => res.json());
   }
 
   getAllDomesticQuotesWithLatestBid() {
-    console.log('get domestic quote along with latest bid info!');
-    console.log(this.headers);
     return this.http.get(this.base_url + 'main/serve/domestic/qutoe/history/for/buyer/', {headers: this.headers})
       .map((res) => res.json());
   }
@@ -111,7 +103,7 @@ export class HttpServerServiceProvider {
       .map((response) => response.json());
   }
 
-  getmodesofpayment() {
+  getModesOfPayment() {
     return this.http.get(this.base_url + 'main/serve/domestic/sale/payment/modes/', {headers: this.headers})
       .map((response) => response.json());
   }
@@ -124,6 +116,11 @@ export class HttpServerServiceProvider {
   getPaymentDetailsForPerItems() {
     return this.http.get(this.base_url + 'main/serve/sale/wise/payment/history/', {headers: this.headers})
       .map((response) => response.json());
+  }
+
+  getSaleDetailsForBid(data) {
+    return this.http.post(this.base_url + 'main/serve/sale/details/for/bid/', data, {headers: this.headers})
+      .map((response) => response.json())
   }
 
 }

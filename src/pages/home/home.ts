@@ -1,12 +1,10 @@
 import { GrievancePage } from './../grievance/grievance';
 import { PhonegapLocalNotification } from '@ionic-native/phonegap-local-notification';
-import { StatusBar } from '@ionic-native/status-bar';
 import { Component, OnInit } from '@angular/core';
-import { NavController, Toast, ToastController, Platform, AlertController } from 'ionic-angular';
+import {NavController, Toast, ToastController, Platform, AlertController, App} from 'ionic-angular';
 import { HttpServerServiceProvider } from '../../providers/http-server-service/http-server-service';
 import { Storage } from '@ionic/storage';
-import { stagger, state } from '@angular/core/src/animation/dsl';
-import { dashCaseToCamelCase } from '@angular/compiler/src/util';
+import { GlobalProvider } from "../../providers/global/global";
 
 
 @Component({
@@ -27,8 +25,8 @@ export class HomePage implements OnInit{
   quantity: number[] = [];
   myDate = new Date();
   today_date = this.myDate.toISOString().split('T')[0];
-  delivery_date: any;
-  rate: any;
+  delivery_date: any = new Date().toISOString().split('T')[0];
+  rate: any = null;
   stock_details: any[] = [];
   is_stock_available: boolean = false;
   expense = {};
@@ -39,46 +37,26 @@ export class HomePage implements OnInit{
   user = {};
 
   constructor(public navCtrl: NavController, private httpServerServiceProvider: HttpServerServiceProvider, private storage: Storage,
-     private toastCtrl: ToastController, private platform: Platform, private localNotification: PhonegapLocalNotification, private alertCtrl: AlertController) {
-    console.log('constructor');
-    try {
-      this.httpServerServiceProvider.getAllDomesticList().subscribe((data) => {
-        this.domestic_quotes = data;
-        // work on dates
-        this.myDate.setDate(this.myDate.getDate() + 1);
-        console.log(this.myDate);
-        this.delivery_date = this.myDate.toISOString().split('T')[0];
-      });
-    }
-    catch(e) {
-      console.log('ther is an error to assing a latest values');
-      console.log(e);
-    }
+    private toastCtrl: ToastController, private platform: Platform, private localNotification: PhonegapLocalNotification,
+    private alertCtrl: AlertController, private global: GlobalProvider, private app: App) {
+    console.log(this.global.bag_quantity);
+    this.delivery_date = this.dateIncrement(this.delivery_date, 2);
+    this.doRefresh();
     httpServerServiceProvider.getStockDetails().subscribe((data) => {
-      console.log(data);
       this.stock_details = data;
-    });
-
-    // get expense for delivery point
-    this.httpServerServiceProvider.getDomesticDeliveryExpense().subscribe((data) => {
-      console.log(data);
-      this.expense = data;
     });
 
     this.localNotification.requestPermission().then(
       (permission) => {
-        console.log('with in notification');
         console.log(permission);
         if (permission === 'denied') {
-          console.log('with in if condition');
-    
           // Create the notification
           this.localNotification.create('My Title', {
             tag: 'home',
             body: 'My body',
             icon: 'assets/icon/favicon.ico'
           });
-    
+
         }
       }
     );
@@ -99,13 +77,13 @@ export class HomePage implements OnInit{
   }
 
 // pull down the page get quote list from serve
-  doRefresh(event) {
+  doRefresh(event = null) {
     this.httpServerServiceProvider.getAllDomesticList().subscribe((data) => {
       console.log(data);
       this.domestic_quotes = data;
-      event.complete();
-    }, (error) => {
-      event.complete();
+      if (event != null) event.complete();
+    }, () => {
+      if (event != null) event.complete();
     });
 
   // get expense for delivery point
@@ -118,12 +96,10 @@ export class HomePage implements OnInit{
   logout() {
     this.httpServerServiceProvider.logout().subscribe((data) => {
       this.storage.clear();
-      // this.navCtrl.popAll();
-      this.navCtrl.setRoot('LoginPage');
-    }, (error) => {
+      this.app.getRootNav().setRoot('LoginPage');
+    }, () => {
       this.storage.clear();
-      // this.navCtrl.popAll();
-      this.navCtrl.setRoot('LoginPage');
+      this.app.getRootNav().setRoot('LoginPage');
     });
   }
 
@@ -161,7 +137,6 @@ export class HomePage implements OnInit{
 
 // when click a oreder button show oreder options
   orderItem(quantity, index) {
-    console.log('with in order item')
     if (this.show_delevery_option) {
       this.show_delevery_option = false;
     } else {
@@ -171,17 +146,18 @@ export class HomePage implements OnInit{
   }
 
 // order copra directly click a order button and confirm that order
-  confirmOrder(quantity, quote_id, latest_spc_rate, delivery_date, index, buyer_rate?, status?) {
-  // confirmOrder(quantity, quote_id, latest_spc_rate, delivery_date, index, latest_buyer_rate?, status?) {
-    let data = {'id': quote_id, 'quantity': quantity, 'status': status, 'rate': latest_spc_rate, 'delivery_date': delivery_date};
+//   confirmOrder(quantity, quote_id, latest_spc_rate, delivery_date, index, buyer_rate?, status?) {
+  confirmOrder(quantity, quote_id, delivery_date, index, latest_spc_rate = null, latest_buyer_rate = null, status = null) {
+    if (latest_spc_rate == null && latest_buyer_rate == null && status == null) {
+      latest_spc_rate = this.domestic_quotes[index].rate;
+    }
+    let data = {'id': quote_id, 'quantity': quantity, 'rate': latest_spc_rate, 'delivery_date': delivery_date};
     this.presentConfirm(data, index)
     console.log(delivery_date);
   }
 
 // bid a rate; in server side if owner and buyer rate will be match accept this bid and add into sale table
   bidding(quantity, quote_id, status, rate, index, credit: boolean = false, door_delivery: boolean = false) {
-    console.log(rate)
-    console.log(quantity)
     if (rate === null || quantity === null) {
 
         let alert = this.alertCtrl.create({
@@ -190,7 +166,7 @@ export class HomePage implements OnInit{
           buttons: ['Ok']
         });
         alert.present();
-      
+
     } else {
       this.httpServerServiceProvider.registerDomesticBid({'id': quote_id, 'quantity': quantity, 'status': status, 'rate': rate, 'date': this.delivery_date, 'is_credit': credit, 'is_door_delivery': door_delivery}).subscribe((data) => {
         if (!this.domestic_quotes[index].hasOwnProperty('latest_bid_info')) {
@@ -235,30 +211,6 @@ export class HomePage implements OnInit{
     toast.present();
   }
 
-// show order option when click order button
-  toggleOrder(idx, quantity, index) {
-    // if (typeof(this.domestic_quotes[index].latest_bid_info) != 'undefined') {
-    //   if (this.domestic_quotes[index].latest_bid_info.bid_status == 3) {
-    //     alert('bid is already accepted and closed');
-    //     let new_order = confirm('You already order for this quote, do you want another order?');
-    //     console.log(new_order);
-    //   }
-    // }
-    if (this.isOrderShown(idx)) {
-      this.is_stock_available = false;
-      this.show_order = null;
-    } else {
-      this.show_order = idx;
-      if (isNaN(this.quantity[index])) {
-        this.quantity[index] = null;
-      }
-    }
-  };
-
-  isOrderShown(idx) {
-    return this.show_order === idx;
-  };
-
 // when click a selfpickup
   selfPickupSelected(pickup_point) {
     console.log('selfpickup selected');
@@ -267,7 +219,7 @@ export class HomePage implements OnInit{
   }
 
 // check quantity is possitive
-  isPossitiveInterger(index) {
+  isPositiveInteger(index) {
     if (this.quantity[index] >= 0) {
       console.log(true);
     } else {
@@ -324,6 +276,33 @@ export class HomePage implements OnInit{
     }, (error) => {
       this.displayToast('Error!');
     });
+  }
+
+
+
+  // helping funtion
+  isThere(key: string, value: any) {
+    return value.hasOwnProperty(key)
+  }
+
+  isNull(value) {
+    return value == null;
+  }
+
+  dateIncrement(date: string, increment_by: number) {
+    console.log(date);
+    console.log(typeof date);
+    console.log(date.split("-"));
+    let splited_date = date.split("-");
+    return  splited_date[0] + '-' + splited_date[1] + '-' + String(parseInt(splited_date[2]) + increment_by)
+  }
+
+  toNum(value: string) {
+    return parseInt(value);
+  }
+
+  calculateBiddingCostTotal(delivery_expense: number, quote_rate: string, quantity: number) {
+    return ((delivery_expense + parseInt(quote_rate)) * (quantity * this.global.bag_quantity));
   }
 }
 

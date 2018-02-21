@@ -22,7 +22,7 @@
               </ion-col>
         </ion-row>
         <ion-row>
-          <ion-col><span class="header-text">Q-Price</span><br><span class="sub-header-text">(Rs/Kg)</span><br><span class="content-text">{{domestic_quote.spc_rate}}</span></ion-col>
+          <ion-col (click)="navToSaleOrderDetails(domestic_quote)"><span class="header-text">Q-Price</span><br><span class="sub-header-text">(Rs/Kg)</span><br><span class="content-text">{{domestic_quote.spc_rate}}</span></ion-col>
           <ion-col><span class="header-text">Last Bid</span><br><span class="sub-header-text">(spc | You)</span><br><span class="content-text">{{domestic_quote.spc_rate}}</span> | <span class="content-text">{{domestic_quote.buyer_rate}}</span></ion-col>
           <ion-col><span class="header-text">Quantity</span><br><span class="sub-header-text">(Bags)</span><br><span class="content-text">{{domestic_quote.buyer_quantity}}</span></ion-col>
           <ion-col (click)="routeToGrievancePage(domestic_quote.id)" col-1><ion-icon style="font-size: 25px" name="outlet"></ion-icon></ion-col>
