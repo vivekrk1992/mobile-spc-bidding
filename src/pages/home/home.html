@@ -224,8 +224,10 @@
                   <span *ngIf="!isNull(rate)">{{ rate }} Rs * {{ quantity[i] }} Bags = {{ calculateBiddingCostTotal(expense.delivery_point_cost, rate, quantity[i]) }} Rs</span>
                 </ion-col>
                 <!-- <span style="float:right" [ngStyle]="{'background-color': rate * (quantity[i] * 50) > user_properties.running_credit_limit? 'red':'green'}">C.limit{{user_properties.running_credit_limit}}</span> -->
+                <!-- <ion-col style="float:right"
+                         [ngStyle]="{'background-color': rate * (quantity[i] * 50) > user_properties.running_credit_limit? 'red':'green'}">CL : {{ user_properties.running_credit_limit }} Rs</ion-col> -->
                 <ion-col style="float:right"
-                         [ngStyle]="{'background-color': rate * (quantity[i] * 50) > user_properties.running_credit_limit? 'red':'green'}">CL : {{ user_properties.running_credit_limit }} Rs</ion-col>
+                         [ngStyle]="{'background-color': isBiddingRateLessThanCreditLimit(rate, quantity[i], user_properties.running_credit_limit)? 'green':'red'}">CL : {{ user_properties.running_credit_limit }} Rs</ion-col>
               </ion-row>
 
               <ion-row>

@@ -304,6 +304,12 @@ export class HomePage implements OnInit{
   calculateBiddingCostTotal(delivery_expense: number, quote_rate: string, quantity: number) {
     return ((delivery_expense + parseInt(quote_rate)) * (quantity * this.global.bag_quantity));
   }
+
+  isBiddingRateLessThanCreditLimit(rate: number, quantity: number, credit_limit: number) {
+    console.log(typeof rate);
+    console.log(typeof credit_limit);
+    return (rate * (quantity * 50)) < credit_limit;
+  }
 }
 
 
