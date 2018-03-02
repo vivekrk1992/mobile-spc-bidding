@@ -36,7 +36,7 @@
 
 .header-text {
     font-weight: bold;
-    color: darkorange;
+    color: #004054;
 }
 
 .content-text {
@@ -45,15 +45,16 @@
 }
 .sub-header-text {
     font-weight: bold;
-    color: #a7845b;
+    color: #35798e;
 }
 .bidding-rate {
-    color: #9ee237;
+    color: whitesmoke;
     font-weight: bold;
 }
 
 .bid-history-title {
-    color: #c8c8c8;
+    // color: #c8c8c8;
+    color: saddlebrown;
 }
 
 ion-col {
@@ -74,7 +75,7 @@ ion-col {
 
 
 .card-md {
-  background-color: #275777;
+  background-color: #C2A793;
   font-size: small;
   border-radius: 5px;
 }
@@ -90,7 +91,7 @@ ion-col {
     color: #eeeeee;
 }
 .bidding-trail-card {
-  background-color: rgba(59, 104, 105, 0.253);
+  background-color: #cebeae;
   position:relative;
   border-top-left-radius: 0px;
   border-top-right-radius: 0px;
@@ -98,7 +99,7 @@ ion-col {
 }
 
 .message-bidform-card {
-  background-color: rgba(59, 104, 105, 0.253);
+  background-color: #a0988f;
   margin: 0px;
   width: 100%;
 }

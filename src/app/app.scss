@@ -14,3 +14,25 @@
 // To declare rules for a specific mode, create a child rule
 // for the .md, .ios, or .wp mode classes. The mode class is
 // automatically applied to the <body> element in the app.
+
+
+.toolbar-background {
+  background-color: #9C9085;
+}
+
+.navbar-title {
+  float:left;
+  padding: 0px 0px 0px 0px;
+  color: #FFFFFF;
+  font-family: cursive;
+  font-size: x-large;
+  font-weight: bold;
+}
+
+.scroll-content {
+  background-color: #E7E3DA;
+}
+
+ion-content.has-refresher > .scroll-content {
+  background-color: #E7E3DA;
+}

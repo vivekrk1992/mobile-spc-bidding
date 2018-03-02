@@ -1,7 +1,7 @@
 <ion-header>
   <ion-navbar>
     <ion-title>
-      Account
+      <span class="navbar-title">Account</span>
     </ion-title>
   </ion-navbar>
 </ion-header>
@@ -13,7 +13,7 @@
   </ion-refresher>
 
   <h2 text-center padding-top>Enter Payment Details</h2>
-  <ion-card>
+  <ion-card style="background-color: #AB9E92;">
   <form [formGroup]="account_form" (ngSubmit)="submitAccountForm(account_form.value)">
     <ion-row>
       <ion-col col-6>
