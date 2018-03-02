@@ -1,7 +1,7 @@
 <ion-header>
   <ion-navbar>
     <ion-title>
-      Quote/Order History
+      <span class="navbar-title">Quote/Order History</span>
     </ion-title>
   </ion-navbar>
 </ion-header>
@@ -12,7 +12,7 @@
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
   <ion-col *ngFor="let domestic_quote of domestic_quotes; let i = index">
-    <ion-card style="padding-bottom:0px; margin-bottom:0px" [ngStyle]="{'background-color': isBidStatusAccepted(domestic_quote.bid_status)? 'green':'#275777'}">
+    <ion-card style="padding-bottom:0px; margin-bottom:0px" [ngStyle]="{'background-color': isBidStatusAccepted(domestic_quote.bid_status)? '#A2A240':'#C2A792'}">
       <ion-card-header>
         <ion-row class="tiny-date-row bidding-card-main-content">
               <ion-col>Quote Date: {{domestic_quote.buyer_date_needed}}</ion-col><ion-col>Status:
