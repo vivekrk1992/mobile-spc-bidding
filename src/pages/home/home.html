@@ -219,12 +219,31 @@
               <ion-row>
                 <ion-col>
                   cost :
-                  <span *ngIf="!isThere('latest_bid_info', domestic_quote) && isNull(rate)">{{ domestic_quote.rate }} Rs * {{ quantity[i] }} Bags = {{ calculateBiddingCostTotal(expense.delivery_point_cost, domestic_quote.rate, quantity[i]) }} Rs</span>
-                  <span *ngIf="isThere('latest_bid_info', domestic_quote) && isNull(rate)">{{ domestic_quote.latest_bid_info.spc_rate }} Rs * {{ quantity[i] }} Bags = {{ calculateBiddingCostTotal(expense.delivery_point_cost, domestic_quote.latest_bid_info.spc_rate, quantity[i]) }} Rs</span>
-                  <span *ngIf="!isNull(rate)">{{ rate }} Rs * {{ quantity[i] }} Bags = {{ calculateBiddingCostTotal(expense.delivery_point_cost, rate, quantity[i]) }} Rs</span>
+                  <span *ngIf="!isThere('latest_bid_info', domestic_quote) && isNull(rate)">V{{ domestic_quote.rate }} Rs * {{ quantity[i] }} Bags = {{ calculateBiddingCostTotal(expense.delivery_point_cost, domestic_quote.rate, quantity[i]) }} Rs</span>
+                  <span *ngIf="isThere('latest_bid_info', domestic_quote) && isNull(rate)">I{{ domestic_quote.latest_bid_info.spc_rate }} Rs * {{ quantity[i] }} Bags = {{ calculateBiddingCostTotal(expense.delivery_point_cost, domestic_quote.latest_bid_info.spc_rate, quantity[i]) }} Rs</span>
+                  <span *ngIf="!isNull(rate)">J{{ rate }} Rs * {{ quantity[i] }} Bags = {{ calculateBiddingCostTotal(expense.delivery_point_cost, rate, quantity[i]) }} Rs</span>
                 </ion-col>
-                <ion-col style="float:right"
-                         [ngStyle]="{'background-color': ((expense.delivery_point_cost + rate) * (quantity[i] * 50)) < user_properties.running_credit_limit? 'green':'red'}">CL : {{ user_properties.running_credit_limit }} Rs</ion-col>
+                
+                <!-- green red alert -->
+                <span *ngIf="!isThere('latest_bid_info', domestic_quote) && isNull(rate)">
+                  <ion-col style="float:right"
+                           [ngStyle]="{'background-color': calculateBiddingCostTotal(expense.delivery_point_cost, domestic_quote.rate, quantity[i]) < toNum(user_properties.running_credit_limit)? 'green':'red'}">CL : {{ user_properties.running_credit_limit }} Rs</ion-col>
+                          </span>
+                          
+                <span *ngIf="isThere('latest_bid_info', domestic_quote) && isNull(rate)">
+                  <ion-col style="float:right"
+                            [ngStyle]="{'background-color': calculateBiddingCostTotal(expense.delivery_point_cost, domestic_quote.latest_bid_info.spc_rate, quantity[i]) < toNum(user_properties.running_credit_limit)? 'green':'red'}">CL : {{ user_properties.running_credit_limit }} Rs</ion-col>
+
+                </span>
+
+                <span *ngIf="!isNull(rate)">
+                    <ion-col style="float:right"
+                              [ngStyle]="{'background-color': calculateBiddingCostTotal(expense.delivery_point_cost, rate, quantity[i]) < toNum(user_properties.running_credit_limit)? 'green':'red'}">CL : {{ user_properties.running_credit_limit }} Rs</ion-col>
+                </span>
+
+
+                <!-- <ion-col style="float:right"
+                         [ngStyle]="{'background-color': ((expense.delivery_point_cost + rate) * (quantity[i] * 50)) < user_properties.running_credit_limit? 'green':'red'}">CL : {{ user_properties.running_credit_limit }} Rs</ion-col> -->
               </ion-row>
 
               <ion-row>

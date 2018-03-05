@@ -213,12 +213,12 @@ export class HomePage implements OnInit{
 
 // when click a selfpickup
   selfPickupSelected(pickup_point) {
-    console.log('selfpickup selected');
+    console.log('self pickup selected');
     this.selected_pickup_point_option = pickup_point;
     this.door_delivery_cost = 0;
   }
 
-// check quantity is possitive
+  // check quantity is positive
   isPositiveInteger(index) {
     if (this.quantity[index] >= 0) {
       console.log(true);
@@ -228,7 +228,7 @@ export class HomePage implements OnInit{
     }
   }
 
-// check stock availability for particular date and quantity
+  // check stock availability for particular date and quantity
   checkAvailability(quantity, date) {
     console.log(quantity);
     console.log(date);
@@ -290,9 +290,6 @@ export class HomePage implements OnInit{
   }
 
   dateIncrement(date: string, increment_by: number) {
-    console.log(date);
-    console.log(typeof date);
-    console.log(date.split("-"));
     let splited_date = date.split("-");
     return  splited_date[0] + '-' + splited_date[1] + '-' + String(parseInt(splited_date[2]) + increment_by)
   }
@@ -302,7 +299,6 @@ export class HomePage implements OnInit{
   }
 
   calculateBiddingCostTotal(delivery_expense: number, quote_rate: string, quantity: number) {
-    console.log((delivery_expense + parseInt(quote_rate)) * (quantity * this.global.bag_quantity));
     return ((delivery_expense + parseInt(quote_rate)) * (quantity * this.global.bag_quantity));
   }
 }
