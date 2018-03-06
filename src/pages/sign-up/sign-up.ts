@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
-import { FormGroup, FormBuilder } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { HttpServerServiceProvider } from '../../providers/http-server-service/http-server-service';
 
 
@@ -16,11 +16,12 @@ export class SignUpPage {
 
   constructor(public navCtrl: NavController, public navParams: NavParams, private formBuilder: FormBuilder, private httpServerServiceProvider: HttpServerServiceProvider) {
     this.sign_up_form = this.formBuilder.group({
-      username: [null],
+      username: [null, Validators.compose([Validators.required])],
       first_name: [null],
       last_name: [null],
-      email: [null],
+      email: [null, Validators.compose([Validators.email])],
       city: [null],
+      mobile: [null],
       password: [null],
       otp: [null],
     });
