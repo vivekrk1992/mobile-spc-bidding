@@ -21,7 +21,7 @@ export class LoginPage {
     });
 
     storage.get('token').then((token) => {
-      if(token != null){
+      if (token != null) {
         this.navCtrl.setRoot(TabsPage);
       }
     });
@@ -45,6 +45,10 @@ export class LoginPage {
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad LoginPage');
+  }
+
+  routeSignUp() {
+    this.navCtrl.push('SignUpPage')
   }
 
   logIn() {

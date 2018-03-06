@@ -13,9 +13,6 @@ export class HttpServerServiceProvider {
   user_type: string;
 
   headers: Headers;
-  // base_url: string = "http://127.0.0.1:8000/";
-   base_url: string = "http://192.168.0.104:8000/";
-  // base_url: string = "http://api.exportcopra.com/";
 
   constructor(public http: Http, private storage: Storage, private global: GlobalProvider) {
     console.log('Hello HttpServerServiceProvider Provider');
@@ -40,6 +37,11 @@ export class HttpServerServiceProvider {
     let data = {'puspose': 'logout'};
     return this.http.post(this.global.base_url+'main/mobile/logout/',data , {headers: this.headers})
       .map(res => console.log(res));
+  }
+
+// signup
+  signUp(value) {
+    return this.http.post(this.global.base_url+'main/signup/', value, {headers: this.headers});
   }
 
   setTokenHeader(token) {

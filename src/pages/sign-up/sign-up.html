@@ -1,0 +1,80 @@
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>
+      <span class="navbar-title">Sign-Up</span>
+    </ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+  <form [formGroup]="sign_up_form" (ngSubmit)="onSignup(sign_up_form.value)" style="background-color:transparent;">
+    <ion-row>
+      <ion-col>
+        <ion-item>
+          <ion-label style="color: darkslategray;" floating>First Name</ion-label>
+          <ion-input type="text" formControlName='first_name'></ion-input>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+
+    <ion-row>
+      <ion-col>
+        <ion-item>
+          <ion-label style="color: darkslategray;" floating>Last Name</ion-label>
+          <ion-input type="text" formControlName='last_name'></ion-input>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+
+    <ion-row>
+      <ion-col>
+        <ion-item>
+          <ion-label style="color: darkslategray;" floating>User Name</ion-label>
+          <ion-input type="text" formControlName='username'></ion-input>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+
+    <ion-row>
+      <ion-col>
+        <ion-item>
+          <ion-label style="color: darkslategray;" floating>City</ion-label>
+          <ion-input type="text" formControlName='city'></ion-input>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+
+    <ion-row>
+      <ion-col>
+        <ion-item>
+          <ion-label style="color: darkslategray;" floating>E-mail</ion-label>
+          <ion-input type="email" formControlName='email'></ion-input>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+
+    <ion-row>
+      <ion-col>
+        <ion-item>
+          <ion-label style="color: darkslategray;" floating>Password</ion-label>
+          <ion-input type="password" formControlName='password'></ion-input>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+
+    <ion-row *ngIf="show_otp_field">
+      <ion-col>
+        <ion-item>
+          <ion-label style="color: darkslategray;" floating>OTP</ion-label>
+          <ion-input type="number" formControlName='otp'></ion-input>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+
+    <button ion-button type="submit" class="button-center">Sign Up</button>
+  </form>
+
+</ion-content>
