@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
-import { FormGroup, FormBuilder } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { HttpServerServiceProvider } from '../../providers/http-server-service/http-server-service';
 import { AlertController } from 'ionic-angular';
 
@@ -16,11 +16,12 @@ export class SignUpPage {
 
   constructor(public navCtrl: NavController, public navParams: NavParams, private formBuilder: FormBuilder, private httpServerServiceProvider: HttpServerServiceProvider, private alertController: AlertController) {
     this.sign_up_form = this.formBuilder.group({
-      username: [null],
+      username: [null, Validators.compose([Validators.required])],
       first_name: [null],
       last_name: [null],
-      email: [null],
+      email: [null, Validators.compose([Validators.email])],
       city: [null],
+      mobile: [null],
       password: [null],
       otp: [null],
     });
@@ -65,15 +66,22 @@ export class SignUpPage {
         {
           text: 'Confirm',
           handler: (data) => {
-            console.log('Confirm clicked');
-            data['Mobile'] = this.sign_up_form.value['city'];
-            console.log(data);
-
+            data['Mobile'] = this.sign_up_form.value['mobile'];
+            this.confirmOtp(data);
           }
         }
       ]
     });
     alert.present();
+  }
+
+  confirmOtp(data) {
+    console.log(data);
+    this.httpServerServiceProvider.confirmOtp(data).subscribe(() => {
+      console.log('otp confirmed successfully!');
+    }, () => {
+      console.log('OTP does not match');
+    }, () => console.log('process completed'))
   }
 
 }
