@@ -13,6 +13,8 @@ export class SignUpPage {
 
   sign_up_form: FormGroup;
   show_otp_field: boolean = false;
+  // passwordType: string = 'password';
+  // passwordIcon: string = 'eye-off';
 
   constructor(public navCtrl: NavController, public navParams: NavParams, private formBuilder: FormBuilder, private httpServerServiceProvider: HttpServerServiceProvider, private alertController: AlertController) {
     this.sign_up_form = this.formBuilder.group({
@@ -23,6 +25,7 @@ export class SignUpPage {
       city: [null],
       mobile: [null],
       password: [null],
+      confirm_password: [null],
       otp: [null],
     });
   }
@@ -33,13 +36,17 @@ export class SignUpPage {
 
   onSignup(signup_value) {
     console.log(signup_value);
-    this.httpServerServiceProvider.signUp(signup_value).subscribe((data) => {
-      console.log(data);
-      // this.show_otp_field = true;
-      this.presentConfirm();
-    }, (error) => {
-      console.log(error);
-    });
+    if (signup_value.password === signup_value.confirm_password) {
+      this.httpServerServiceProvider.signUp(signup_value).subscribe((data) => {
+        console.log(data);
+        // this.show_otp_field = true;
+        this.presentConfirm();
+      }, (error) => {
+        console.log(error);
+      });
+    } else {
+      this.mismatchAlert();
+    }
   }
 
 
@@ -75,6 +82,15 @@ export class SignUpPage {
     alert.present();
   }
 
+  mismatchAlert() {
+    let alert = this.alertController.create({
+      title: 'Password Mismatch',
+      subTitle: 'Enter the Password Correctly!',
+      buttons: ['Dismiss']
+    });
+    alert.present();
+  }
+
   confirmOtp(data) {
     console.log(data);
     this.httpServerServiceProvider.confirmOtp(data).subscribe(() => {
@@ -83,5 +99,11 @@ export class SignUpPage {
       console.log('OTP does not match');
     }, () => console.log('process completed'))
   }
+
+//   hideShowPassword() {
+//     console.log('show pass Function');
+//     this.passwordType = this.passwordType === 'text' ? 'password' : 'text';
+//     this.passwordIcon = this.passwordIcon === 'eye-off' ? 'eye' : 'eye-off';
+//  }
 
 }

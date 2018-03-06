@@ -127,7 +127,7 @@ export class HttpServerServiceProvider {
   }
 
   confirmOtp(data) {
-    return this.http.post(this.global.base_url + 'main/confirm/signup/', data, {headers: this.headers});
+    return this.http.post(this.global.base_url + 'main/confirm/signup/', data);
   }
 
 }
