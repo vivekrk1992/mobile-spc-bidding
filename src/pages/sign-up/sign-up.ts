@@ -66,15 +66,22 @@ export class SignUpPage {
         {
           text: 'Confirm',
           handler: (data) => {
-            console.log('Confirm clicked');
-            data['Mobile'] = this.sign_up_form.value['city'];
-            console.log(data);
-
+            data['Mobile'] = this.sign_up_form.value['mobile'];
+            this.confirmOtp(data);
           }
         }
       ]
     });
     alert.present();
+  }
+
+  confirmOtp(data) {
+    console.log(data);
+    this.httpServerServiceProvider.confirmOtp(data).subscribe(() => {
+      console.log('otp confirmed successfully!');
+    }, () => {
+      console.log('OTP does not match');
+    }, () => console.log('process completed'))
   }
 
 }
