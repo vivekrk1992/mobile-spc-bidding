@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ToastController } from 'ionic-angular';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { HttpServerServiceProvider } from '../../providers/http-server-service/http-server-service';
 import { AlertController } from 'ionic-angular';
@@ -16,7 +16,7 @@ export class SignUpPage {
   // passwordType: string = 'password';
   // passwordIcon: string = 'eye-off';
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private formBuilder: FormBuilder, private httpServerServiceProvider: HttpServerServiceProvider, private alertController: AlertController) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, private formBuilder: FormBuilder, private httpServerServiceProvider: HttpServerServiceProvider, private alertController: AlertController, private toastCtrl: ToastController) {
     this.sign_up_form = this.formBuilder.group({
       username: [null, Validators.compose([Validators.required])],
       first_name: [null],
@@ -73,7 +73,7 @@ export class SignUpPage {
         {
           text: 'Confirm',
           handler: (data) => {
-            data['Mobile'] = this.sign_up_form.value['mobile'];
+            data['mobile'] = this.sign_up_form.value['mobile'];
             this.confirmOtp(data);
           }
         }
@@ -95,6 +95,8 @@ export class SignUpPage {
     console.log(data);
     this.httpServerServiceProvider.confirmOtp(data).subscribe(() => {
       console.log('otp confirmed successfully!');
+      this.displayToastMessage('OTP confirmed successfully!', 'top');
+      this.navCtrl.pop();
     }, () => {
       console.log('OTP does not match');
     }, () => console.log('process completed'))
@@ -105,5 +107,14 @@ export class SignUpPage {
 //     this.passwordType = this.passwordType === 'text' ? 'password' : 'text';
 //     this.passwordIcon = this.passwordIcon === 'eye-off' ? 'eye' : 'eye-off';
 //  }
+
+  displayToastMessage(message, position) {
+   let toast = this.toastCtrl.create({
+     message: message,
+     position: position,
+     duration: 3000
+   });
+   toast.present();
+  }
 
 }
