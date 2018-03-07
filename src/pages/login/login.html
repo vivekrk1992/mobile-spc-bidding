@@ -1,20 +1,20 @@
 <!-- <ion-title> -->
 <!-- </ion-title> -->
-<ion-content padding style="background-image:url('assets/icon/withcut.jpg'); background-position: center center; width:100%; height:100%; display: flex; justify-content:center; align-items:center;">
+<ion-content padding style="background-image:url('assets/icon/login_coconut.jpg'); background-position: center center; width:100%; height:100%; display: flex; justify-content:center; align-items:center; background-repeat: repeat-y;">
   <ion-row>
-    <ion-col class="spc-text-header">
-      <span style="font-style: italic;">SHUBH. Inc Since in 1952</span><br>
-      <span>Trading in Coconut Product</span>
+    <ion-col>
+      <span class="spc-text-header">Shree Praswanath Crop.</span><br>
+      <span class="spc-text-content">Trading in Coconut Product</span>
     </ion-col>
   </ion-row>
-  <form [formGroup]="login_form" (ngSubmit)="logIn()" style="margin-top:30%">
+  <form [formGroup]="login_form" (ngSubmit)="logIn()">
     <input class="input-field" type="text" placeholder="User Name" formControlName="user_name">
     <br>
     <input class="input-field" type="password" placeholder="Password" formControlName="password">
     <button ion-button type="submit" class="button-center">Log In</button>
   </form>
-  <div padding text-center>
-    <span style='color: currentColor; font-weight: bold;'>Forget Password</span>
-    <span margin-left style='color: currentColor; font-weight: bold;' (click)="routeSignUp()">SignUp</span>
+  <div padding text-center style="margin-top:75%;">
+    <span style='color: orangered; font-weight: bold;'>Forget Password</span>
+    <span margin-left style='color: saddlebrown; font-weight: bold;' (click)="routeSignUp()">SignUp</span>
   </div>
 </ion-content>
