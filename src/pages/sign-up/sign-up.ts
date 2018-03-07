@@ -73,7 +73,7 @@ export class SignUpPage {
         {
           text: 'Confirm',
           handler: (data) => {
-            data['Mobile'] = this.sign_up_form.value['mobile'];
+            data['mobile'] = this.sign_up_form.value['mobile'];
             this.confirmOtp(data);
           }
         }

@@ -32,10 +32,25 @@ page-login {
 
     .spc-text-header{
         text-align: center;
-        margin-top: 100px;
-        color: antiquewhite;
+        margin-top: 15px;
+        color: steelblue;
         font-size: xx-large;
         font-family: Impact;
         font-weight: bold;
     }
+
+    .spc-text-content{
+        text-align: center;
+        margin-top: 15px;
+        color: steelblue;
+        font-size: large;
+        font-family: Impact;
+        font-weight: bold;
+    }
+
+    .input-field {
+        text-align: center;
+        height: 35px;
+    }
+    
 }
