@@ -1,3 +1,4 @@
+import { OrderPage } from './../pages/order/order';
 import { NgModule, ErrorHandler } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
@@ -28,7 +29,8 @@ import { GlobalProvider } from '../providers/global/global';
     HomePage,
     TabsPage,
     GrievancePage,
-    SaleOrderDetailsPage
+    SaleOrderDetailsPage,
+    OrderPage
   ],
   imports: [
     BrowserModule,
@@ -45,7 +47,8 @@ import { GlobalProvider } from '../providers/global/global';
     HomePage,
     TabsPage,
     GrievancePage,
-    SaleOrderDetailsPage
+    SaleOrderDetailsPage,
+    OrderPage
   ],
   providers: [
     StatusBar,

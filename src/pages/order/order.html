@@ -1,0 +1,64 @@
+<ion-header>
+  <ion-navbar>
+    <ion-row>
+      <ion-col col-2>
+        <img src="assets/icon/coconut-tree.jpg" class="navbar-icon">
+      </ion-col>
+      <ion-col>
+        <ion-title>
+          <span class="navbar-title">Shree Praswanath Crop.</span>
+        </ion-title>
+      </ion-col>
+      <ion-col></ion-col>
+    </ion-row>
+  </ion-navbar>
+</ion-header>
+
+
+<ion-content padding>
+  <h1 text-center padding-top>Today's Rate</h1>
+
+
+  <h1 text-center style="font-size: 40px">Rs 132</h1>
+
+  <h1 text-center padding-top>
+      <h2 text-center>
+      Quick Order
+      </h2>
+    <ion-row>
+      <ion-col>
+      <input type="number" [(ngModel)]="bag_count_25kg" max="5">    
+      <br> 25 Kgs 
+      <br> Katta 
+    </ion-col>
+    <ion-col>
+      <input type="number" [(ngModel)]="bag_count_50kg" max="5">
+      <br> 50 Kgs 
+      <br> Bori 
+    </ion-col>
+  </ion-row>
+  </h1>
+
+  <h1 text-center>
+  </h1>
+  <h3 text-center>Total Cost: Rs. {{(132 * 50 * bag_count_50kg) + (bag_count_25kg * 25 * 132)}}</h3>
+
+  <h1 text-center padding-top>
+
+    Transport service:
+    <br>
+    <input type="text" style="width: 250px;">
+  </h1>
+  <ion-row>
+    <ion-col></ion-col>
+    <ion-col>
+      <button ion-button>Order</button>
+    </ion-col>
+    <ion-col> </ion-col>
+  </ion-row>
+
+  <h4>
+    For orders above 5 bags call <a tel='7538812444'>7538812444</a>
+  </h4>
+
+</ion-content>

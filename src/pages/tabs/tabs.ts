@@ -1,3 +1,4 @@
+import { OrderPage } from './../order/order';
 import { Component } from '@angular/core';
 
 import { AboutPage } from '../about/about';
@@ -10,7 +11,8 @@ import { GrievancePage } from './../grievance/grievance';
 })
 export class TabsPage {
 
-  tab1Root = HomePage;
+  // tab1Root = HomePage;
+  tab1Root = OrderPage;
   tab2Root = AboutPage;
   tab3Root = ContactPage;
   tab4Root = GrievancePage;
