@@ -90,11 +90,16 @@ export class HttpServerServiceProvider {
       .map((response) => response.json());
   }
 
-// stock
-  getStockDetails() {
-    return this.http.get(this.global.base_url + 'main/serve/stock/details/', {headers: this.headers})
+  getBagTypes() {
+    return this.http.get(this.global.base_url + 'main/serve/domestic/bag/types/', { headers: this.headers })
       .map((response) => response.json());
   }
+
+// stock
+  // getStockDetails() {
+  //   return this.http.get(this.global.base_url + 'main/serve/stock/details/', {headers: this.headers})
+  //     .map((response) => response.json());
+  // }
 
   checkStockAvailability(data) {
     return this.http.post(this.global.base_url + 'main/check/availability/', data, {headers: this.headers})
@@ -128,6 +133,11 @@ export class HttpServerServiceProvider {
 
   confirmOtp(data) {
     return this.http.post(this.global.base_url + 'main/confirm/signup/', data);
+  }
+
+  saveUserPropertyFile(data) {
+    return this.http.post(this.global.base_url + 'main/add/user/property/file/', data, { headers: this.headers })
+      .map((response) => response.json());
   }
 
 }

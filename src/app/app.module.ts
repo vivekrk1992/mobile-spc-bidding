@@ -9,6 +9,7 @@ import { ContactPage } from '../pages/contact/contact';
 import { HomePage } from '../pages/home/home';
 import { TabsPage } from '../pages/tabs/tabs';
 import { GrievancePage } from './../pages/grievance/grievance';
+import { BuyerProfilePage } from './../pages/buyer-profile/buyer-profile';
 
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
@@ -19,6 +20,7 @@ import { PhonegapLocalNotification } from '@ionic-native/phonegap-local-notifica
 import {SaleOrderDetailsPage} from "../pages/sale-order-details/sale-order-details";
 import {PipesModule} from "../pipes/pipes.module";
 import { GlobalProvider } from '../providers/global/global';
+import { FileOpener } from '@ionic-native/file-opener'
 // import { InterfaceProvider } from '../providers/interface/interface';
 
 @NgModule({
@@ -30,7 +32,8 @@ import { GlobalProvider } from '../providers/global/global';
     TabsPage,
     GrievancePage,
     SaleOrderDetailsPage,
-    OrderPage
+    OrderPage,
+    BuyerProfilePage
   ],
   imports: [
     BrowserModule,
@@ -48,7 +51,8 @@ import { GlobalProvider } from '../providers/global/global';
     TabsPage,
     GrievancePage,
     SaleOrderDetailsPage,
-    OrderPage
+    OrderPage,
+    BuyerProfilePage
   ],
   providers: [
     StatusBar,
@@ -57,6 +61,7 @@ import { GlobalProvider } from '../providers/global/global';
     HttpServerServiceProvider,
     PhonegapLocalNotification,
     GlobalProvider,
+    FileOpener
     // InterfaceProvider,
   ]
 })

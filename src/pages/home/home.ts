@@ -42,9 +42,9 @@ export class HomePage implements OnInit{
     console.log(this.global.bag_quantity);
     this.delivery_date = this.dateIncrement(this.delivery_date, 2);
     this.doRefresh();
-    httpServerServiceProvider.getStockDetails().subscribe((data) => {
-      this.stock_details = data;
-    });
+    // httpServerServiceProvider.getStockDetails().subscribe((data) => {
+    //   this.stock_details = data;
+    // });
 
     this.localNotification.requestPermission().then(
       (permission) => {

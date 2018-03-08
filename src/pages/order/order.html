@@ -17,9 +17,68 @@
 
 <ion-content padding>
   <h1 text-center padding-top>Today's Rate</h1>
-
-
   <h1 text-center style="font-size: 40px">Rs 132</h1>
+  <ion-row radio-group [(ngModel)]="brands">
+    <ion-col>
+      <ion-item>
+        <ion-label>SHUBH</ion-label>
+        <ion-radio value="shubh"></ion-radio>
+      </ion-item>
+    </ion-col>
+    <ion-col>
+      <ion-item>
+        <ion-label>SPC</ion-label>
+        <ion-radio value="spc"></ion-radio>
+      </ion-item>
+    </ion-col>
+  </ion-row>
+  <ion-row *ngIf="brands" radio-group [(ngModel)]="selected_bag_type">
+    <ion-col>
+      <ion-item>
+        <ion-label>50 Kg</ion-label>
+        <ion-radio value="1"></ion-radio>
+      </ion-item>
+    </ion-col>
+    <ion-col>
+      <ion-item>
+        <ion-label>25 KG</ion-label>
+        <ion-radio value="3"></ion-radio>
+      </ion-item>
+    </ion-col>
+  </ion-row>
+
+  <ion-row>
+    <ion-col *ngIf="selected_bag_type == 3">
+      <input style="border-radius:10px; text-align: center;" type="number" [(ngModel)]="bag_count_25kg" max="5">
+      <br> 25 Kgs
+      <br> Katta
+    </ion-col>
+    <ion-col *ngIf="selected_bag_type == 1">
+      <input style="border-radius:10px; text-align: center;" type="number" [(ngModel)]="bag_count_50kg" max="5">
+      <br> 50 Kgs
+      <br> Bori
+    </ion-col>
+  </ion-row>
+
+  <h3 text-center *ngIf="selected_bag_type == 3">132 x {{bag_count_25kg}} x 25 = ₹.{{(bag_count_25kg * 25 * 132) | number : '.1'}}</h3>
+  <h3 text-center *ngIf="selected_bag_type == 1">132 x {{bag_count_50kg}} x 50 = ₹.{{(bag_count_50kg * 50 * 132) | number : '.1'}}</h3>
+
+  <!-- <h3 text-center>Total Cost: ₹. {{(132 * 50 * bag_count_50kg) + (bag_count_25kg * 25 * 132)}}</h3> -->
+
+  <ion-row>
+    <ion-col></ion-col>
+    <ion-col>
+      <button ion-button (click)="confirmOrder(bag_count_25kg, bag_count_50kg, selected_bag_type)">Order</button>
+    </ion-col>
+    <ion-col> </ion-col>
+  </ion-row>
+
+  <h4>
+    For orders above 5 bags call
+    <a tel='7538812444'>7538812444</a>
+  </h4>
+
+  <!-- <h1 text-center style="font-size: 40px">Rs 132</h1>
 
   <h1 text-center padding-top>
       <h2 text-center>
@@ -59,6 +118,6 @@
 
   <h4>
     For orders above 5 bags call <a tel='7538812444'>7538812444</a>
-  </h4>
+  </h4> -->
 
 </ion-content>
