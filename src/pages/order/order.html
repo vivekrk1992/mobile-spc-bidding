@@ -1,12 +1,12 @@
 <ion-header>
   <ion-navbar>
     <ion-row>
-      <ion-col col-2>
-        <img src="assets/icon/coconut-tree.jpg" class="navbar-icon">
-      </ion-col>
+      <!--<ion-col col-2>-->
+        <!--<img src="assets/icon/coconut-tree.jpg" class="navbar-icon">-->
+      <!--</ion-col>-->
       <ion-col>
         <ion-title>
-          <span class="navbar-title">Shree Praswanath Crop.</span>
+          <span class="navbar-title">Shree Praswanath Corporation</span>
         </ion-title>
       </ion-col>
       <ion-col></ion-col>
@@ -17,59 +17,69 @@
 
 <ion-content padding>
   <span class="logout-button" (click)="logout()">logout</span>
-  <span *ngFor="let quote of domestic_quotes">
-    <h3 text-center padding-top>Today's Rate:
-      <span>₹.{{quote['rate']}}</span>
-    </h3>
+
+  <!--Today's quote  -->
+  <h3 text-center padding-top>Today's Copra Rate:</h3>
+  <h1 text-center>
+    <!--dont know why we need the ngFOr, but it errors otherwise, so keeping it-->
+    <span>
+    ₹ {{domestic_quote_of_the_day}}
+    </span>
+  </h1>
+  <hr>
+  <!--Quick Order section-->
     <!-- <h3 text-center style="font-size: 40px">Rs 132</h3> -->
-    <ion-label style="text-align: center;">Quick Order</ion-label>
-    <hr>
-    <ion-label style="text-align: center;">Select Brand</ion-label>
+  <!--<ion-label style="text-align: center;">Quick Order</ion-label>-->
+  <h3 text-center>Quick Order</h3>
+    <ion-label style="text-align: left; margin-left: 10px"><i>Step 1: Choose Mark:</i></ion-label>
     <ion-row radio-group [(ngModel)]="brands">
-      <ion-col>
-        <ion-item>
-          <ion-label>SHUBH</ion-label>
-          <ion-radio value="shubh"></ion-radio>
+      <ion-col style="margin-left:10px;">
+        <ion-item style="background-color: #9C9085; border-radius: 5px">
+          <ion-radio item-left value="shubh" class="radio-button-style"></ion-radio><ion-label style="margin-left: 0px">SHUBH</ion-label>
         </ion-item>
       </ion-col>
-      <ion-col>
-        <ion-item>
-          <ion-label>SPC</ion-label>
-          <ion-radio value="spc"></ion-radio>
+
+      <ion-col style="margin-left:10px;">
+        <ion-item style="background-color: #9C9085; border-radius: 5px">
+          <ion-radio item-left value="spc" class="radio-button-style"></ion-radio>
+          <ion-label style="margin-left: 0px">SPC</ion-label>
         </ion-item>
       </ion-col>
     </ion-row>
-    <ion-label *ngIf="brands" style="text-align: center;">Select Bag Type</ion-label>
+
+  <ion-label *ngIf="brands" style="text-align: left; margin-left: 10px"><i>Step 2: Select Bag Size</i></ion-label>
     <ion-row *ngIf="brands" radio-group [(ngModel)]="selected_bag_type">
-      <ion-col>
-        <ion-item>
+      <ion-col style="margin-left:10px;">
+        <ion-item style="background-color: #9C9085; border-radius: 5px">
+          <ion-radio item-left value="1" class="radio-button-style"></ion-radio>
           <ion-label>50 Kg</ion-label>
-          <ion-radio value="1"></ion-radio>
         </ion-item>
       </ion-col>
-      <ion-col>
-        <ion-item>
+      <ion-col style="margin-left:10px;">
+        <ion-item style="background-color: #9C9085; border-radius: 5px">
+          <ion-radio item-left value="3" class="radio-button-style"></ion-radio>
           <ion-label>25 KG</ion-label>
-          <ion-radio value="3"></ion-radio>
         </ion-item>
       </ion-col>
     </ion-row>
 
     <ion-row>
       <ion-col *ngIf="selected_bag_type == 3">
-        <input style="border-radius:10px; text-align: center;" type="number" [(ngModel)]="bag_count_25kg" max="5">
+        <ion-label *ngIf="brands" style="text-align: left; margin-left: 10px"><i>Step 3: Enter Bag Count</i></ion-label>
+        <input style="border-radius:10px; height: 30px; text-align: center;" type="number" [(ngModel)]="bag_count_25kg" max="5">
         <br> 25 Kgs
         <br> Katta
       </ion-col>
       <ion-col *ngIf="selected_bag_type == 1">
-        <input style="border-radius:10px; text-align: center;" type="number" [(ngModel)]="bag_count_50kg" max="5">
+        <ion-label *ngIf="brands" style="text-align: left; margin-left: 10px"><i>Step 3: Enter Bag Count</i></ion-label>
+        <input style="border-radius:10px; height: 30px; text-align: center;" type="number" [(ngModel)]="bag_count_50kg" max="5">
         <br> 50 Kgs
         <br> Bori
       </ion-col>
     </ion-row>
 
-    <h3 text-center *ngIf="selected_bag_type == 3">₹.{{quote['rate']}} x {{bag_count_25kg}} bags x 25 kgs = ₹.{{totalCost(quote['rate'], bag_count_25kg, 25) | number : '.1'}}</h3>
-    <h3 text-center *ngIf="selected_bag_type == 1">₹.{{quote['rate']}} x {{bag_count_50kg}} bags x 50 kgs = ₹.{{totalCost(quote['rate'], bag_count_50kg, 50) | number : '.1'}}</h3>
+    <h3 text-center *ngIf="selected_bag_type == 3">₹ {{domestic_quote_of_the_day}} x {{bag_count_25kg}} bags x 25 kgs = ₹ {{totalCost(domestic_quote_of_the_day, bag_count_25kg, 25) | number : '.1'}}</h3>
+    <h3 text-center *ngIf="selected_bag_type == 1">₹ {{domestic_quote_of_the_day}} x {{bag_count_50kg}} bags x 50 kgs = ₹ {{totalCost(domestic_quote_of_the_day, bag_count_50kg, 50) | number : '.1'}}</h3>
 
     <!-- <h3 text-center>Total Cost: ₹. {{(132 * 50 * bag_count_50kg) + (bag_count_25kg * 25 * 132)}}</h3> -->
 
@@ -80,8 +90,6 @@
       </ion-col>
       <ion-col> </ion-col>
     </ion-row>
-  </span>
-  <hr>
   <span>
     For orders above 5 bags please Contact:&nbsp;
     <a style="text-decoration:none" href="tel:+917538812444">
@@ -89,6 +97,7 @@
       7538812444</a>
   </span>
 
+  <!--todo: page errors out when order clicked with out forms filled out-->
   <!-- <h1 text-center style="font-size: 40px">Rs 132</h1>
 
   <h1 text-center padding-top>
