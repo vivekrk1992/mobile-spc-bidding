@@ -18,6 +18,7 @@ export class OrderPage {
   bag_count_50kg: number = 0;
   domestic_quotes: any;
   user: any;
+  domestic_quote_of_the_day: any;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, private httpServerServiceProvider: HttpServerServiceProvider, private toastCtrl: ToastController, private app: App, private storage: Storage) {
     this.httpServerServiceProvider.getBagTypes().subscribe((data) => {
@@ -38,6 +39,8 @@ export class OrderPage {
     this.httpServerServiceProvider.getAllDomesticList().subscribe((data) => {
       console.log(data);
       this.domestic_quotes = data;
+      this.domestic_quote_of_the_day = data[0].rate;
+      console.log(this.domestic_quote_of_the_day);
     }, (error) => {
       console.log(error);
     });

@@ -21,7 +21,7 @@ export class AboutPage {
     // this.httpServerServiceProvider.getAllDomesticQuotesWithLatestBid().subscribe((data) => {
     //   this.domestic_quotes = data;
     // });
-    
+
     this.httpServerServiceProvider.getOrderHistory().subscribe((data) => {
       this.domestic_quotes = data;
     });
@@ -64,7 +64,7 @@ export class AboutPage {
   }
 
   routeToGrievancePage(bid_id) {
-    this.navCtrl.push(GrievancePage, {'from': 'history', 'bid_id': bid_id})
+    this.navCtrl.push(GrievancePage, { 'from': 'history', 'bid_id': bid_id })
   }
 
   totalCost(quote_rate, quantity, quantity_in_kgs) {
