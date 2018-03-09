@@ -26,6 +26,7 @@ export class AboutPage {
   doRefresh(event) {
     this.httpServerServiceProvider.getAllDomesticQuotesWithLatestBid().subscribe((data) => {
       this.domestic_quotes = data;
+      console.log(data);
       event.complete();
     }, () => {
       event.complete();
@@ -37,6 +38,7 @@ export class AboutPage {
   getBiddingList(event) {
     this.httpServerServiceProvider.getDomesticBiddingListByBuyer().subscribe((data) => {
       this.bidding_list = data;
+      console.log(data);
       event.complete();
     }, () => {
       event.complete();

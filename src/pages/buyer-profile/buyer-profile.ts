@@ -30,7 +30,7 @@ export class BuyerProfilePage {
 
     this.gst_form = this.formBuilder.group({
       value: [null],
-      gst_id: [10],
+      property_id: [10],
     });
 
     storage.get('user').then((user) => {

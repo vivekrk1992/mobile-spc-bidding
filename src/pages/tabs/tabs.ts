@@ -29,9 +29,11 @@ export class TabsPage {
     });
     if (this.buyer_profile == 100) {
       this.tab1Root = HomePage;
-    } else {
       // this.tab1Root = OrderPage;
-      this.tab1Root = BuyerProfilePage;
+    } else {
+      // this.tab1Root = HomePage;
+      this.tab1Root = OrderPage;
+      // this.tab1Root = BuyerProfilePage;
     }
 
   }

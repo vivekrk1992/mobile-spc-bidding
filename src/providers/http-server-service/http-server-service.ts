@@ -136,8 +136,7 @@ export class HttpServerServiceProvider {
   }
 
   saveUserPropertyFile(data) {
-    return this.http.post(this.global.base_url + 'main/add/user/property/file/', data, { headers: this.headers })
-      .map((response) => response.json());
+    return this.http.post(this.global.base_url + 'main/add/user/property/file/', data, { headers: this.headers });
   }
 
 }
