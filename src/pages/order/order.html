@@ -29,13 +29,13 @@
       <ion-col>
         <ion-item>
           <ion-label>SHUBH</ion-label>
-          <ion-radio value="shubh"></ion-radio>
+          <ion-radio value="1"></ion-radio>
         </ion-item>
       </ion-col>
       <ion-col>
         <ion-item>
           <ion-label>SPC</ion-label>
-          <ion-radio value="spc"></ion-radio>
+          <ion-radio value="2"></ion-radio>
         </ion-item>
       </ion-col>
     </ion-row>
@@ -76,7 +76,7 @@
     <ion-row>
       <ion-col></ion-col>
       <ion-col>
-        <button ion-button (click)="confirmOrder(buyer_id, quote['id'], bag_count_25kg, bag_count_50kg, selected_bag_type)">Order</button>
+        <button ion-button (click)="confirmOrder(brands, quote['id'], bag_count_25kg, bag_count_50kg, selected_bag_type)">Order</button>
       </ion-col>
       <ion-col> </ion-col>
     </ion-row>

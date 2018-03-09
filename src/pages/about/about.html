@@ -11,15 +11,15 @@
   <ion-refresher (ionRefresh)="doRefresh($event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
-  <ion-col *ngFor="let domestic_quote of domestic_quotes; let i = index">
+  <!-- <ion-col *ngFor="let domestic_quote of domestic_quotes; let i = index">
     <ion-card style="padding-bottom:0px; margin-bottom:0px" [ngStyle]="{'background-color': isBidStatusAccepted(domestic_quote.bid_status)? '#A2A240':'#C2A792'}">
       <ion-card-header>
         <ion-row class="tiny-date-row bidding-card-main-content">
-              <ion-col>Quote Date: {{domestic_quote.buyer_date_needed}}</ion-col><ion-col>Status:
-                <span *ngIf="domestic_quote.bid_status == 1">Bidding</span>
-                <span *ngIf="domestic_quote.bid_status == 2">Expiry</span>
-                <span *ngIf="domestic_quote.bid_status == 3">Accepted</span>
-              </ion-col>
+          <ion-col>Quote Date: {{domestic_quote.buyer_date_needed}}</ion-col><ion-col>Status:
+            <span *ngIf="domestic_quote.bid_status == 1">Bidding</span>
+            <span *ngIf="domestic_quote.bid_status == 2">Expiry</span>
+            <span *ngIf="domestic_quote.bid_status == 3">Accepted</span>
+          </ion-col>
         </ion-row>
         <ion-row>
           <ion-col (click)="navToSaleOrderDetails(domestic_quote)"><span class="header-text">Q-Price</span><br><span class="sub-header-text">(Rs/Kg)</span><br><span class="content-text">{{domestic_quote.spc_rate}}</span></ion-col>
@@ -28,6 +28,48 @@
           <ion-col (click)="routeToGrievancePage(domestic_quote.id)" col-1><ion-icon style="font-size: 25px" name="outlet"></ion-icon></ion-col>
         </ion-row>
       </ion-card-header>
+    </ion-card>
+  </ion-col> -->
+
+  <ion-col *ngFor="let domestic_quote of domestic_quotes; let i = index">
+    <ion-card>
+      <ion-row class="tiny-date-row bidding-card-main-content">
+        <ion-col>Date: {{domestic_quote.sale_date | date: 'dd-MMM-yy'}}</ion-col>
+        <ion-col>Bag Type:
+          <span *ngIf="domestic_quote['bag_type']['id'] == 1">50 KG</span>
+          <span *ngIf="domestic_quote['bag_type']['id'] == 3">25 KG</span>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col>
+          <span *ngIf="domestic_quote['bag_type']['id'] == 1">
+            <ion-col class="header-text">
+              ₹{{domestic_quote.rate}} x {{domestic_quote.bag_count}} bags x 50 Kg = <span class="content-text">₹&nbsp;{{totalCost(domestic_quote.rate, domestic_quote.bag_count, 50) | number : '.1'}}</span>
+            </ion-col><br>
+            <ion-col>
+              <span class="sub-header-text"> Total = <span class="content-text">₹&nbsp;{{totalCost(domestic_quote.rate, domestic_quote.bag_count, 50) | number : '.1'}}</span></span>
+            </ion-col>
+          </span>
+          
+          <span *ngIf="domestic_quote['bag_type']['id'] == 3">
+            <ion-col class="header-text">
+              ₹{{domestic_quote.rate}} x {{domestic_quote.bag_count}} bags x 25 Kg = <span class="content-text">₹&nbsp;{{totalCost(domestic_quote.rate, domestic_quote.bag_count, 25) | number : '.1'}}</span>
+            </ion-col><br>
+            <ion-col>
+              <span class="sub-header-text"> Total = <span class="content-text">₹&nbsp;{{totalCost(domestic_quote.rate, domestic_quote.bag_count, 25) | number : '.1'}}</span></span>
+            </ion-col>
+          </span>
+        </ion-col>
+        <ion-col (click)="routeToGrievancePage(domestic_quote.id)" col-1>
+          <ion-icon style="font-size: 25px" name="outlet"></ion-icon>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col>
+          <span class="header-text" *ngIf="domestic_quote['bag_type']['id'] == 1">Total Outstanding = <span class="sub-header-text">₹&nbsp;{{totalCost(domestic_quote.rate, domestic_quote.bag_count, 50) | number : '.1'}}</span></span>
+          <span class="header-text" *ngIf="domestic_quote['bag_type']['id'] == 3">Total Outstanding = <span class="sub-header-text">₹&nbsp;{{totalCost(domestic_quote.rate, domestic_quote.bag_count, 25) | number : '.1'}}</span></span>
+        </ion-col>
+      </ion-row>
     </ion-card>
   </ion-col>
 </ion-content>

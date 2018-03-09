@@ -17,6 +17,7 @@ export class OrderPage {
   bag_count_25kg: number = 0;
   bag_count_50kg: number = 0;
   domestic_quotes: any;
+  user: any;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, private httpServerServiceProvider: HttpServerServiceProvider, private toastCtrl: ToastController, private app: App, private storage: Storage) {
     this.httpServerServiceProvider.getBagTypes().subscribe((data) => {
@@ -24,6 +25,11 @@ export class OrderPage {
       this.bag_types = data;
     }, (error) => {
       console.log(error);
+    });
+
+    storage.get('user').then((user) => {
+      console.log(user);
+      this.user = user;
     });
 
   }
@@ -46,11 +52,12 @@ export class OrderPage {
     toast.present();
   }
 
-  confirmOrder(buyer_id, quote_id, count_25kg, count_50kg, selected_bag) {
+  confirmOrder(brand, quote_id, count_25kg, count_50kg, selected_bag) {
     let place_order = {};
     if (selected_bag == 1) {
       if (count_50kg <= 5) {
-        place_order['buyer_id'] = buyer_id;
+        place_order['brand_id'] = brand;
+        place_order['buyer_id'] = this.user['id'];
         place_order['quote_id'] = quote_id;
         place_order['bag_type'] = selected_bag;
         place_order['bag_count'] = count_50kg;
@@ -60,7 +67,8 @@ export class OrderPage {
       }
     } else {
       if (count_25kg <= 5) {
-        place_order['buyer_id'] = buyer_id;
+        place_order['brand_id'] = brand;
+        place_order['buyer_id'] = this.user['id'];
         place_order['quote_id'] = quote_id;
         place_order['bag_type'] = selected_bag;
         place_order['bag_count'] = count_25kg;
