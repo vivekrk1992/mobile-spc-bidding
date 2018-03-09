@@ -32,8 +32,8 @@ export class TabsPage {
       // this.tab1Root = OrderPage;
     } else {
       // this.tab1Root = HomePage;
-      this.tab1Root = OrderPage;
-      // this.tab1Root = BuyerProfilePage;
+      // this.tab1Root = OrderPage;
+      this.tab1Root = BuyerProfilePage;
     }
 
   }

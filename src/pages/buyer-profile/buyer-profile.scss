@@ -3,4 +3,52 @@ page-buyer-profile {
         width: 200px;
     }
 
+    .page-title {
+        padding-top: 20px;
+        padding-left: 10px;
+    }
+
+    .label-md {
+        margin: 0px 0px 0px 0px;
+    }
+
+    .checkbox-row {
+        padding-left: 10px;
+    }
+
+    ion-col {
+        text-align: left;
+    }
+
+    .radio-button-style {
+        border-radius: 50%;
+        //border-style: solid;
+        margin: 0 0 0 0;
+        font-size: smaller;
+    }
+
+    .item-md .radio-md[item-left]{
+        margin: 0px 10px 0px 0px;
+        background-color: transparent;
+        font-size: smaller;
+    }
+
+    .ion-item {
+        background-color: #9C9085;
+        border-radius: 5px;
+        font-size: smaller;
+    }
+
+    .item-md {
+        font-size: smaller;
+        //padding: 0px;
+        margin: 0px;
+    }
+
+    .input-cover {
+        background-color: whitesmoke;
+        border-radius: 5px;
+        width: 250px;
+    }
+
 }
