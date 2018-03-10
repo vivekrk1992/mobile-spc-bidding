@@ -95,6 +95,11 @@ export class HttpServerServiceProvider {
     .map((response) => response.json());
   }
   
+  getCopraBrand() {
+    return this.http.get(this.global.base_url + 'main/serve/copra/brands/', { headers: this.headers })
+    .map((response) => response.json());
+  }
+  
   // stock
   // getStockDetails() {
     //   return this.http.get(this.global.base_url + 'main/serve/stock/details/', {headers: this.headers})
@@ -138,10 +143,14 @@ export class HttpServerServiceProvider {
     saveUserPropertyFile(data) {
       return this.http.post(this.global.base_url + 'main/add/user/property/file/', data, { headers: this.headers });
     }
-  
+    
     getOrderHistory() {
       return this.http.get(this.global.base_url + 'main/serve/domestic/quote/history/for/buyer/direct/order/', {headers: this.headers})
-        .map((res) => res.json());
+      .map((res) => res.json());
+    }
+    
+    registerDirectOrderToSale(order) {
+      return this.http.post(this.global.base_url + 'main/register/domestic/sale/via/direct/order/', order, { headers: this.headers });
     }
     
   }

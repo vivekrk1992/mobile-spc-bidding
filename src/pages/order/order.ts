@@ -19,11 +19,20 @@ export class OrderPage {
   domestic_quotes: any;
   user: any;
   domestic_quote_of_the_day: any;
+  copra_brands: any;
+  today = new Date().toISOString().split('T')[0];
 
   constructor(public navCtrl: NavController, public navParams: NavParams, private httpServerServiceProvider: HttpServerServiceProvider, private toastCtrl: ToastController, private app: App, private storage: Storage) {
     this.httpServerServiceProvider.getBagTypes().subscribe((data) => {
       console.log(data);
       this.bag_types = data;
+    }, (error) => {
+      console.log(error);
+    });
+
+    this.httpServerServiceProvider.getCopraBrand().subscribe(data => {
+      console.log(data);
+      this.copra_brands = data;
     }, (error) => {
       console.log(error);
     });
@@ -39,7 +48,9 @@ export class OrderPage {
     this.httpServerServiceProvider.getAllDomesticList().subscribe((data) => {
       console.log(data);
       this.domestic_quotes = data;
-      this.domestic_quote_of_the_day = data[0].rate;
+      if (data.length !== 0) {
+        this.domestic_quote_of_the_day = data[0].rate;
+      } 
       console.log(this.domestic_quote_of_the_day);
     }, (error) => {
       console.log(error);
@@ -64,6 +75,7 @@ export class OrderPage {
         place_order['quote_id'] = quote_id;
         place_order['bag_type'] = selected_bag;
         place_order['bag_count'] = count_50kg;
+        place_order['date'] = this.today;
       } else {
         this.displayToast('Not more than 5 Bags!');
         console.log('error');
@@ -75,6 +87,7 @@ export class OrderPage {
         place_order['quote_id'] = quote_id;
         place_order['bag_type'] = selected_bag;
         place_order['bag_count'] = count_25kg;
+        place_order['date'] = this.today;
       } else {
         this.displayToast('Not more than 5 Bags!');
         console.log('error');
@@ -82,6 +95,12 @@ export class OrderPage {
     }
 
     console.log(place_order);
+    
+    // this.httpServerServiceProvider.registerDirectOrderToSale(place_order).subscribe(data => {
+    //   console.log(data);
+    // }, (error) => {
+    //   console.log(error);
+    // });
   }
 
   totalCost(quote_rate, quantity, quantity_in_kgs) {

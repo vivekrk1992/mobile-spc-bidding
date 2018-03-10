@@ -33,51 +33,55 @@
   <h3 text-center>Quick Order</h3>
     <ion-label style="text-align: left; margin-left: 10px"><i>Step 1: Choose Mark:</i></ion-label>
     <ion-row radio-group [(ngModel)]="brands">
-      <ion-col style="margin-left:10px;">
+      <ion-col style="margin-left:10px;" col-5 *ngFor="let copra_brand of copra_brands">
         <ion-item style="background-color: #9C9085; border-radius: 5px">
-          <ion-radio item-left value="1" class="radio-button-style"></ion-radio><ion-label style="margin-left: 0px">SHUBH</ion-label>
+          <ion-radio item-left [value]="copra_brand.id" class="radio-button-style"></ion-radio><ion-label style="margin-left: 0px">{{copra_brand.name}}</ion-label>
         </ion-item>
       </ion-col>
 
-      <ion-col style="margin-left:10px;">
+      <!-- <ion-col style="margin-left:10px;">
         <ion-item style="background-color: #9C9085; border-radius: 5px">
           <ion-radio item-left value="2" class="radio-button-style"></ion-radio>
           <ion-label style="margin-left: 0px">SPC</ion-label>
         </ion-item>
       </ion-col>
+
+      <br>
+      <ion-col col-5 style="margin-left:100px;">
+        <ion-item style="background-color: #9C9085; border-radius: 5px">
+          <ion-radio item-left value="3" class="radio-button-style"></ion-radio>
+          <ion-label style="margin-left: 0px">LABH</ion-label>
+        </ion-item>
+      </ion-col> -->
     </ion-row>
 
   <ion-label *ngIf="brands" style="text-align: left; margin-left: 10px"><i>Step 2: Select Bag Size</i></ion-label>
     <ion-row *ngIf="brands" radio-group [(ngModel)]="selected_bag_type">
-      <ion-col style="margin-left:10px;">
+      <ion-col style="margin-left:10px;" *ngFor="let bag_type of bag_types">
         <ion-item style="background-color: #9C9085; border-radius: 5px">
-          <ion-radio item-left value="1" class="radio-button-style"></ion-radio>
-          <ion-label>50 Kg</ion-label>
-        </ion-item>
-      </ion-col>
-      <ion-col style="margin-left:10px;">
-        <ion-item style="background-color: #9C9085; border-radius: 5px">
-          <ion-radio item-left value="3" class="radio-button-style"></ion-radio>
-          <ion-label>25 KG</ion-label>
+          <ion-radio item-left [value]="bag_type.id" class="radio-button-style"></ion-radio>
+          <ion-label>{{bag_type.name}}</ion-label>
         </ion-item>
       </ion-col>
     </ion-row>
 
     <ion-row>
-      <ion-col *ngIf="selected_bag_type == 3">
+      <ion-col *ngIf="selected_bag_type == 2">
+        <ion-label *ngIf="brands" style="text-align: left; margin-left: 10px"><i>Step 3: Enter Bag Count</i></ion-label>
         <input style="border-radius:10px; height: 30px; text-align: center;" type="number" [(ngModel)]="bag_count_25kg" max="5">
         <br> 25 Kgs
         <br> Katta
       </ion-col>
       <ion-col *ngIf="selected_bag_type == 1">
+        <ion-label *ngIf="brands" style="text-align: left; margin-left: 10px"><i>Step 3: Enter Bag Count</i></ion-label>
         <input style="border-radius:10px; height: 30px; text-align: center;" type="number" [(ngModel)]="bag_count_50kg" max="5">
         <br> 50 Kgs
         <br> Bori
       </ion-col>
     </ion-row>
 
-    <h3 text-center *ngIf="selected_bag_type == 3">₹ {{domestic_quote_of_the_day}} x {{bag_count_25kg}} bags x 25 kgs = ₹ {{totalCost(domestic_quote_of_the_day, bag_count_25kg, 25) | number : '.1'}}</h3>
-    <h3 text-center *ngIf="selected_bag_type == 1">₹ {{domestic_quote_of_the_day}} x {{bag_count_50kg}} bags x 50 kgs = ₹ {{totalCost(domestic_quote_of_the_day, bag_count_50kg, 50) | number : '.1'}}</h3>
+    <h6 text-center *ngIf="selected_bag_type == 2">₹ {{domestic_quote_of_the_day}} x {{bag_count_25kg}} bags x 25 kgs = ₹ {{totalCost(domestic_quote_of_the_day, bag_count_25kg, 25) | number : '.2'}}</h6>
+    <h6 text-center *ngIf="selected_bag_type == 1">₹ {{domestic_quote_of_the_day}} x {{bag_count_50kg}} bags x 50 kgs = ₹ {{totalCost(domestic_quote_of_the_day, bag_count_50kg, 50) | number : '.2'}}</h6>
 
     <!-- <h3 text-center>Total Cost: ₹. {{(132 * 50 * bag_count_50kg) + (bag_count_25kg * 25 * 132)}}</h3> -->
 
@@ -88,7 +92,6 @@
       </ion-col>
       <ion-col> </ion-col>
     </ion-row>
-  <hr>
   <span>
     For orders above 5 bags please Contact:&nbsp;
     <a style="text-decoration:none" href="tel:+917538812444">
@@ -96,6 +99,7 @@
       7538812444</a>
   </span>
 
+  <!--todo: page errors out when order clicked with out forms filled out-->
   <!-- <h1 text-center style="font-size: 40px">Rs 132</h1>
 
   <h1 text-center padding-top>

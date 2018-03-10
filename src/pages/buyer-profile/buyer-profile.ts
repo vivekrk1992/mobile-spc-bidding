@@ -18,6 +18,7 @@ export class BuyerProfilePage {
   resident_proof: any;
   isDropdownSelected: any;
   user: any
+  address_proof: any;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, private formBuilder: FormBuilder, private storage: Storage, private httpServerServiceProvider: HttpServerServiceProvider) {
     this.business_form = this.formBuilder.group({
@@ -86,10 +87,10 @@ export class BuyerProfilePage {
     gst['buyer_id'] = this.user.id;
     cv_profile.push(gst);
     console.log(cv_profile);
-    this.httpServerServiceProvider.saveUserPropertyFile(cv_profile).subscribe(data => {
-      console.log(data);
-    }, (error) => {
-      console.log(error);
-    });
+    // this.httpServerServiceProvider.saveUserPropertyFile(cv_profile).subscribe(data => {
+    //   console.log(data);
+    // }, (error) => {
+    //   console.log(error);
+    // });
   }
 }

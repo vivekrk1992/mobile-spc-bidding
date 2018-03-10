@@ -15,8 +15,11 @@ export class AboutPage {
   domestic_quotes: any[] = [];
   todate: any = new Date().toISOString().split('T')[0];
   latest_bid_info: any = {};
-
+  // total_cost: number = 0;
+  bag_25: any;
+  bag_50: any;
   bidding_list: any[] = [];
+
   constructor(public navCtrl: NavController, private httpServerServiceProvider: HttpServerServiceProvider, private storage: Storage, private toastCtrl: ToastController) {
     // this.httpServerServiceProvider.getAllDomesticQuotesWithLatestBid().subscribe((data) => {
     //   this.domestic_quotes = data;
@@ -69,6 +72,12 @@ export class AboutPage {
 
   totalCost(quote_rate, quantity, quantity_in_kgs) {
     return (quote_rate * quantity * quantity_in_kgs);
+  }
+
+  overallCost(rate, quantity, quantity_in_kgs) {
+    // this.total_cost += (rate * quantity * quantity_in_kgs);
+    // console.log(this.total_cost);
+    return (rate * quantity * quantity_in_kgs);
   }
 
   navToSaleOrderDetails(bid_details) {

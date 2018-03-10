@@ -36,64 +36,65 @@
   </ion-row>
   <ion-card>
     <ion-row>
-      <ion-col>
+      <ion-col col-2>
         <span class="header-text">Date</span>
       </ion-col>
-      <ion-col>
+      <ion-col col-4>
         <span class="header-text">Description</span>
       </ion-col>
-      <ion-col>
+      <ion-col col-3>
         <span class="header-text">Cost</span>
+      </ion-col>
+      <ion-col col-3>
+        <span class="header-text">Status</span>
       </ion-col>
     </ion-row>
     <span *ngFor="let domestic_quote of domestic_quotes; let i = index">
       <ion-col *ngFor="let sale of domestic_quote['unpaid']">
         <ion-row>
-          <ion-col class="tiny-date-row bidding-card-main-content">{{sale.expected_delivery_date | date: 'dd-MMM-yy'}}</ion-col>
-          <ion-col>
+          <ion-col col-2 class="tiny-date-row bidding-card-main-content">{{sale.expected_delivery_date | date: 'dd-MMM'}}</ion-col>
+          <ion-col col-4>
             <span *ngIf="sale['bag_type_id'] == 1">
               <ion-col class="header-text">
                 ₹{{sale.rate}} x {{sale.bag_count}} bags x 50 Kg
               </ion-col>
               <!-- <ion-col>
-              <span class="sub-header-text"> Total = <span class="content-text">₹&nbsp;{{totalCost(sale.rate, sale.bag_count, 50) | number : '.1'}}</span></span>
+              <span class="sub-header-text"> Total = <span class="content-text">₹&nbsp;{{totalCost(sale.rate, sale.bag_count, 50) | number : '.2'}}</span></span>
             </ion-col> -->
             </span>
 
-            <span *ngIf="sale['bag_type_id'] == 3">
+            <span *ngIf="sale['bag_type_id'] == 2">
               <ion-col class="header-text">
                 ₹{{sale.rate}} x {{sale.bag_count}} bags x 25 Kg
               </ion-col>
               <!-- <ion-col>
-              <span class="sub-header-text"> Total = <span class="content-text">₹&nbsp;{{totalCost(sale.rate, sale.bag_count, 25) | number : '.1'}}</span></span>
+              <span class="sub-header-text"> Total = <span class="content-text">₹&nbsp;{{totalCost(sale.rate, sale.bag_count, 25) | number : '.2'}}</span></span>
             </ion-col> -->
             </span>
           </ion-col>
-          <ion-col>
+          <ion-col col-3>
             <span *ngIf="sale['bag_type_id'] == 1">
-              <span class="content-text">₹&nbsp;{{totalCost(sale.rate, sale.bag_count, 50) | number : '.1'}}</span>
+              <span class="content-text">₹&nbsp;{{totalCost(sale.rate, sale.bag_count, 50) | number : '.2'}}</span>
             </span>
-            <span *ngIf="sale['bag_type_id'] == 3">
-              <span class="content-text">₹&nbsp;{{totalCost(sale.rate, sale.bag_count, 25) | number : '.1'}}</span>
+            <span *ngIf="sale['bag_type_id'] == 2">
+              <span class="content-text">₹&nbsp;{{totalCost(sale.rate, sale.bag_count, 25) | number : '.2'}}</span>
             </span>
           </ion-col>
-          <ion-col (click)="routeToGrievancePage(sale.id)" col-1>
-            <ion-icon style="font-size: 25px" name="outlet"></ion-icon>
+          <ion-col col-3 class="sub-header-text">
+            {{sale.sale_status}}
           </ion-col>
         </ion-row>
       </ion-col>
+      <ion-row>
+        <ion-col>
+          <!-- {{total_cost}} -->
+        </ion-col>
+      </ion-row>
     </span>
     <ion-row>
       <ion-col>
-        <span class="header-text">Transport Cost =
-          <span class="sub-header-text">₹&nbsp;0</span>
-        </span>
-      </ion-col>
-    </ion-row>
-    <ion-row>
-      <ion-col>
-        <!-- <span class="header-text" *ngIf="domestic_quote['bag_type_id'] == 1">Total Outstanding = <span class="sub-header-text">₹&nbsp;{{totalCost(domestic_quote.rate, domestic_quote.bag_count, 50) | number : '.1'}}</span></span> -->
-        <!-- <span class="header-text" *ngIf="domestic_quote['bag_type_id'] == 3">Total Outstanding = <span class="sub-header-text">₹&nbsp;{{totalCost(domestic_quote.rate, domestic_quote.bag_count, 25) | number : '.1'}}</span></span> -->
+        <!-- <span class="header-text" *ngIf="domestic_quote['bag_type_id'] == 1">Total Outstanding = <span class="sub-header-text">₹&nbsp;{{totalCost(domestic_quote.rate, domestic_quote.bag_count, 50) | number : '.2'}}</span></span> -->
+        <!-- <span class="header-text" *ngIf="domestic_quote['bag_type_id'] == 3">Total Outstanding = <span class="sub-header-text">₹&nbsp;{{totalCost(domestic_quote.rate, domestic_quote.bag_count, 25) | number : '.2'}}</span></span> -->
       </ion-col>
     </ion-row>
   </ion-card>
@@ -103,64 +104,49 @@
   </ion-row>
   <ion-card>
     <ion-row>
-      <ion-col>
+      <ion-col col-2>
         <span class="header-text">Date</span>
       </ion-col>
-      <ion-col>
-        <span class="header-text">Description</span>
-      </ion-col>
-      <ion-col>
+      <ion-col col-3>
         <span class="header-text">Cost</span>
+      </ion-col>
+      <ion-col col-4>
+        <span class="header-text">Amount Balance</span>
+      </ion-col>
+      <ion-col col-3>
+        <span class="header-text">Status</span>
       </ion-col>
     </ion-row>
     <span *ngFor="let domestic_quote of domestic_quotes; let i = index">
       <ion-col *ngFor="let sale of domestic_quote['partially_paid']">
         <ion-row>
-          <ion-col class="tiny-date-row bidding-card-main-content">{{sale.expected_delivery_date | date: 'dd-MMM-yy'}}</ion-col>
-          <ion-col>
+          <ion-col col-2 class="tiny-date-row bidding-card-main-content">{{sale.expected_delivery_date | date: 'dd-MMM'}}</ion-col>
+          <ion-col col-3>
             <span *ngIf="sale['bag_type_id'] == 1">
-              <ion-col class="header-text">
-                ₹{{sale.rate}} x {{sale.bag_count}} bags x 50 Kg
-              </ion-col>
-              <!-- <ion-col>
-              <span class="sub-header-text"> Total = <span class="content-text">₹&nbsp;{{totalCost(sale.rate, sale.bag_count, 50) | number : '.1'}}</span></span>
-            </ion-col> -->
+              <span class="header-text">₹&nbsp;{{totalCost(sale.rate, sale.bag_count, 50) | number : '.2'}}</span>
             </span>
-
-            <span *ngIf="sale['bag_type_id'] == 3">
-              <ion-col class="header-text">
-                ₹{{sale.rate}} x {{sale.bag_count}} bags x 25 Kg
-              </ion-col>
-              <!-- <ion-col>
-              <span class="sub-header-text"> Total = <span class="content-text">₹&nbsp;{{totalCost(sale.rate, sale.bag_count, 25) | number : '.1'}}</span></span>
-            </ion-col> -->
+            <span *ngIf="sale['bag_type_id'] == 2">
+              <span class="header-text">₹&nbsp;{{totalCost(sale.rate, sale.bag_count, 25) | number : '.2'}}</span>
             </span>
           </ion-col>
-          <ion-col>
+          <ion-col col-4>
             <span *ngIf="sale['bag_type_id'] == 1">
-              <span class="content-text">₹&nbsp;{{totalCost(sale.rate, sale.bag_count, 50) | number : '.1'}}</span>
+              <span class="content-text">₹&nbsp;{{totalCost(sale.rate, sale.bag_count, 50) - sale.amount_received | number : '.2'}}</span>
             </span>
-            <span *ngIf="sale['bag_type_id'] == 3">
-              <span class="content-text">₹&nbsp;{{totalCost(sale.rate, sale.bag_count, 25) | number : '.1'}}</span>
+            <span *ngIf="sale['bag_type_id'] == 2">
+              <span class="content-text">₹&nbsp;{{totalCost(sale.rate, sale.bag_count, 25) - sale.amount_received | number : '.2'}}</span>
             </span>
           </ion-col>
-          <ion-col (click)="routeToGrievancePage(sale.id)" col-1>
-            <ion-icon style="font-size: 25px" name="outlet"></ion-icon>
+          <ion-col col-3 class="sub-header-text">
+            {{sale.sale_status}}
           </ion-col>
         </ion-row>
       </ion-col>
     </span>
     <ion-row>
       <ion-col>
-        <span class="header-text">Transport Cost =
-          <span class="sub-header-text">₹&nbsp;0</span>
-        </span>
-      </ion-col>
-    </ion-row>
-    <ion-row>
-      <ion-col>
-        <!-- <span class="header-text" *ngIf="domestic_quote['bag_type_id'] == 1">Total Outstanding = <span class="sub-header-text">₹&nbsp;{{totalCost(domestic_quote.rate, domestic_quote.bag_count, 50) | number : '.1'}}</span></span> -->
-        <!-- <span class="header-text" *ngIf="domestic_quote['bag_type_id'] == 3">Total Outstanding = <span class="sub-header-text">₹&nbsp;{{totalCost(domestic_quote.rate, domestic_quote.bag_count, 25) | number : '.1'}}</span></span> -->
+        <!-- <span class="header-text" *ngIf="domestic_quote['bag_type_id'] == 1">Total Outstanding = <span class="sub-header-text">₹&nbsp;{{totalCost(domestic_quote.rate, domestic_quote.bag_count, 50) | number : '.2'}}</span></span> -->
+        <!-- <span class="header-text" *ngIf="domestic_quote['bag_type_id'] == 3">Total Outstanding = <span class="sub-header-text">₹&nbsp;{{totalCost(domestic_quote.rate, domestic_quote.bag_count, 25) | number : '.2'}}</span></span> -->
       </ion-col>
     </ion-row>
   </ion-card>
