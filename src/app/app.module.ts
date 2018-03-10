@@ -20,7 +20,6 @@ import { PhonegapLocalNotification } from '@ionic-native/phonegap-local-notifica
 import {SaleOrderDetailsPage} from "../pages/sale-order-details/sale-order-details";
 import {PipesModule} from "../pipes/pipes.module";
 import { GlobalProvider } from '../providers/global/global';
-import { FileOpener } from '@ionic-native/file-opener'
 // import { InterfaceProvider } from '../providers/interface/interface';
 
 @NgModule({
@@ -61,7 +60,6 @@ import { FileOpener } from '@ionic-native/file-opener'
     HttpServerServiceProvider,
     PhonegapLocalNotification,
     GlobalProvider,
-    FileOpener
     // InterfaceProvider,
   ]
 })

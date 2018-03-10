@@ -15,7 +15,8 @@ export class AboutPage {
   domestic_quotes: any[] = [];
   todate: any = new Date().toISOString().split('T')[0];
   latest_bid_info: any = {};
-  // total_cost: number = 0;
+  total_cost_unpaid: number = 0;
+  total_cost_partial: number = 0;
   bag_25: any;
   bag_50: any;
   bidding_list: any[] = [];
@@ -27,6 +28,8 @@ export class AboutPage {
 
     this.httpServerServiceProvider.getOrderHistory().subscribe((data) => {
       this.domestic_quotes = data;
+      this.total_cost_unpaid = data[0]['unpaid'][0]['total_amount'] ;
+      this.total_cost_partial = data[0]['unpaid'][0]['total_pending'] ;
     });
 
   }
@@ -43,6 +46,8 @@ export class AboutPage {
 
     this.httpServerServiceProvider.getOrderHistory().subscribe((data) => {
       this.domestic_quotes = data;
+      this.total_cost_unpaid = data[0]['unpaid'][0]['total_amount'];
+      this.total_cost_partial = data[0]['unpaid'][0]['total_pending'];
       console.log(data);
       event.complete();
     }, () => {
