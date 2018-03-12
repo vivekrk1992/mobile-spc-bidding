@@ -28,8 +28,14 @@ export class AboutPage {
 
     this.httpServerServiceProvider.getOrderHistory().subscribe((data) => {
       this.domestic_quotes = data;
-      this.total_cost_unpaid = data[0]['unpaid'][0]['total_amount'] ;
-      this.total_cost_partial = data[0]['unpaid'][0]['total_pending'] ;
+      console.log(data);
+      console.log(data.length);
+      if (data[0]['unpaid'].length !== 0) {
+        this.total_cost_unpaid = data[0]['unpaid'][0]['total_amount'];
+      }
+      if (data[0]['partially_paid'].length !== 0) {
+        this.total_cost_partial = data[0]['partially_paid'][0]['total_pending'];
+      }
     });
 
   }
@@ -46,8 +52,12 @@ export class AboutPage {
 
     this.httpServerServiceProvider.getOrderHistory().subscribe((data) => {
       this.domestic_quotes = data;
-      this.total_cost_unpaid = data[0]['unpaid'][0]['total_amount'];
-      this.total_cost_partial = data[0]['unpaid'][0]['total_pending'];
+      if (data[0]['unpaid'].length !== 0) {
+        this.total_cost_unpaid = data[0]['unpaid'][0]['total_amount'];
+      }
+      if (data[0]['partially_paid'].length !== 0) {
+        this.total_cost_partial = data[0]['partially_paid'][0]['total_pending'];
+      }
       console.log(data);
       event.complete();
     }, () => {

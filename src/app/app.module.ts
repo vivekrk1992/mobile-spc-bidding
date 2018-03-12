@@ -20,6 +20,7 @@ import { PhonegapLocalNotification } from '@ionic-native/phonegap-local-notifica
 import {SaleOrderDetailsPage} from "../pages/sale-order-details/sale-order-details";
 import {PipesModule} from "../pipes/pipes.module";
 import { GlobalProvider } from '../providers/global/global';
+import { DocumentViewer } from '@ionic-native/document-viewer';
 // import { InterfaceProvider } from '../providers/interface/interface';
 
 @NgModule({
@@ -32,7 +33,7 @@ import { GlobalProvider } from '../providers/global/global';
     GrievancePage,
     SaleOrderDetailsPage,
     OrderPage,
-    BuyerProfilePage
+    BuyerProfilePage,
   ],
   imports: [
     BrowserModule,
@@ -60,6 +61,7 @@ import { GlobalProvider } from '../providers/global/global';
     HttpServerServiceProvider,
     PhonegapLocalNotification,
     GlobalProvider,
+    DocumentViewer,
     // InterfaceProvider,
   ]
 })

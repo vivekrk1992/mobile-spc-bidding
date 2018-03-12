@@ -88,7 +88,7 @@
     <ion-row>
       <ion-col></ion-col>
       <ion-col>
-        <button ion-button (click)="confirmOrder(brands, domestic_quotes[0]['id'], bag_count_25kg, bag_count_50kg, selected_bag_type)">Order</button>
+        <button ion-button (click)="confirmOrder(brands, domestic_quote_id, bag_count_25kg, bag_count_50kg, selected_bag_type)" [disabled]="!domestic_quote_id">Order</button>
       </ion-col>
       <ion-col> </ion-col>
     </ion-row>

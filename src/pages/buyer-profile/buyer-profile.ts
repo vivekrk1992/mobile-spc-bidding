@@ -77,20 +77,27 @@ export class BuyerProfilePage {
 
   updateUserCVPropertity(business, address, gst) {
     let cv_profile = [];
-    business['image_value'] = this.business_proof;
-    business['buyer_id'] = this.user.id;
-    cv_profile.push(business);
-    address['property_id'] = parseInt(address['property_id'])
-    address['image_value'] = this.resident_proof
-    address['buyer_id'] = this.user.id;
-    cv_profile.push(address);
-    gst['buyer_id'] = this.user.id;
-    cv_profile.push(gst);
+    if (this.business_proof != undefined) {
+      business['image_value'] = this.business_proof;
+      business['buyer_id'] = this.user.id;
+      cv_profile.push(business);
+    }
+    if (this.resident_proof != undefined) {
+      address['property_id'] = parseInt(address['property_id']);
+      address['image_value'] = this.resident_proof;
+      address['buyer_id'] = this.user.id;
+      cv_profile.push(address);
+    }
+    if (gst['value'] != null) {
+      gst['value'] = parseInt(gst['value']);
+      gst['buyer_id'] = this.user.id;
+      cv_profile.push(gst);
+    }
     console.log(cv_profile);
-    // this.httpServerServiceProvider.saveUserPropertyFile(cv_profile).subscribe(data => {
-    //   console.log(data);
-    // }, (error) => {
-    //   console.log(error);
-    // });
+    this.httpServerServiceProvider.saveUserPropertyFile(cv_profile).subscribe(data => {
+      console.log(data);
+    }, (error) => {
+      console.log(error);
+    });
   }
 }

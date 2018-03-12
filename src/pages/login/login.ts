@@ -5,6 +5,7 @@ import { TabsPage } from '../tabs/tabs';
 import { Storage } from '@ionic/storage';
 import { HttpServerServiceProvider } from '../../providers/http-server-service/http-server-service';
 import { PhonegapLocalNotification } from '@ionic-native/phonegap-local-notification';
+import { DocumentViewer, DocumentViewerOptions } from '@ionic-native/document-viewer';
 
 @IonicPage()
 @Component({
@@ -14,7 +15,7 @@ import { PhonegapLocalNotification } from '@ionic-native/phonegap-local-notifica
 export class LoginPage {
   login_form: FormGroup;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private formBuilder: FormBuilder, private storage: Storage, private httpServerServiceProvider: HttpServerServiceProvider, private localNotification: PhonegapLocalNotification) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, private formBuilder: FormBuilder, private storage: Storage, private httpServerServiceProvider: HttpServerServiceProvider, private localNotification: PhonegapLocalNotification, private document: DocumentViewer) {
     this.login_form = this.formBuilder.group({
       user_name: [''],
       password: [''],
@@ -43,16 +44,15 @@ export class LoginPage {
 
   }
 
+
   ionViewDidLoad() {
     console.log('ionViewDidLoad LoginPage');
   }
 
-  // openTermsAndConditions() {
-  //   console.log('assets/t&c/login_terms_sample.pdf');
-  //   this.fileOpener.open('assets/t&c/login_terms_sample.pdf', 'application/pdf')
-  //     .then(() => console.log('File is opened'))
-  //     .catch(e => console.log('Error openening file', e));
-  // }
+  openTermsAndConditions() {
+    // this.document.viewDocument('assets/login_terms_sample.pdf', "application/pdf", { print: { enabled: true } });
+    this.navCtrl.push('LoginTermsPage');
+  }
 
   routeSignUp() {
     this.navCtrl.push('SignUpPage')

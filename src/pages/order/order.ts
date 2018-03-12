@@ -19,6 +19,7 @@ export class OrderPage {
   domestic_quotes: any;
   user: any;
   domestic_quote_of_the_day: any;
+  domestic_quote_id: number = 0;
   copra_brands: any;
   today = new Date().toISOString().split('T')[0];
 
@@ -50,7 +51,8 @@ export class OrderPage {
       this.domestic_quotes = data;
       if (data.length !== 0) {
         this.domestic_quote_of_the_day = data[0].rate;
-      } 
+        this.domestic_quote_id = data[0]['id'];
+      }
       console.log(this.domestic_quote_of_the_day);
     }, (error) => {
       console.log(error);
@@ -70,7 +72,7 @@ export class OrderPage {
     let place_order = {};
     if (selected_bag == 1) {
       if (count_50kg <= 5) {
-        place_order['brand_id'] = brand;
+        place_order['copra_brand_id'] = brand;
         place_order['buyer_id'] = this.user['id'];
         place_order['quote_id'] = quote_id;
         place_order['bag_type'] = selected_bag;
@@ -82,7 +84,7 @@ export class OrderPage {
       }
     } else {
       if (count_25kg <= 5) {
-        place_order['brand_id'] = brand;
+        place_order['copra_brand_id'] = brand;
         place_order['buyer_id'] = this.user['id'];
         place_order['quote_id'] = quote_id;
         place_order['bag_type'] = selected_bag;
@@ -96,11 +98,12 @@ export class OrderPage {
 
     console.log(place_order);
     
-    // this.httpServerServiceProvider.registerDirectOrderToSale(place_order).subscribe(data => {
-    //   console.log(data);
-    // }, (error) => {
-    //   console.log(error);
-    // });
+    this.httpServerServiceProvider.registerDirectOrderToSale(place_order).subscribe(data => {
+      console.log(data);
+      this.displayToast('Order is placed for ₹' + this.domestic_quote_of_the_day)
+    }, (error) => {
+      console.log(error);
+    });
   }
 
   totalCost(quote_rate, quantity, quantity_in_kgs) {

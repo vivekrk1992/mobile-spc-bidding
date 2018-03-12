@@ -103,11 +103,13 @@
       </ion-col>
     </ion-row>
 
-    <button ion-button type="submit" class="button-center">Sign Up</button>
+    <button ion-button type="submit" class="button-center" [disabled]="terms_conditions">Sign Up</button>
   </form>
   <div padding text-center>
-    <!-- <span style='color: orangered; font-weight: bold;' (click)="openSignupTermsAndConditions()">Trems & Condition</span> -->
-    <span style='color: orangered; font-weight: bold;'>Trems & Condition</span>
+    <ion-col col-1 ([ngModel])="terms_conditions">
+      <ion-checkbox checked (click)="disableToggle()"></ion-checkbox>
+    </ion-col>
+    <span style='color: orangered; font-weight: bold;' (click)="openSignupTermsAndConditions()">Trems & Condition</span>
   </div>
 
 </ion-content>
