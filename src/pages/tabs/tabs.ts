@@ -57,7 +57,7 @@ export class TabsPage {
   routePage() {
     if (this.buyer_profile_complete_percentage == 100) {
       console.log('in if condition when profile is at 100');
-      // this.navCtrl.setRoot(OrderPage);
+      // this.navCtr l.setRoot(OrderPage);
     } else {
       console.log('in else for second if');
       // this.navCtrl.setRoot(BuyerProfilePage);
