@@ -7,6 +7,7 @@ import { AboutPage } from '../pages/about/about';
 import { ContactPage } from '../pages/contact/contact';
 import { HomePage } from '../pages/home/home';
 import { TabsPage } from '../pages/tabs/tabs';
+import { OrderTabsPage } from '../pages/order-tabs/order-tabs';
 import { GrievancePage } from './../pages/grievance/grievance';
 import { BuyerProfilePage } from './../pages/buyer-profile/buyer-profile';
 import { OrderPage } from './../pages/order/order';
@@ -20,7 +21,7 @@ import { HttpModule } from '@angular/http';
 import { PhonegapLocalNotification } from '@ionic-native/phonegap-local-notification';
 import {PipesModule} from "../pipes/pipes.module";
 import { GlobalProvider } from '../providers/global/global';
-import { DocumentViewer } from '@ionic-native/document-viewer';
+// import { DocumentViewer } from '@ionic-native/document-viewer';
 // import { InterfaceProvider } from '../providers/interface/interface';
 
 @NgModule({
@@ -34,6 +35,7 @@ import { DocumentViewer } from '@ionic-native/document-viewer';
     SaleOrderDetailsPage,
     OrderPage,
     BuyerProfilePage,
+    OrderTabsPage
   ],
   imports: [
     BrowserModule,
@@ -52,7 +54,8 @@ import { DocumentViewer } from '@ionic-native/document-viewer';
     GrievancePage,
     SaleOrderDetailsPage,
     OrderPage,
-    BuyerProfilePage
+    BuyerProfilePage,
+    OrderTabsPage
   ],
   providers: [
     StatusBar,
@@ -61,7 +64,7 @@ import { DocumentViewer } from '@ionic-native/document-viewer';
     HttpServerServiceProvider,
     PhonegapLocalNotification,
     GlobalProvider,
-    DocumentViewer,
+    // DocumentViewer,
     // InterfaceProvider,
   ]
 })
