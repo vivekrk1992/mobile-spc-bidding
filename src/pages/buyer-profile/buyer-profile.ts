@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, App } from 'ionic-angular';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { Storage } from '@ionic/storage';
 import { HttpServerServiceProvider } from '../../providers/http-server-service/http-server-service';
@@ -20,7 +20,7 @@ export class BuyerProfilePage {
   user: any
   address_proof: any;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private formBuilder: FormBuilder, private storage: Storage, private httpServerServiceProvider: HttpServerServiceProvider) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, private formBuilder: FormBuilder, private storage: Storage, private httpServerServiceProvider: HttpServerServiceProvider, private app: App) {
     this.business_form = this.formBuilder.group({
       property_id: [5],
     });
@@ -89,7 +89,7 @@ export class BuyerProfilePage {
       cv_profile.push(address);
     }
     if (gst['value'] != null) {
-      gst['value'] = parseInt(gst['value']);
+      gst['value'] = gst['value'];
       gst['buyer_id'] = this.user.id;
       cv_profile.push(gst);
     }
@@ -98,6 +98,16 @@ export class BuyerProfilePage {
       console.log(data);
     }, (error) => {
       console.log(error);
+    });
+  }
+
+  routeLoginPage() {
+    this.httpServerServiceProvider.logout().subscribe((data) => {
+      this.storage.clear();
+      this.app.getRootNav().setRoot('LoginPage');
+    }, () => {
+      this.storage.clear();
+      this.app.getRootNav().setRoot('LoginPage');
     });
   }
 }
