@@ -88,14 +88,11 @@
     <ion-row>
       <ion-col></ion-col>
       <ion-col>
-        <span *ngIf="!domestic_quote_id">
-          <button ion-button (click)="confirmOrder(brands, domestic_quote_id, bag_count_25kg, bag_count_50kg, selected_bag_type)" [disabled]="!domestic_quote_id">Order</button>
-        </span>
         <span *ngIf="selected_bag_type == 2">
-          <button ion-button (click)="confirmOrder(brands, domestic_quote_id, bag_count_25kg, bag_count_50kg, selected_bag_type)" [disabled]="bag_count_25kg == 0">Order</button>
+          <button ion-button (click)="confirmOrder(brands, domestic_quote_id, bag_count_25kg, bag_count_50kg, selected_bag_type)" [disabled]="bag_count_25kg == 0 || bag_count_25kg == null">Order</button>
         </span>
         <span *ngIf="selected_bag_type == 1">
-          <button ion-button (click)="confirmOrder(brands, domestic_quote_id, bag_count_25kg, bag_count_50kg, selected_bag_type)" [disabled]="bag_count_50kg == 0">Order</button>
+          <button ion-button (click)="confirmOrder(brands, domestic_quote_id, bag_count_25kg, bag_count_50kg, selected_bag_type)" [disabled]="bag_count_50kg == 0 || bag_count_50kg == null">Order</button>
         </span>
       </ion-col>
       <ion-col> </ion-col>
