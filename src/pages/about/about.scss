@@ -1,3 +1,45 @@
+page-about {
+    .table-header-row {
+        background-color: #BAB2B5;
+        //padding: 5px;
+    }
+
+    .table-header-row-cell {
+        border-right: solid rebeccapurple;
+    }
+
+    .tiny-date-cell {
+        font-size: smaller;
+        font-style: italic;
+        color: #000000;
+        //color: #90b49f;
+    }
+
+    .price-calculation-cell {
+        font-size: smaller;
+        font-style: italic;
+        color: #ec6161;
+        color: #000000;
+    }
+
+    .cost-cell {
+        color: #ec6161;
+    }
+
+    .sum-value-row {
+        font-size: small;
+        font-weight: 500;
+        color: #ec6161;
+    }
+}
+
+.dull-small-italics {
+    font-size: smaller;
+    font-style: italic;
+    color: rgba(0, 0, 0, 0.51);
+}
+
+
 .content-text {
     color: #f1f1f1;
     font-weight: bold;
