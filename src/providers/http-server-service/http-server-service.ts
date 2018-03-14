@@ -152,6 +152,11 @@ export class HttpServerServiceProvider {
     registerDirectOrderToSale(order) {
       return this.http.post(this.global.base_url + 'main/register/domestic/sale/via/direct/order/', order, { headers: this.headers });
     }
+
+    getSaleListFor3Days() {
+      return this.http.get(this.global.base_url + 'main/serve/last/three/days/of/sale/for/buyer/', {headers: this.headers})
+        .map((res) => res.json());
+    }
     
   }
   

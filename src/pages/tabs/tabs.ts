@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { AboutPage } from '../about/about';
 import { ContactPage } from '../contact/contact';
 import { HomePage } from '../home/home';
@@ -13,9 +13,10 @@ import { NavController, Tabs } from 'ionic-angular';
 })
 export class TabsPage {
 
+  @ViewChild('tabRoot') tabRef: Tabs;
   // tab1Root = HomePage;
-  // tab1Root = OrderPage;
-  tab1Root: any;
+  tab1Root = OrderPage;
+  // tab1Root = BuyerProfilePage;
   tab2Root = AboutPage;
   tab3Root = ContactPage;
   tab4Root = GrievancePage;
@@ -24,7 +25,7 @@ export class TabsPage {
 
   constructor(private storage: Storage, public navCtrl: NavController) {
 
-    this.tab1Root = OrderPage;
+    // this.tab1Root = OrderPage;
     storage.get('user').then((user) => {
       console.log(user);
       this.user = user;
@@ -57,10 +58,12 @@ export class TabsPage {
   routePage() {
     if (this.buyer_profile_complete_percentage == 100) {
       console.log('in if condition when profile is at 100');
-      // this.navCtr l.setRoot(OrderPage);
+      // this.navCtrl.setRoot(OrderPage);
+      // this.tab1Root = OrderPage;
+      // this.tabRef.select(0)
     } else {
       console.log('in else for second if');
-      // this.navCtrl.setRoot(BuyerProfilePage);
+      this.navCtrl.setRoot(BuyerProfilePage);
     }
   }
 }

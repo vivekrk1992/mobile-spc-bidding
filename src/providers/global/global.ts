@@ -4,7 +4,7 @@ import { Injectable } from '@angular/core';
 export class GlobalProvider {
   private _bag_quantity = 50;
   // private _base_url: string = 'http://127.0.0.1:8000/';
-  private _base_url: string = 'http://192.168.0.106:8000/';
+  private _base_url: string = 'http://192.168.0.110:8000/';
 
   get bag_quantity() {
     return this._bag_quantity
