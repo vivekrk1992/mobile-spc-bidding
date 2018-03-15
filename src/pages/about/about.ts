@@ -20,6 +20,7 @@ export class AboutPage {
   bag_25: any;
   bag_50: any;
   bidding_list: any[] = [];
+  show_paid_order: boolean = false;
 
   constructor(public navCtrl: NavController, private httpServerServiceProvider: HttpServerServiceProvider, private storage: Storage, private toastCtrl: ToastController) {
     // this.httpServerServiceProvider.getAllDomesticQuotesWithLatestBid().subscribe((data) => {
@@ -97,5 +98,9 @@ export class AboutPage {
 
   navToSaleOrderDetails(bid_details) {
     this.navCtrl.push(SaleOrderDetailsPage, bid_details);
+  }
+
+  showPaidOrder() {
+    this.show_paid_order = !this.show_paid_order
   }
 }

@@ -10,6 +10,8 @@ import { HttpServerServiceProvider } from '../../providers/http-server-service/h
 })
 export class GrievancePage {
   sale_list: any;
+  sale_id: any;
+  complain: any;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, private httpServerServiceProvider: HttpServerServiceProvider) {
     console.log(this.navParams.data);
@@ -23,6 +25,11 @@ export class GrievancePage {
     }, (error) => {
       console.log(error);
     });
+  }
+  
+  submitComplain(sale_id, complain) {
+    console.log(sale_id);
+    console.log(complain);
   }
 
 }

@@ -24,7 +24,8 @@ export class LoginPage {
 
     storage.get('token').then((token) => {
       if (token != null) {
-        this.navCtrl.setRoot(TabsPage);
+        // this.navCtrl.setRoot(TabsPage);
+        this.readyPlatform()
       }
     });
 
@@ -59,6 +60,24 @@ export class LoginPage {
     this.navCtrl.push('SignUpPage')
   }
 
+  readyPlatform() {
+    this.platform.ready().then(() => {
+      this.storage.get('user_properties').then((user_property) => {
+        console.log('with in storage');
+        console.log(user_property);
+        if (user_property.hasOwnProperty('buyer_profile_complete_percentage')) {
+          if (user_property['buyer_profile_complete_percentage'] == '100') {
+            console.log('inside if')
+            this.navCtrl.setRoot(OrderTabsPage);
+          }
+        } else {
+          console.log('inside else')
+          this.navCtrl.setRoot(TabsPage);
+        }
+      })
+    }), () => {console.log('Platform not ready')};
+  }
+
   logIn() {
     this.httpServerServiceProvider.login(this.login_form.value).subscribe((data) => {
       console.log('login success');
@@ -66,23 +85,9 @@ export class LoginPage {
       this.storage.set('user', data.user);
       this.storage.set('user_type', data.user_type);
       this.storage.set('user_properties', data.user_properties);
+      this.readyPlatform();
       this.httpServerServiceProvider.setTokenHeader(data.token);
-      this.platform.ready().then(() => {
-        this.storage.get('user_properties').then((user_property) => {
-          console.log('with in storage');
-          console.log(user_property);
-          if (user_property.hasOwnProperty('buyer_profile_complete_percentage')) {
-            if (user_property['buyer_profile_complete_percentage'] == '100') {
-              console.log('inside if')
-              this.navCtrl.setRoot(OrderTabsPage);
-            } else {
-              console.log('inside else')
-              this.navCtrl.setRoot(TabsPage);
-            }
-          }
-        })
-      });
-    }, () => console.log('platform not ready'));
+    });
   }
 
 }
