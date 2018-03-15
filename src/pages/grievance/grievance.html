@@ -12,10 +12,26 @@
 <ion-content padding>
   <br>
   <h1 style="text-align:center">Grievances</h1>
-  <br>
-  <span *ngFor="let sale of sale_list">
-    
-  </span>
+  <h5 style="text-align:center">Sale List upto <strong><em>Three Days</em></strong></h5>
+  <ion-list radio-group *ngFor="let sale of sale_list" [(ngModel)]="sale_id" >
+    <ion-card>
+      <ion-card-header>
+        <ion-col>
+          <span style="color: darkslategray; font-size: medium; font-weight:bold;">Date: {{sale.expected_delivery_date}}</span>
+        </ion-col>
+        <ion-col>
+          <span style="color: darkslategray; font-size: medium; font-weight:bold;">Product-Cost: {{sale.product_cost}}</span>
+        </ion-col>
+        <ion-item>
+          <!-- <ion-label>{{sale.brand_name}}</ion-label> -->
+          <ion-label>
+            Mark:{{sale.brand_name}}, Bag:{{sale.bag_type}}
+          </ion-label>
+          <ion-radio [value]="sale.id"></ion-radio>
+        </ion-item>
+      </ion-card-header>
+    </ion-card>
+  </ion-list>
   <br>
   <ion-card style="padding-top:30px; background-color: #AB9E92;">
     <ion-list>
@@ -31,13 +47,13 @@
     <ion-row>
       <ion-item>
         <ion-label floating>Your Complain</ion-label>
-        <ion-textarea elastic style="color:black; line-height:normal; height:100%"></ion-textarea>
+        <ion-textarea elastic style="color:black; line-height:normal; height:100%" [(ngModel)]="complain"></ion-textarea>
       </ion-item>
     </ion-row>
     <ion-row>
       <ion-col></ion-col>
       <ion-col>
-        <button ion-button>Submit</button>
+        <button ion-button (click)="submitComplain(sale_id, complain)">Submit</button>
       </ion-col>
       <ion-col></ion-col>
     </ion-row>
