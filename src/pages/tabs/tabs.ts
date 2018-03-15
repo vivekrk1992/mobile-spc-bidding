@@ -39,7 +39,6 @@ export class TabsPage {
         console.log('profile complete percentage = ', this.buyer_profile_complete_percentage);
         console.log(typeof (this.buyer_profile_complete_percentage));
         console.log('after assign percentage');
-        this.routePage();
       } else {
         this.buyer_profile_complete_percentage = 0;
       }
@@ -47,19 +46,5 @@ export class TabsPage {
       console.log(error);
     });
     
-  }
-  routePage() {
-    console.log('routePage');
-    if (this.buyer_profile_complete_percentage == 100) {
-      console.log('in if condition when profile is at 100');
-      // this.tab1Root = null;
-      delete this.tab1Root
-      this.tab1Root = OrderPage;
-      console.log('root page seted')
-    } else {
-      console.log('else part');
-      // this.tab1Root = BuyerProfilePage;
-      // this.navCtrl.setRoot(BuyerProfilePage);
-    }
   }
 }
