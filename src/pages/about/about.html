@@ -130,12 +130,12 @@
   </span>
     <hr>
     <ion-item>
-        <h3 padding-top style="padding-left: 5px" (click)="showPaidOrder()">Paid Order(s):
+        <h1 padding-top style="padding-left: 5px" (click)="showPaidOrder()">Paid Order(s):
             <ion-icon [name]="show_paid_order ? 'arrow-dropdown-circle': 'arrow-dropright-circle'"
                       style="float:right"></ion-icon>
-        </h3>
+        </h1>
     </ion-item>
-    <ion-card *ngIf="show_paid_order">
+    <span *ngIf="show_paid_order">
         <ion-row class="table-header-row">
             <ion-col col-4 class="table-header-row-cell">
                 <span class="header-text">Date</span>
@@ -160,6 +160,6 @@
         </ion-row>
       </ion-col>
     </span>
-    </ion-card>
+    </span>
     <br>
 </ion-content>
