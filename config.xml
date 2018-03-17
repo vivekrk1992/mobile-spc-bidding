@@ -90,6 +90,5 @@
     <plugin name="cordova-android-support-gradle-release" spec="^1.2.0">
         <variable name="ANDROID_SUPPORT_VERSION" value="26.+" />
     </plugin>
-    <plugin name="cordova-plugin-document-viewer" spec="^0.9.8" />
     <plugin name="cordova-plugin-file" spec="^5.0.0" />
 </widget>

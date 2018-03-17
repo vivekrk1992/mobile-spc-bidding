@@ -12,71 +12,95 @@
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
 
+  <h5 style="text-align: center;">Invoice</h5>
+  <ion-card *ngFor="let invoice of buyer_invoice">
+    <ion-row class="highlighted-section-header">
+      <ion-col>
+        <span class="section-header-key">Date:</span>
+        <span>{{invoice.sale_date | date: 'dd-MMM'}}</span>
+      </ion-col>
+      <ion-col>
+        <span class="section-header-key">Cost:₹ &nbsp;</span>
+        <span>{{invoice.total_cost | number : '.2'}}</span>
+      </ion-col>
+      <ion-col>
+        <button>
+          <!-- {{invoice.invoice}} -->
+          <span (click)="downloadPdf(invoice.invoice)">
+          <ion-icon name="download"></ion-icon></span>
+        </button>
+      </ion-col>
+    </ion-row>
+  </ion-card>
+
+  <!-- Select Payment Details for Particular Order -->
+<!-- 
   <h2 text-center padding-top>Enter Payment Details</h2>
   <ion-card style="background-color: #AB9E92;">
-  <form [formGroup]="account_form" (ngSubmit)="submitAccountForm(account_form.value)">
-    <ion-row>
-      <ion-col col-6>
-        <span>
-          <ion-input type="number" class="text-box-midium"  placeholder="Amount" formControlName="amount" [(ngModel)]="Amount"> </ion-input>
-        </span>
-      </ion-col>
+    <form [formGroup]="account_form" (ngSubmit)="submitAccountForm(account_form.value)">
+      <ion-row>
+        <ion-col col-6>
+          <span>
+            <ion-input type="number" class="text-box-midium" placeholder="Amount" formControlName="amount" [(ngModel)]="Amount"> </ion-input>
+          </span>
+        </ion-col>
 
 
-      <ion-col col-6>
-        <ion-item>
-          <ion-label>Mode of transaction</ion-label>
-          <ion-select interface="popover" formControlName="mode_of_transaction_id">
+        <ion-col col-6>
+          <ion-item>
+            <ion-label>Mode of transaction</ion-label>
+            <ion-select interface="popover" formControlName="mode_of_transaction_id">
               <ion-option [value]="item.id" *ngFor="let item of payment">{{item.name}} &nbsp;&nbsp;</ion-option>
-          </ion-select>
-        </ion-item>
-      </ion-col>
-    </ion-row>
-    <ion-row>
-      <ion-col col-6>
-        <span>
-          <ion-input type="text" class="text-box-midium"  placeholder="Transaction_id" formControlName="transaction_id" [(ngModel)]="transaction_id"> </ion-input>
-        </span>
-      </ion-col>
-      <ion-col col-3>
-        <ion-icon name="calendar" class="header-text">
-          <ion-datetime  displayFormat="DD-MMM-YYYY" formControlName="date_sent" [(ngModel)]="date"></ion-datetime>
-        </ion-icon>
-      </ion-col>
-      <ion-col col-3>
-        <button ion-button full color="primary" [disabled]="!account_form.valid" style="margin-top: 20px;" type="submit">submit</button>
-      </ion-col>
-    </ion-row>
-  </form>
+            </ion-select>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col col-6>
+          <span>
+            <ion-input type="text" class="text-box-midium" placeholder="Transaction_id" formControlName="transaction_id" [(ngModel)]="transaction_id">
+            </ion-input>
+          </span>
+        </ion-col>
+        <ion-col col-3>
+          <ion-icon name="calendar" class="header-text">
+            <ion-datetime displayFormat="DD-MMM-YYYY" formControlName="date_sent" [(ngModel)]="date"></ion-datetime>
+          </ion-icon>
+        </ion-col>
+        <ion-col col-3>
+          <button ion-button full color="primary" [disabled]="!account_form.valid" style="margin-top: 20px;" type="submit">submit</button>
+        </ion-col>
+      </ion-row>
+    </form>
 
-</ion-card>
-<h2 text-center padding-top>Payment History</h2>
-<ion-row class="row-head">
-  <ion-col>From</ion-col>
-  <ion-col>To</ion-col>
-  <ion-col>Date</ion-col>
-  <ion-col>Mode</ion-col>
-  <ion-col>Amount</ion-col>
-</ion-row>
-<ion-row *ngFor="let payment of buyer_payments">
-  <ion-col>{{payment.buyer.first_name}}</ion-col>
-  <ion-col>{{payment.payment_to.first_name}}</ion-col>
-  <ion-col>{{payment.date_sent}}</ion-col>
-  <ion-col>{{payment.mode_of_transaction.name}}</ion-col>
-  <ion-col>{{payment.amount}}</ion-col>
-</ion-row>
+  </ion-card>
+  <h2 text-center padding-top>Payment History</h2>
+  <ion-row class="row-head">
+    <ion-col>From</ion-col>
+    <ion-col>To</ion-col>
+    <ion-col>Date</ion-col>
+    <ion-col>Mode</ion-col>
+    <ion-col>Amount</ion-col>
+  </ion-row>
+  <ion-row *ngFor="let payment of buyer_payments">
+    <ion-col>{{payment.buyer.first_name}}</ion-col>
+    <ion-col>{{payment.payment_to.first_name}}</ion-col>
+    <ion-col>{{payment.date_sent}}</ion-col>
+    <ion-col>{{payment.mode_of_transaction.name}}</ion-col>
+    <ion-col>{{payment.amount}}</ion-col>
+  </ion-row>
 
-<h2 text-center padding-top>Item Wise Payment History</h2>
-<ion-row class="row-head">
-  <ion-col>Date</ion-col>
-  <ion-col>Quantity</ion-col>
-  <ion-col>Amount</ion-col>
-  <ion-col>Status</ion-col>
-</ion-row>
-<ion-row *ngFor="let item of payment_per_items">
-  <ion-col>{{item.sale_date.split('T')[0]}}</ion-col>
-  <ion-col>{{item.quantity_50kg_bag}}</ion-col>
-  <ion-col>{{(item.product_cost + item.logistics_cost)}}</ion-col>
-  <ion-col>{{item.payment_status.name}}</ion-col>
-</ion-row>
+  <h2 text-center padding-top>Item Wise Payment History</h2>
+  <ion-row class="row-head">
+    <ion-col>Date</ion-col>
+    <ion-col>Quantity</ion-col>
+    <ion-col>Amount</ion-col>
+    <ion-col>Status</ion-col>
+  </ion-row>
+  <ion-row *ngFor="let item of payment_per_items">
+    <ion-col>{{item.sale_date.split('T')[0]}}</ion-col>
+    <ion-col>{{item.quantity_50kg_bag}}</ion-col>
+    <ion-col>{{(item.product_cost + item.logistics_cost)}}</ion-col>
+    <ion-col>{{item.payment_status.name}}</ion-col>
+  </ion-row> -->
 </ion-content>

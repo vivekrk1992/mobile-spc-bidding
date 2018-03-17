@@ -1,17 +1,17 @@
 <ion-header>
-    <ion-navbar>
-        <ion-title>
-            <span class="navbar-title">Quote/Order History</span>
-        </ion-title>
-    </ion-navbar>
+  <ion-navbar>
+    <ion-title>
+      <span class="navbar-title">Quote/Order History</span>
+    </ion-title>
+  </ion-navbar>
 </ion-header>
 
 <ion-content padding>
-    <!-- <span style="float:right; color:chocolate;font-size:17px; font-weight:bold">logout</span> -->
-    <ion-refresher (ionRefresh)="doRefresh($event)">
-        <ion-refresher-content></ion-refresher-content>
-    </ion-refresher>
-    <!-- <ion-col *ngFor="let domestic_quote of domestic_quotes; let i = index">
+  <!-- <span style="float:right; color:chocolate;font-size:17px; font-weight:bold">logout</span> -->
+  <ion-refresher (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+  <!-- <ion-col *ngFor="let domestic_quote of domestic_quotes; let i = index">
       <ion-card style="padding-bottom:0px; margin-bottom:0px" [ngStyle]="{'background-color': isBidStatusAccepted(domestic_quote.bid_status)? '#A2A240':'#C2A792'}">
         <ion-card-header>
           <ion-row class="tiny-date-row bidding-card-main-content">
@@ -30,26 +30,25 @@
         </ion-card-header>
       </ion-card>
     </ion-col> -->
-    <h3 padding-top style="padding-left: 5px">Orders Yet to be paid:</h3>
-    <ion-row class="table-header-row">
-        <ion-col col-2 class="table-header-row-cell">
-            <span class="header-text">Date</span>
-        </ion-col>
-        <ion-col col-5 class="table-header-row-cell">
-            <span class="header-text">Description</span>
-        </ion-col>
-        <ion-col col-3 class="table-header-row-cell">
-            <span class="header-text">Cost</span>
-        </ion-col>
-        <ion-col col-2>
-            <span class="header-text">Status</span>
-        </ion-col>
-    </ion-row>
-    <span *ngFor="let domestic_quote of domestic_quotes; let i = index">
+  <h3 padding-top style="padding-left: 5px">Orders Yet to be paid:</h3>
+  <ion-row class="table-header-row">
+    <ion-col col-2 class="table-header-row-cell">
+      <span class="header-text">Date</span>
+    </ion-col>
+    <ion-col col-5 class="table-header-row-cell">
+      <span class="header-text">Description</span>
+    </ion-col>
+    <ion-col col-3 class="table-header-row-cell">
+      <span class="header-text">Cost</span>
+    </ion-col>
+    <ion-col col-2>
+      <span class="header-text">Status</span>
+    </ion-col>
+  </ion-row>
+  <span *ngFor="let domestic_quote of domestic_quotes; let i = index">
     <ion-col *ngFor="let sale of domestic_quote['unpaid']">
       <ion-row>
-        <ion-col col-2
-                 class="tiny-date-cell bidding-card-main-content">{{sale.expected_delivery_date | date: 'dd-MMM'}}</ion-col>
+        <ion-col col-2 class="tiny-date-cell bidding-card-main-content">{{sale.expected_delivery_date | date: 'dd-MMM'}}</ion-col>
         <ion-col col-5>
           <span *ngIf="sale['bag_type_id'] == 1">
             <ion-col class="price-calculation-cell">
@@ -82,27 +81,26 @@
       <ion-col col-3 class="sum-value-row">₹&nbsp;{{total_cost_unpaid | number : '.2'}}</ion-col>
     </ion-row>
   </span>
-    <hr>
-    <h3 padding-top style="padding-left: 5px">Partially Paid Order(s):</h3>
-    <ion-row class="table-header-row">
-        <ion-col col-2 class="table-header-row-cell">
-            <span class="header-text">Date</span>
-        </ion-col>
-        <ion-col col-3 class="table-header-row-cell">
-            <span class="header-text">Cost</span>
-        </ion-col>
-        <ion-col col-4 class="table-header-row-cell">
-            <span class="header-text">Amount Balance</span>
-        </ion-col>
-        <ion-col col-3>
-            <span class="header-text">Status</span>
-        </ion-col>
-    </ion-row>
-    <span *ngFor="let domestic_quote of domestic_quotes; let i = index">
+  <hr>
+  <h3 padding-top style="padding-left: 5px">Partially Paid Order(s):</h3>
+  <ion-row class="table-header-row">
+    <ion-col col-2 class="table-header-row-cell">
+      <span class="header-text">Date</span>
+    </ion-col>
+    <ion-col col-3 class="table-header-row-cell">
+      <span class="header-text">Cost</span>
+    </ion-col>
+    <ion-col col-4 class="table-header-row-cell">
+      <span class="header-text">Amount Balance</span>
+    </ion-col>
+    <ion-col col-3>
+      <span class="header-text">Status</span>
+    </ion-col>
+  </ion-row>
+  <span *ngFor="let domestic_quote of domestic_quotes; let i = index">
     <ion-col *ngFor="let sale of domestic_quote['partially_paid']">
       <ion-row>
-        <ion-col col-2
-                 class="tiny-date-cell bidding-card-main-content">{{sale.expected_delivery_date | date: 'dd-MMM'}}</ion-col>
+        <ion-col col-2 class="tiny-date-cell bidding-card-main-content">{{sale.expected_delivery_date | date: 'dd-MMM'}}</ion-col>
         <ion-col col-3>
           <span class="header-text">₹&nbsp;{{sale.product_cost | number : '.2'}}</span>
         </ion-col>
@@ -123,31 +121,29 @@
       <ion-col col-6 class="sum-value-row">
         Total Amout to be paid =
       </ion-col>
-      <ion-col col-3 class="sum-value-row"
-               style="margin-left: -15px;">₹&nbsp;{{total_cost_partial | number : '.2'}}</ion-col>
+      <ion-col col-3 class="sum-value-row" style="margin-left: -15px;">₹&nbsp;{{total_cost_partial | number : '.2'}}</ion-col>
       <ion-col col-3></ion-col>
     </ion-row>
   </span>
-    <hr>
-    <ion-item>
-        <h3 padding-top style="padding-left: 5px" (click)="showPaidOrder()">Paid Order(s):
-            <ion-icon [name]="show_paid_order ? 'arrow-dropdown-circle': 'arrow-dropright-circle'"
-                      style="float:right"></ion-icon>
-        </h3>
-    </ion-item>
-    <ion-card *ngIf="show_paid_order">
-        <ion-row class="table-header-row">
-            <ion-col col-4 class="table-header-row-cell">
-                <span class="header-text">Date</span>
-            </ion-col>
-            <ion-col col-4 class="table-header-row-cell">
-                <span class="header-text">Amount Paid</span>
-            </ion-col>
-            <ion-col col-4>
-                <span class="header-text">Status</span>
-            </ion-col>
-        </ion-row>
-        <span *ngFor="let domestic_quote of domestic_quotes; let i = index">
+  <hr>
+  <ion-item>
+    <h3 padding-top style="padding-left: 5px" (click)="showPaidOrder()">Paid Order(s):
+      <ion-icon [name]="show_paid_order ? 'arrow-dropdown-circle': 'arrow-dropright-circle'" style="float:right"></ion-icon>
+    </h3>
+  </ion-item>
+  <ion-card *ngIf="show_paid_order">
+    <ion-row class="table-header-row">
+      <ion-col col-4 class="table-header-row-cell">
+        <span class="header-text">Date</span>
+      </ion-col>
+      <ion-col col-4 class="table-header-row-cell">
+        <span class="header-text">Amount Paid</span>
+      </ion-col>
+      <ion-col col-4>
+        <span class="header-text">Status</span>
+      </ion-col>
+    </ion-row>
+    <span *ngFor="let domestic_quote of domestic_quotes; let i = index">
       <ion-col *ngFor="let sale of domestic_quote['fully_paid']">
         <ion-row>
           <ion-col col-4 class="tiny-date-cell bidding-card-main-content">{{sale.expected_delivery_date | date: 'dd-MMM-yy'}}</ion-col>
@@ -160,6 +156,6 @@
         </ion-row>
       </ion-col>
     </span>
-    </ion-card>
-    <br>
+  </ion-card>
+  <br>
 </ion-content>

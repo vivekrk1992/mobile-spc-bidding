@@ -158,5 +158,9 @@ export class HttpServerServiceProvider {
         .map((res) => res.json());
     }
     
+    getInvoiceDetails() {
+      return this.http.get(this.global.base_url + 'main/serve/invoice/details/for/buyer/', {headers: this.headers})
+        .map((res) => res.json())
+    }
   }
   
