@@ -21,9 +21,8 @@ import { HttpModule } from '@angular/http';
 import { PhonegapLocalNotification } from '@ionic-native/phonegap-local-notification';
 import {PipesModule} from "../pipes/pipes.module";
 import { GlobalProvider } from '../providers/global/global';
-// import { DocumentViewer } from '@ionic-native/document-viewer';
-// import { InterfaceProvider } from '../providers/interface/interface';
-
+import { Camera } from '@ionic-native/camera';
+  
 @NgModule({
   declarations: [
     MyApp,
@@ -64,8 +63,7 @@ import { GlobalProvider } from '../providers/global/global';
     HttpServerServiceProvider,
     PhonegapLocalNotification,
     GlobalProvider,
-    // DocumentViewer,
-    // InterfaceProvider,
+    Camera,
   ]
 })
 export class AppModule {}

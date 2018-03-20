@@ -71,7 +71,7 @@ export class OrderPage {
   confirmOrder(brand, quote_id, count_25kg, count_50kg, selected_bag) {
     let place_order = {};
     if (selected_bag == 1) {
-      if (count_50kg <= 5) {
+      if (count_50kg <= 10) {
         place_order['copra_brand_id'] = brand;
         place_order['buyer_id'] = this.user['id'];
         place_order['quote_id'] = quote_id;
@@ -79,11 +79,11 @@ export class OrderPage {
         place_order['bag_count'] = count_50kg;
         place_order['date'] = this.today;
       } else {
-        this.displayToast('Not more than 5 Bags!');
+        this.displayToast('Not more than 10 Bags!');
         console.log('error');
       }
     } else {
-      if (count_25kg <= 5) {
+      if (count_25kg <= 10) {
         place_order['copra_brand_id'] = brand;
         place_order['buyer_id'] = this.user['id'];
         place_order['quote_id'] = quote_id;
@@ -91,7 +91,7 @@ export class OrderPage {
         place_order['bag_count'] = count_25kg;
         place_order['date'] = this.today;
       } else {
-        this.displayToast('Not more than 5 Bags!');
+        this.displayToast('Not more than 10 Bags!');
         console.log('error');
       }
     }

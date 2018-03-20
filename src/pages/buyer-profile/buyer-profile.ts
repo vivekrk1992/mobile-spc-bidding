@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, App } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, App, ToastController } from 'ionic-angular';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { Storage } from '@ionic/storage';
 import { HttpServerServiceProvider } from '../../providers/http-server-service/http-server-service';
@@ -20,7 +20,7 @@ export class BuyerProfilePage {
   user: any
   address_proof: any;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private formBuilder: FormBuilder, private storage: Storage, private httpServerServiceProvider: HttpServerServiceProvider, private app: App) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, private formBuilder: FormBuilder, private storage: Storage, private httpServerServiceProvider: HttpServerServiceProvider, private app: App, private toastCtrl: ToastController) {
     this.business_form = this.formBuilder.group({
       property_id: [5],
     });
@@ -96,8 +96,10 @@ export class BuyerProfilePage {
     console.log(cv_profile);
     this.httpServerServiceProvider.saveUserPropertyFile(cv_profile).subscribe(data => {
       console.log(data);
+      this.displayToast('Document(s) Uploaded Successfully!')
     }, (error) => {
       console.log(error);
+      this.displayToast('Error!')
     });
   }
 
@@ -109,5 +111,14 @@ export class BuyerProfilePage {
       this.storage.clear();
       this.app.getRootNav().setRoot('LoginPage');
     });
+  }
+
+  displayToast(display_message) {
+    let toast = this.toastCtrl.create({
+      message: display_message,
+      duration: 3000,
+      position: 'top'
+    });
+    toast.present();
   }
 }

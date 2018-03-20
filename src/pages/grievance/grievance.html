@@ -11,32 +11,27 @@
 
 <ion-content padding>
   <br>
+  <ion-row>
+    <ion-col style="font-size: larger; font-style: italic;">
+      <strong>Grievances are entertained for orders only within 3 days of delivery of goods! </strong>
+    </ion-col>
+  </ion-row>
   <h1 style="text-align:center">Grievances</h1>
-  <h5 style="text-align:center">Sale List upto <strong><em>Three Days</em></strong></h5>
-  <ion-list radio-group *ngFor="let sale of sale_list" [(ngModel)]="sale_id" >
-    <ion-card>
-      <ion-card-header>
-        <ion-col>
-          <span style="color: darkslategray; font-size: medium; font-weight:bold;">Date: {{sale.expected_delivery_date}}</span>
-        </ion-col>
-        <ion-col>
-          <span style="color: darkslategray; font-size: medium; font-weight:bold;">Product-Cost: {{sale.product_cost}}</span>
-        </ion-col>
-        <ion-item>
-          <!-- <ion-label>{{sale.brand_name}}</ion-label> -->
-          <ion-label>
-            Mark:{{sale.brand_name}}, Bag:{{sale.bag_type}}
-          </ion-label>
-          <ion-radio [value]="sale.id"></ion-radio>
-        </ion-item>
-      </ion-card-header>
-    </ion-card>
+  <h5 style="text-align:center">Sale List upto<strong><em>Three Days</em></strong></h5>
+  <ion-list radio-group *ngFor="let sale of sale_list" [(ngModel)]="sale_id">
+    <ion-item>
+      <ion-label>
+        <span style="color: darkslategray; font-size: medium; font-weight:bold;">{{sale.expected_delivery_date | date: 'dd-MMM'}}</span>
+        {{sale.brand_name}}, {{sale.bag_type_weight}}&nbsp;Kg-&nbsp;{{sale.bag_count}}&nbsp;Bag(s)
+      </ion-label>
+      <ion-radio [value]="sale.id"></ion-radio>
+    </ion-item>
   </ion-list>
   <br>
   <ion-card style="padding-top:30px; background-color: #AB9E92;">
     <ion-list>
       <ion-item-sliding>
-        <ion-item>
+        <ion-item (click)="takePicture()">
           <ion-avatar item-start>
             <ion-icon style="font-size: 25px" name="camera"></ion-icon>
           </ion-avatar>
@@ -58,7 +53,4 @@
       <ion-col></ion-col>
     </ion-row>
   </ion-card>
-  <ion-row>
-    <ion-col style="font-size: larger; font-style: italic;"><strong>Grievances are entertained for orders only within 3 days of delivery of goods! </strong></ion-col>
-  </ion-row>
 </ion-content>

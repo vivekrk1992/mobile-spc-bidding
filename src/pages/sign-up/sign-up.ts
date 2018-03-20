@@ -3,7 +3,6 @@ import { IonicPage, NavController, NavParams, ToastController } from 'ionic-angu
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { HttpServerServiceProvider } from '../../providers/http-server-service/http-server-service';
 import { AlertController } from 'ionic-angular';
-import { DocumentViewer } from '@ionic-native/document-viewer';
 
 @IonicPage()
 @Component({
@@ -18,7 +17,7 @@ export class SignUpPage {
   // passwordType: string = 'password';
   // passwordIcon: string = 'eye-off';
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private formBuilder: FormBuilder, private httpServerServiceProvider: HttpServerServiceProvider, private alertController: AlertController, private toastCtrl: ToastController, private document: DocumentViewer) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, private formBuilder: FormBuilder, private httpServerServiceProvider: HttpServerServiceProvider, private alertController: AlertController, private toastCtrl: ToastController) {
     this.sign_up_form = this.formBuilder.group({
       username: [null, Validators.compose([Validators.required])],
       first_name: [null],
