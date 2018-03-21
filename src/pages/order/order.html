@@ -16,6 +16,11 @@
 
 
 <ion-content padding>
+
+  <ion-refresher (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
   <span class="logout-button" (click)="logout()">logout</span>
 
   <!--Today's quote  -->
@@ -82,10 +87,10 @@
 
     <h6 text-center *ngIf="selected_bag_type == 2">₹ {{domestic_quote_of_the_day}} x {{bag_count_25kg}} bags x 25 kgs = ₹ {{totalCost(domestic_quote_of_the_day, bag_count_25kg, 25) | number : '.2'}}
       <br>
-      <h6 text-center>Net rate <i>inclusive</i> of Package Weight</h6></h6>
+      <h6 text-center>Net rate <em>inclusive</em> of Package Weight</h6></h6>
     <h6 text-center *ngIf="selected_bag_type == 1">₹ {{domestic_quote_of_the_day}} x {{bag_count_50kg}} bags x 50 kgs = ₹ {{totalCost(domestic_quote_of_the_day, bag_count_50kg, 50) | number : '.2'}}
       <br>
-    <h6 text-center>Net rate <i>inclusive</i> of Package Weight</h6></h6>
+    <h6 text-center>Net rate <em>inclusive</em> of Package Weight</h6></h6>
     <!-- <h3 text-center>Total Cost: ₹. {{(132 * 50 * bag_count_50kg) + (bag_count_25kg * 25 * 132)}}</h3> -->
 
     <ion-row>

@@ -10,6 +10,9 @@
 
 
 <ion-content padding>
+  <ion-refresher (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
   <br>
   <ion-row>
     <ion-col style="font-size: larger; font-style: italic;">
@@ -21,7 +24,7 @@
   <ion-list radio-group *ngFor="let sale of sale_list" [(ngModel)]="sale_id">
     <ion-item>
       <ion-label>
-        <span style="color: darkslategray; font-size: medium; font-weight:bold;">{{sale.expected_delivery_date | date: 'dd-MMM'}}</span>
+        <span style="color: darkslategray; font-size: medium; font-weight:bold;">{{sale.sale_date | date: 'dd-MMM'}}</span>
         {{sale.brand_name}}, {{sale.bag_type_weight}}&nbsp;Kg-&nbsp;{{sale.bag_count}}&nbsp;Bag(s)
       </ion-label>
       <ion-radio [value]="sale.id"></ion-radio>

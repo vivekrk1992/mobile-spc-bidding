@@ -69,6 +69,9 @@ export class LoginPage {
           if (user_property['buyer_profile_complete_percentage'] == '100') {
             console.log('inside if')
             this.navCtrl.setRoot(OrderTabsPage);
+          } else {
+            console.log('inside else')
+            this.navCtrl.setRoot(TabsPage);
           }
         } else {
           console.log('inside else')

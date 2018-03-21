@@ -25,6 +25,7 @@ export class SignUpPage {
       email: [null, Validators.compose([Validators.email])],
       city: [null],
       mobile: [null],
+      company_name: [null],
       password: [null],
       confirm_password: [null],
       otp: [null],

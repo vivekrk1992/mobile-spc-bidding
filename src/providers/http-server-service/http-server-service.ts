@@ -162,5 +162,9 @@ export class HttpServerServiceProvider {
       return this.http.get(this.global.base_url + 'main/serve/invoice/details/for/buyer/', {headers: this.headers})
         .map((res) => res.json())
     }
+
+    registerGrievance(complain) {
+      return this.http.post(this.global.base_url + 'main/register/grievance/', complain, {headers: this.headers});
+    }
   }
   

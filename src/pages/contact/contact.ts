@@ -1,9 +1,11 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/forms';
 import { HttpServerServiceProvider } from '../../providers/http-server-service/http-server-service';
-import { NavController, ToastController } from 'ionic-angular';
+import { NavController, ToastController, Platform } from 'ionic-angular';
 // import { InterfaceProvider } from './../../providers/interface/interface';
 import { value, Test } from '../../providers/interface/interface'
+import { FileOpener} from '@ionic-native/file-opener';
+import { File } from '@ionic-native/file';
 
 @Component({
   selector: 'page-contact',
@@ -18,7 +20,7 @@ export class ContactPage {
   buyer_invoice: any[] = [];
   payment_per_items:any;
 
-  constructor(private httpServerServiceProvider: HttpServerServiceProvider, public formBuilder: FormBuilder, private toastCtrl: ToastController) {
+  constructor(private httpServerServiceProvider: HttpServerServiceProvider, public formBuilder: FormBuilder, private toastCtrl: ToastController, private fileOpener: FileOpener, private file: File, private platform: Platform) {
 
     // console.log('contact');
     // console.log(value);
@@ -97,12 +99,66 @@ export class ContactPage {
     toast.present();
   }
 
-  downloadPdf(pdf_string) {
-    let pdf = window.open();
-    pdf.document.write("<iframe width='100%' height='100%' src='data:application/pdf;base64, " + pdf_string + "'></iframe>");
+  downloadPdf(pdf_path) {
+    console.log(pdf_path)
+    let file_path: any;
+    // let pdf = window.open();
+    // pdf.document.write("<iframe width='100%' height='100%' src='data:application/pdf;base64, " + pdf_string + "'></iframe>");
+
+    // this.fileOpener.open(pdf_path, 'application/pdf')
+    //   .then(() => console.log('File is opened'))
+    //   .catch(e => console.log('Error openening file', e));
+    
+    // this.filePath.resolveNativePath(pdf_path)
+    // .then(filePath => {
+    //   this.fileOpener.open(pdf_path, 'application/pdf')
+    //     .then(() => console.log('File is opened'))
+    //     .catch(e => console.log('Error openening file', e));        
+    //     console.log(filePath)})
+    //   .catch(err => console.log(err));
+
   }
-  testFun() {
-    // this.interfaceProvider.interFun();
+
+  saveAndOpenPdf(pdf_string: string,) {
+    let filename: any;
+    filename = new Date().getTime();
+    const writeDirectory = this.platform ? this.file.dataDirectory : this.file.externalDataDirectory;
+    // let binary_string = window.atob(pdf_string);
+    // let binary_length = binary_string.length;
+    // let bytes = new Uint8Array(binary_length);
+    // for (let i = 0; i < binary_length; i++) {
+    //   bytes[i] = binary_string.charCodeAt(i);
+    // }
+    // let blob = new Blob([bytes]);
+    this.file.writeFile(writeDirectory, filename, this.convertBaseb64ToBlob(pdf_string, 'data:application/pdf;base64'), { replace: true })
+      .then(() => {
+        this.fileOpener.open(writeDirectory + filename, 'application/pdf')
+      .catch(() => {
+        console.log('Error opening pdf file');
+      });
+    })
+    .catch(() => {
+      console.error('Error writing pdf file');
+    });
+  }
+
+  convertBaseb64ToBlob(b64Data, contentType): Blob {
+    contentType = contentType || '';
+    const sliceSize = 512;
+    b64Data = b64Data.replace(/^[^,]+,/, '');
+    b64Data = b64Data.replace(/\s/g, '');
+    const byteCharacters = window.atob(b64Data);
+    const byteArrays = [];
+    for (let offset = 0; offset < byteCharacters.length; offset += sliceSize) {
+      const slice = byteCharacters.slice(offset, offset + sliceSize);
+      const byteNumbers = new Array(slice.length);
+      for (let i = 0; i < slice.length; i++) {
+        byteNumbers[i] = slice.charCodeAt(i);
+      }
+      const byteArray = new Uint8Array(byteNumbers);
+      byteArrays.push(byteArray);
+    }
+    return new Blob(byteArrays, { type: contentType });
   }
 
 }

@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ToastController } from 'ionic-angular';
 import { HttpServerServiceProvider } from '../../providers/http-server-service/http-server-service';
 import { Camera, CameraOptions } from '@ionic-native/camera';
 
@@ -14,17 +14,18 @@ export class GrievancePage {
   complain: any;
   image: any = null;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private httpServerServiceProvider: HttpServerServiceProvider, private camera: Camera) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, private httpServerServiceProvider: HttpServerServiceProvider, private camera: Camera, private toastCtrl: ToastController) {
     console.log(this.navParams.data);
+    this.doRefresh();
   }
-  
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad GrievancePage');
-    this.httpServerServiceProvider.getSaleListFor3Days().subscribe(data => {
+
+  doRefresh(event = null) {
+    this.httpServerServiceProvider.getSaleListFor3Days().subscribe((data) => {
       console.log(data);
       this.sale_list = data;
-    }, (error) => {
-      console.log(error);
+      if (event != null) { event.complete() }
+    }, () => {
+      if (event != null) { event.complete() }
     });
   }
   
@@ -36,6 +37,13 @@ export class GrievancePage {
       grievance_dict['image'] = this.image;
     }
     console.log(grievance_dict);
+    this.httpServerServiceProvider.registerGrievance(grievance_dict).subscribe((data) => {
+      console.log(data);
+      this.displayToast('Complain registered!');
+    }, (error) => {
+      console.log(error);
+      this.displayToast('Error!');
+    });
   }
 
   takePicture() {
@@ -55,6 +63,15 @@ export class GrievancePage {
       // Handle error
       console.log(err);
     });
+  }
+
+  displayToast(display_message) {
+    let toast = this.toastCtrl.create({
+      message: display_message,
+      duration: 3000,
+      position: 'top'
+    });
+    toast.present();
   }
 
 }

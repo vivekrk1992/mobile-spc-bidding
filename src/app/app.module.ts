@@ -22,6 +22,8 @@ import { PhonegapLocalNotification } from '@ionic-native/phonegap-local-notifica
 import {PipesModule} from "../pipes/pipes.module";
 import { GlobalProvider } from '../providers/global/global';
 import { Camera } from '@ionic-native/camera';
+import { FileOpener } from '@ionic-native/file-opener'
+import { File } from '@ionic-native/file'
   
 @NgModule({
   declarations: [
@@ -64,6 +66,8 @@ import { Camera } from '@ionic-native/camera';
     PhonegapLocalNotification,
     GlobalProvider,
     Camera,
+    FileOpener,
+    File
   ]
 })
 export class AppModule {}

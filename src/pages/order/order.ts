@@ -24,6 +24,26 @@ export class OrderPage {
   today = new Date().toISOString().split('T')[0];
 
   constructor(public navCtrl: NavController, public navParams: NavParams, private httpServerServiceProvider: HttpServerServiceProvider, private toastCtrl: ToastController, private app: App, private storage: Storage) {
+  }
+
+  doRefresh(event = null) {
+    this.httpServerServiceProvider.getAllDomesticList().subscribe((data) => {
+      console.log(data);
+      this.domestic_quotes = data;
+      if (data.length !== 0) {
+        this.domestic_quote_of_the_day = data[0].rate;
+        this.domestic_quote_id = data[0]['id'];
+      }
+      if (event != null) { event.complete() }
+    }, (error) => {
+      console.log(error);
+      if (event != null) { event.complete() }
+    });
+  }
+  
+  ionViewCanEnter() {
+    this.doRefresh();
+
     this.httpServerServiceProvider.getBagTypes().subscribe((data) => {
       console.log(data);
       this.bag_types = data;
@@ -38,25 +58,11 @@ export class OrderPage {
       console.log(error);
     });
 
-    storage.get('user').then((user) => {
+    this.storage.get('user').then((user) => {
       console.log(user);
       this.user = user;
     });
-
-  }
-  
-  ionViewCanEnter() {
-    this.httpServerServiceProvider.getAllDomesticList().subscribe((data) => {
-      console.log(data);
-      this.domestic_quotes = data;
-      if (data.length !== 0) {
-        this.domestic_quote_of_the_day = data[0].rate;
-        this.domestic_quote_id = data[0]['id'];
-      }
-      console.log(this.domestic_quote_of_the_day);
-    }, (error) => {
-      console.log(error);
-    });
+    
   }
 
   displayToast(display_message) {
