@@ -109,6 +109,7 @@ export class OrderPage {
       this.displayToast('Order is placed for ₹' + this.domestic_quote_of_the_day)
     }, (error) => {
       console.log(error);
+      this.displayToast('Error!')
     });
   }
 
