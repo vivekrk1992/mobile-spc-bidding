@@ -25,17 +25,16 @@
       </ion-col>
       <ion-col>
         <button>
-          <!-- {{invoice.invoice}} -->
-          <!-- <span (click)="saveAndOpenPdf(invoice.invoice)"> -->
-          <span (click)="download(invoice.invoice)">
-          <ion-icon name="download"></ion-icon></span>
+          <span (click)="downloadPdf(invoice.invoice)">
+            <ion-icon name="download"></ion-icon>
+          </span>
         </button>
       </ion-col>
     </ion-row>
   </ion-card>
 
   <!-- Select Payment Details for Particular Order -->
-<!-- 
+  <!-- 
   <h2 text-center padding-top>Enter Payment Details</h2>
   <ion-card style="background-color: #AB9E92;">
     <form [formGroup]="account_form" (ngSubmit)="submitAccountForm(account_form.value)">

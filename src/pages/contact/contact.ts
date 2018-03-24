@@ -100,102 +100,9 @@ export class ContactPage {
     toast.present();
   }
 
-  downloadPdf(pdf_path) {
-    console.log(pdf_path)
-    let file_path: any;
-    // let pdf = window.open();
-    // pdf.document.write("<iframe width='100%' height='100%' src='data:application/pdf;base64, " + pdf_string + "'></iframe>");
-
-    // this.fileOpener.open(pdf_path, 'application/pdf')
-    //   .then(() => console.log('File is opened'))
-    //   .catch(e => console.log('Error openening file', e));
-
-    // this.filePath.resolveNativePath(pdf_path)
-    // .then(filePath => {
-    //   this.fileOpener.open(pdf_path, 'application/pdf')
-    //     .then(() => console.log('File is opened'))
-    //     .catch(e => console.log('Error openening file', e));        
-    //     console.log(filePath)})
-    //   .catch(err => console.log(err));
-
-  }
-
-  saveAndOpenPdf(pdf_string: string, ) {
-    let filename: any;
-    filename = new Date().getTime();
-    const writeDirectory = this.platform ? this.file.dataDirectory : this.file.externalDataDirectory;
-    let binary_string = window.atob(pdf_string);
-    let binary_length = binary_string.length;
-    let bytes = new Uint8Array(binary_length);
-    for (let i = 0; i < binary_length; i++) {
-      bytes[i] = binary_string.charCodeAt(i);
-    }
-    // let blob = new Blob([bytes]);
-    // this.file.writeFile(writeDirectory, filename, this.convertBaseb64ToBlob(pdf_string, 'data:application/pdf;base64'), { replace: true })
-    //   .then(() => {
-    //     this.fileOpener.open(writeDirectory + filename, 'application/pdf')
-    //   .catch(() => {
-    //     console.log('Error opening pdf file');
-    //   });
-    // })
-    // .catch(() => {
-    //   console.error('Error writing pdf file');
-    // });
-
-
-    var blob = new Blob([bytes], { type: 'application/pdf' });
-
-    //Determine a native file path to save to
-    // let filePath = (this.appConfig.isNativeAndroid) ? this.file.externalRootDirectory : this.file.cacheDirectory;
-
-    //Write the file
-    this.file.writeFile(writeDirectory, filename, blob, { replace: true }).then((fileEntry: FileEntry) => {
-
-      alert('Download Invoice')
-      alert(filename)
-      console.log("File created!");
-
-      //Open with File Opener plugin
-      this.fileOpener.open(fileEntry.toURL(), 'data:application/pdf;base64')
-        .then(() => {
-          console.log('File is opened');
-          alert(writeDirectory);
-          alert('File saved')
-        })
-        .catch(err => {
-          console.error('Error openening file: ' + err);
-          alert(err);
-        });
-    })
-      .catch((err) => {
-        console.error("Error creating file: " + err);
-        alert(err);
-        throw err;  //Rethrow - will be caught by caller
-      });
-  }
-
-  convertBaseb64ToBlob(b64Data, contentType): Blob {
-    contentType = contentType || '';
-    const sliceSize = 512;
-    b64Data = b64Data.replace(/^[^,]+,/, '');
-    b64Data = b64Data.replace(/\s/g, '');
-    const byteCharacters = window.atob(b64Data);
-    const byteArrays = [];
-    for (let offset = 0; offset < byteCharacters.length; offset += sliceSize) {
-      const slice = byteCharacters.slice(offset, offset + sliceSize);
-      const byteNumbers = new Array(slice.length);
-      for (let i = 0; i < slice.length; i++) {
-        byteNumbers[i] = slice.charCodeAt(i);
-      }
-      const byteArray = new Uint8Array(byteNumbers);
-      byteArrays.push(byteArray);
-    }
-    return new Blob(byteArrays, { type: contentType });
-  }
-
-
-  download(file_string) {
+  downloadPdf(file_string) {
     alert('with in download')
+    let filename: string = String(new Date().getTime()) + '.pdf';
     // const img: string = file_string
     const bytes: string = atob(file_string);
     const byteNumbers = new Array(bytes.length);
@@ -206,9 +113,16 @@ export class ContactPage {
 
     const blob: Blob = new Blob([byteArray], { type: 'application/pdf' });
 
-    this.file.writeFile(this.file.dataDirectory, 'file.pdf', blob)
+    this.file.writeFile(this.file.cacheDirectory, filename, blob)
       .then(() => {
         alert('file created')
+        this.fileOpener.open(this.file.cacheDirectory + filename, 'application/pdf')
+          .then(() => {
+            alert(filename)
+          })
+          .catch((error) => {
+            alert('Error while opening' + JSON.stringify(error))
+          })
       })
       .catch((err) => {
         alert("error in the report creation: " + JSON.stringify(err))
