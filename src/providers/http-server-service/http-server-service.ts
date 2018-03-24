@@ -41,7 +41,7 @@ export class HttpServerServiceProvider {
 
 // signup
   signUp(value) {
-    return this.http.post(this.global.base_url+'main/signup/', value, {headers: this.headers});
+    return this.http.post(this.global.base_url+'main/signup/', value);
   }
 
   setTokenHeader(token) {
@@ -150,7 +150,8 @@ export class HttpServerServiceProvider {
     }
     
     registerDirectOrderToSale(order) {
-      return this.http.post(this.global.base_url + 'main/register/domestic/sale/via/direct/order/', order, { headers: this.headers });
+      return this.http.post(this.global.base_url + 'main/register/domestic/sale/via/direct/order/', order, { headers: this.headers })
+        .map((res) => res.json());
     }
 
     getSaleListFor3Days() {

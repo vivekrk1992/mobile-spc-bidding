@@ -15,6 +15,7 @@ import { PhonegapLocalNotification } from '@ionic-native/phonegap-local-notifica
 })
 export class LoginPage {
   login_form: FormGroup;
+  terms_conditions: any;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, private formBuilder: FormBuilder, private storage: Storage, private httpServerServiceProvider: HttpServerServiceProvider, private localNotification: PhonegapLocalNotification, private platform: Platform) {
     this.login_form = this.formBuilder.group({
@@ -91,6 +92,10 @@ export class LoginPage {
       this.readyPlatform();
       this.httpServerServiceProvider.setTokenHeader(data.token);
     });
+  }
+
+  disableToggle() {
+    this.terms_conditions = !this.terms_conditions;
   }
 
 }

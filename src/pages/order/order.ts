@@ -40,7 +40,7 @@ export class OrderPage {
       if (event != null) { event.complete() }
     });
   }
-  
+
   ionViewCanEnter() {
     this.doRefresh();
 
@@ -62,7 +62,7 @@ export class OrderPage {
       console.log(user);
       this.user = user;
     });
-    
+
   }
 
   displayToast(display_message) {
@@ -77,40 +77,54 @@ export class OrderPage {
   confirmOrder(brand, quote_id, count_25kg, count_50kg, selected_bag) {
     let place_order = {};
     if (selected_bag == 1) {
-      if (count_50kg <= 10) {
-        place_order['copra_brand_id'] = brand;
-        place_order['buyer_id'] = this.user['id'];
-        place_order['quote_id'] = quote_id;
-        place_order['bag_type'] = selected_bag;
-        place_order['bag_count'] = count_50kg;
-        place_order['date'] = this.today;
+      if (Number.isInteger(count_50kg)) {
+        if (count_50kg <= 10) {
+          place_order['copra_brand_id'] = brand;
+          place_order['buyer_id'] = this.user['id'];
+          place_order['quote_id'] = quote_id;
+          place_order['bag_type'] = selected_bag;
+          place_order['bag_count'] = count_50kg;
+          place_order['date'] = this.today;
+        } else {
+          this.displayToast('Not more than 10 Bags!');
+          console.log('error');
+        }
       } else {
-        this.displayToast('Not more than 10 Bags!');
-        console.log('error');
+        this.displayToast('Bag count must be a round number, not a fraction.');
       }
     } else {
-      if (count_25kg <= 10) {
-        place_order['copra_brand_id'] = brand;
-        place_order['buyer_id'] = this.user['id'];
-        place_order['quote_id'] = quote_id;
-        place_order['bag_type'] = selected_bag;
-        place_order['bag_count'] = count_25kg;
-        place_order['date'] = this.today;
+      if (Number.isInteger(count_25kg)) {
+        if (count_25kg <= 10) {
+          place_order['copra_brand_id'] = brand;
+          place_order['buyer_id'] = this.user['id'];
+          place_order['quote_id'] = quote_id;
+          place_order['bag_type'] = selected_bag;
+          place_order['bag_count'] = count_25kg;
+          place_order['date'] = this.today;
+        } else {
+          this.displayToast('Not more than 10 Bags!');
+          console.log('error');
+        }
       } else {
-        this.displayToast('Not more than 10 Bags!');
-        console.log('error');
+        this.displayToast('Bag count must be a round number, not a fraction.');
       }
     }
 
     console.log(place_order);
-    
-    this.httpServerServiceProvider.registerDirectOrderToSale(place_order).subscribe(data => {
-      console.log(data);
-      this.displayToast('Order is placed for ₹' + this.domestic_quote_of_the_day)
-    }, (error) => {
-      console.log(error);
-      this.displayToast('Error!')
-    });
+    if (Object.getOwnPropertyNames(place_order).length != 0) {
+      console.log('Not empty');
+      this.httpServerServiceProvider.registerDirectOrderToSale(place_order).subscribe(data => {
+        console.log(data);
+        this.displayToast('Order is placed for ₹' + this.domestic_quote_of_the_day)
+      }, (error) => {
+        console.log(error);
+        console.log(error.statusText);
+        if (error.statusText == 'Bad Request') {
+        this.displayToast('Maximum per day order quantity 10 bags is reached!');
+        }
+        // this.displayToast('Bag count must be a round number, not a fraction.')
+      });
+    }
   }
 
   totalCost(quote_rate, quantity, quantity_in_kgs) {

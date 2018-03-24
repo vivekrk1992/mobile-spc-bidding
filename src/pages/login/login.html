@@ -11,15 +11,15 @@
     <input class="input-field" type="text" placeholder="User Name" formControlName="user_name">
     <br>
     <input class="input-field" type="password" placeholder="Password" formControlName="password">
-    <button ion-button type="submit" class="button-center">Log In</button>
+    <button ion-button type="submit" class="button-center" [disabled]="terms_conditions">Log In</button>
   </form>
   <div padding text-center style="margin-top:75%;">
     <span style='color: orangered; font-weight: bold;'>Forget Password</span>
     <span margin-left style='color: saddlebrown; font-weight: bold;' (click)="routeSignUp()">SignUp</span>
   </div>
   <div padding text-center>
-    <ion-col col-1>
-      <ion-checkbox checked></ion-checkbox>
+    <ion-col col-1 ([ngModel])="terms_conditions">
+      <ion-checkbox checked (click)="disableToggle()"></ion-checkbox>
     </ion-col>
     <!-- <span style='color: orangered; font-weight: bold;'>Trems & Condition</span> -->
     <span style='color: orangered; font-weight: bold;' (click)="openTermsAndConditions()">Trems & Condition</span>

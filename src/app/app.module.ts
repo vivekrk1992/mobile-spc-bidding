@@ -24,6 +24,7 @@ import { GlobalProvider } from '../providers/global/global';
 import { Camera } from '@ionic-native/camera';
 import { FileOpener } from '@ionic-native/file-opener'
 import { File } from '@ionic-native/file'
+import { FileTransfer } from '@ionic-native/file-transfer'
   
 @NgModule({
   declarations: [
@@ -67,7 +68,8 @@ import { File } from '@ionic-native/file'
     GlobalProvider,
     Camera,
     FileOpener,
-    File
+    File,
+    FileTransfer
   ]
 })
 export class AppModule {}

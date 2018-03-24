@@ -96,10 +96,10 @@ export class BuyerProfilePage {
     console.log(cv_profile);
     this.httpServerServiceProvider.saveUserPropertyFile(cv_profile).subscribe(data => {
       console.log(data);
-      this.displayToast('Document(s) Uploaded Successfully!')
+      this.displayToast('Document(s) Uploaded Successfully!');
     }, (error) => {
       console.log(error);
-      this.displayToast('Error!')
+      this.displayToast('Error!');
     });
   }
 

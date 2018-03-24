@@ -22,9 +22,9 @@
   <h1 style="text-align:center">Grievances</h1>
   <h5 style="text-align:center">Sale List upto<strong><em>Three Days</em></strong></h5>
   <ion-list radio-group *ngFor="let sale of sale_list" [(ngModel)]="sale_id">
-    <ion-item>
+    <ion-item style="width: 310px; margin-left: 20px;">
       <ion-label>
-        <span style="color: darkslategray; font-size: medium; font-weight:bold;">{{sale.sale_date | date: 'dd-MMM'}}</span>
+        <span style="color: darkslategray; font-size: medium; font-weight:bold;">{{sale.sale_date | date: 'dd-MMM'}}&nbsp;:&nbsp;</span>
         {{sale.brand_name}}, {{sale.bag_type_weight}}&nbsp;Kg-&nbsp;{{sale.bag_count}}&nbsp;Bag(s)
       </ion-label>
       <ion-radio [value]="sale.id"></ion-radio>
@@ -38,7 +38,8 @@
           <ion-avatar item-start>
             <ion-icon style="font-size: 25px" name="camera"></ion-icon>
           </ion-avatar>
-          <h2>Take a picture</h2>
+          <h2 *ngIf="image == null">Take a picture</h2>
+          <h2 *ngIf="image != null">Picture Taken&nbsp;&nbsp;&nbsp;<span><ion-icon name="checkmark-circle"></ion-icon></span></h2>
         </ion-item>
       </ion-item-sliding>
     </ion-list>

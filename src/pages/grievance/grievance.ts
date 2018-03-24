@@ -40,6 +40,7 @@ export class GrievancePage {
     this.httpServerServiceProvider.registerGrievance(grievance_dict).subscribe((data) => {
       console.log(data);
       this.displayToast('Complain registered!');
+      this.image = null;
     }, (error) => {
       console.log(error);
       this.displayToast('Error!');
