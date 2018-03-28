@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, ToastController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ToastController, LoadingController } from 'ionic-angular';
 import { HttpServerServiceProvider } from '../../providers/http-server-service/http-server-service';
 import { Camera, CameraOptions } from '@ionic-native/camera';
 
@@ -14,7 +14,7 @@ export class GrievancePage {
   complain: any;
   image: any = null;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private httpServerServiceProvider: HttpServerServiceProvider, private camera: Camera, private toastCtrl: ToastController) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, private httpServerServiceProvider: HttpServerServiceProvider, private camera: Camera, private toastCtrl: ToastController, private loadingCtrl: LoadingController) {
     console.log(this.navParams.data);
     this.doRefresh();
   }
@@ -30,6 +30,12 @@ export class GrievancePage {
   }
   
   submitComplain(sale_id, complain) {
+    let loading = this.loadingCtrl.create({
+      content: 'Please wait...'
+    });
+
+    loading.present();
+
     let grievance_dict = {}
     grievance_dict['sale_id'] = sale_id;
     grievance_dict['complain'] = complain;
@@ -39,9 +45,11 @@ export class GrievancePage {
     console.log(grievance_dict);
     this.httpServerServiceProvider.registerGrievance(grievance_dict).subscribe((data) => {
       console.log(data);
+      loading.dismiss();
       this.displayToast('Complain registered!');
       this.image = null;
     }, (error) => {
+      loading.dismiss();    
       console.log(error);
       this.displayToast('Error!');
     });

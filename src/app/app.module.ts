@@ -25,6 +25,7 @@ import { Camera } from '@ionic-native/camera';
 import { FileOpener } from '@ionic-native/file-opener'
 import { File } from '@ionic-native/file'
 import { FileTransfer } from '@ionic-native/file-transfer'
+import { AppVersion } from '@ionic-native/app-version';
   
 @NgModule({
   declarations: [
@@ -69,7 +70,8 @@ import { FileTransfer } from '@ionic-native/file-transfer'
     Camera,
     FileOpener,
     File,
-    FileTransfer
+    FileTransfer,
+    AppVersion
   ]
 })
 export class AppModule {}

@@ -1,0 +1,42 @@
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>
+      <span class="navbar-title">Payment Section</span>
+    </ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+  <ion-refresher (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
+  <ion-item>
+    <ion-label style="color: darkslategray;" floating>Mode of Transaction</ion-label>
+    <ion-select interface="popover" [(ngModel)]="mode_of_payment">
+      <ion-option [value]="payment_mode.id" *ngFor="let payment_mode of payment_modes">{{payment_mode.name}} &nbsp;&nbsp;</ion-option>
+    </ion-select>
+  </ion-item>
+  <ion-item padding-top>
+    <ion-label style="color: darkslategray;" floating>Amount</ion-label>
+    <ion-input type="number" [(ngModel)]="amount"></ion-input>
+  </ion-item>
+  <ion-item>
+    <ion-label style="color: darkslategray;" floating>UTR Number</ion-label>
+    <ion-input type="text" [(ngModel)]="utr_number"></ion-input>
+  </ion-item>
+  <ion-item>
+    <ion-label style="color: darkslategray;" floating>Date</ion-label>
+    <ion-datetime displayFormat="DD/MMM/YYYY" [(ngModel)]="payment_date"></ion-datetime>
+  </ion-item>
+  <ion-row>
+    <ion-col></ion-col>
+    <ion-col>
+      <button ion-button (click)="submitPaymentDetails(payment_date, amount, utr_number, mode_of_payment)"><ion-icon name="cash"></ion-icon>&nbsp;Pay</button>
+    </ion-col>
+    <ion-col></ion-col>
+  </ion-row>
+</ion-content>

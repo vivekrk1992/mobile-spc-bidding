@@ -21,28 +21,42 @@ export class AboutPage {
   bag_50: any;
   bidding_list: any[] = [];
   show_paid_order: boolean = false;
+  all_domestic_sales: any[] = [];
 
   constructor(public navCtrl: NavController, private httpServerServiceProvider: HttpServerServiceProvider, private storage: Storage, private toastCtrl: ToastController) {
     // this.httpServerServiceProvider.getAllDomesticQuotesWithLatestBid().subscribe((data) => {
     //   this.domestic_quotes = data;
     // });
 
-    this.httpServerServiceProvider.getOrderHistory().subscribe((data) => {
-      this.domestic_quotes = data;
-      console.log(data);
-      console.log(data.length);
-      if (data[0]['unpaid'].length !== 0) {
-        this.total_cost_unpaid = data[0]['unpaid'][0]['total_amount'];
-      }
-      if (data[0]['partially_paid'].length !== 0) {
-        this.total_cost_partial = data[0]['partially_paid'][0]['total_pending'];
-      }
-    });
+    // this.httpServerServiceProvider.getOrderHistory().subscribe((data) => {
+    //   this.domestic_quotes = data;
+    //   console.log(data);
+    //   console.log(data.length);
+    //   if (data[0]['unpaid'].length !== 0) {
+    //     this.total_cost_unpaid = data[0]['unpaid'][0]['total_amount'];
+    //   }
+    //   if (data[0]['partially_paid'].length !== 0) {
+    //     this.total_cost_partial = data[0]['partially_paid'][0]['total_pending'];
+    //   }
+    // });
 
+    this.doRefresh();
   }
 
 
-  doRefresh(event) {
+  doRefresh(event = null) {
+
+    this.httpServerServiceProvider.getSaleDetails().subscribe((data) => {
+      console.log(data);
+      this.all_domestic_sales = data;
+      if (event != null) { event.complete() }
+    }, (error) => {
+      console.log(error);
+      if (event != null) { event.complete() }
+    })
+
+
+
     // this.httpServerServiceProvider.getAllDomesticQuotesWithLatestBid().subscribe((data) => {
     //   this.domestic_quotes = data;
     //   console.log(data);
@@ -51,32 +65,33 @@ export class AboutPage {
     //   event.complete();
     // });
 
-    this.httpServerServiceProvider.getOrderHistory().subscribe((data) => {
-      this.domestic_quotes = data;
-      if (data[0]['unpaid'].length !== 0) {
-        this.total_cost_unpaid = data[0]['unpaid'][0]['total_amount'];
-      }
-      if (data[0]['partially_paid'].length !== 0) {
-        this.total_cost_partial = data[0]['partially_paid'][0]['total_pending'];
-      }
-      console.log(data);
-      event.complete();
-    }, () => {
-      event.complete();
-    });
+    // this.httpServerServiceProvider.getOrderHistory().subscribe((data) => {
+    //   this.domestic_quotes = data;
+    //   if (data[0]['unpaid'].length !== 0) {
+    //     this.total_cost_unpaid = data[0]['unpaid'][0]['total_amount'];
+    //   }
+    //   if (data[0]['partially_paid'].length !== 0) {
+    //     this.total_cost_partial = data[0]['partially_paid'][0]['total_pending'];
+    //   }
+    //   console.log(data);
+    //   event.complete();
+    // }, () => {
+    //   event.complete();
+    // });
+
   }
 
 
 
-  getBiddingList(event) {
-    this.httpServerServiceProvider.getDomesticBiddingListByBuyer().subscribe((data) => {
-      this.bidding_list = data;
-      console.log(data);
-      event.complete();
-    }, () => {
-      event.complete();
-    });
-  }
+  // getBiddingList(event) {
+  //   this.httpServerServiceProvider.getDomesticBiddingListByBuyer().subscribe((data) => {
+  //     this.bidding_list = data;
+  //     console.log(data);
+  //     event.complete();
+  //   }, () => {
+  //     event.complete();
+  //   });
+  // }
 
   isBidStatusAccepted(bid_status: number) {
     return bid_status === 3
@@ -100,7 +115,7 @@ export class AboutPage {
     this.navCtrl.push(SaleOrderDetailsPage, bid_details);
   }
 
-  showPaidOrder() {
-    this.show_paid_order = !this.show_paid_order
-  }
+  // showPaidOrder() {
+  //   this.show_paid_order = !this.show_paid_order
+  // }
 }

@@ -55,6 +55,11 @@ export class HttpServerServiceProvider {
       .map((res) => res.json());
   }
 
+  getTodayDomesticQuote() {
+    return this.http.get(this.global.base_url + 'main/serve/today/active/domestic/quote/', {headers: this.headers})
+      .map((res) => res.json());
+  }
+
   getAllDomesticQuotesWithLatestBid() {
     return this.http.get(this.global.base_url + 'main/serve/domestic/qutoe/history/for/buyer/', {headers: this.headers})
       .map((res) => res.json());
@@ -150,22 +155,40 @@ export class HttpServerServiceProvider {
     }
     
     registerDirectOrderToSale(order) {
-      return this.http.post(this.global.base_url + 'main/register/domestic/sale/via/direct/order/', order, { headers: this.headers })
-        .map((res) => res.json());
+      return this.http.post(this.global.base_url + 'main/register/domestic/sale/via/direct/order/', order, { headers: this.headers });
     }
-
+    
     getSaleListFor3Days() {
       return this.http.get(this.global.base_url + 'main/serve/last/three/days/of/sale/for/buyer/', {headers: this.headers})
-        .map((res) => res.json());
+      .map((res) => res.json());
     }
     
     getInvoiceDetails() {
       return this.http.get(this.global.base_url + 'main/serve/invoice/details/for/buyer/', {headers: this.headers})
-        .map((res) => res.json())
+      .map((res) => res.json())
     }
-
+    
     registerGrievance(complain) {
       return this.http.post(this.global.base_url + 'main/register/grievance/', complain, {headers: this.headers});
+    }
+    
+    registerDomesticPayment(data) {
+      return this.http.post(this.global.base_url + 'main/register/domestic/sale/payment/', data, {headers: this.headers});
+    }
+    
+    getSaleDetails() {
+      return this.http.get(this.global.base_url + 'main/serve/order/details/by/sale/group/', {headers: this.headers})
+      .map((res) => res.json())
+    }
+    
+    getTotalAndPendingCost() {
+      return this.http.get(this.global.base_url + 'main/serve/total/and/pending/cost/for/user/', {headers: this.headers})
+      .map((res) => res.json())
+    }
+    
+    getUserAmountBalance() {
+      return this.http.get(this.global.base_url + 'main/serve/user/payment/balance/', {headers: this.headers})
+      .map((res) => res.json())
     }
   }
   

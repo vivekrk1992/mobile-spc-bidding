@@ -101,31 +101,34 @@ export class ContactPage {
   }
 
   downloadPdf(file_string) {
-    alert('with in download')
-    let filename: string = String(new Date().getTime()) + '.pdf';
+    let filename: string = 'spc_' + String(new Date().getTime()) + '.pdf';
     // const img: string = file_string
-    const bytes: string = atob(file_string);
-    const byteNumbers = new Array(bytes.length);
-    for (let i = 0; i < bytes.length; i++) {
-      byteNumbers[i] = bytes.charCodeAt(i);
+    // const bytes: string = atob(file_string);
+    // const byteNumbers = new Array(bytes.length);
+    // for (let i = 0; i < bytes.length; i++) {
+    //   byteNumbers[i] = bytes.charCodeAt(i);
+    // }
+    // const byteArray = new Uint8Array(byteNumbers);
+    // console.log(byteArray);
+
+    const binary_string = window.atob(file_string);
+    const binary_length = binary_string.length;
+    const bytes = new Uint8Array(binary_length);
+    for (let i = 0; i < binary_length; i++) {
+      bytes[i] = binary_string.charCodeAt(i);
     }
-    const byteArray = new Uint8Array(byteNumbers);
+    this.platform.ready().then(() => {
+      const blob: Blob = new Blob([bytes], { type: 'application/pdf' });
+      console.log(blob);
 
-    const blob: Blob = new Blob([byteArray], { type: 'application/pdf' });
-
-    this.file.writeFile(this.file.cacheDirectory, filename, blob)
-      .then(() => {
-        alert('file created')
-        this.fileOpener.open(this.file.cacheDirectory + filename, 'application/pdf')
-          .then(() => {
-            alert(filename)
-          })
-          .catch((error) => {
-            alert('Error while opening' + JSON.stringify(error))
-          })
-      })
-      .catch((err) => {
-        alert("error in the report creation: " + JSON.stringify(err))
+      this.file.writeFile(this.file.externalApplicationStorageDirectory, filename, blob, { replace: false })
+        .then(() => {
+          this.fileOpener.open(this.file.externalApplicationStorageDirectory + filename, 'application/pdf')
+          alert('File Downloaded to' + this.file.externalApplicationStorageDirectory);
+        })
+    })
+      .catch((error) => {
+        alert(JSON.stringify(error))
       })
   }
 }

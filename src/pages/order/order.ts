@@ -18,27 +18,45 @@ export class OrderPage {
   bag_count_50kg: number = 0;
   domestic_quotes: any;
   user: any;
+  domestic_buyer_credit_limit_kgs: number = 500;
   domestic_quote_of_the_day: any;
   domestic_quote_id: number = 0;
   copra_brands: any;
   today = new Date().toISOString().split('T')[0];
+  payment_details: any;
+  pending_amount: number = 0;
+  amount_balance: number = 0;
+  buyer_limit: {} = {};
 
   constructor(public navCtrl: NavController, public navParams: NavParams, private httpServerServiceProvider: HttpServerServiceProvider, private toastCtrl: ToastController, private app: App, private storage: Storage) {
   }
 
   doRefresh(event = null) {
-    this.httpServerServiceProvider.getAllDomesticList().subscribe((data) => {
+    this.httpServerServiceProvider.getTodayDomesticQuote().subscribe((data) => {
       console.log(data);
       this.domestic_quotes = data;
-      if (data.length !== 0) {
-        this.domestic_quote_of_the_day = data[0].rate;
-        this.domestic_quote_id = data[0]['id'];
+      if (data.hasOwnProperty('rate')) {
+        this.domestic_quote_of_the_day = data.rate;
+        this.domestic_quote_id = data['id'];
+
+        // actual balance for the buyer
+        this.httpServerServiceProvider.getUserAmountBalance().subscribe((data) => {
+          console.log(data);
+          this.amount_balance = data.amount_balance;
+          this.maxOrderLimit();
+        }, (error) => {
+          console.log(error);
+        });
       }
       if (event != null) { event.complete() }
     }, (error) => {
       console.log(error);
       if (event != null) { event.complete() }
     });
+  }
+
+  routePaymentDetails() {
+    this.navCtrl.push('PaymentDetailsPage');
   }
 
   ionViewCanEnter() {
@@ -62,7 +80,6 @@ export class OrderPage {
       console.log(user);
       this.user = user;
     });
-
   }
 
   displayToast(display_message) {
@@ -76,9 +93,10 @@ export class OrderPage {
 
   confirmOrder(brand, quote_id, count_25kg, count_50kg, selected_bag) {
     let place_order = {};
+    let total_limit = this.maxOrderLimit()
     if (selected_bag == 1) {
       if (Number.isInteger(count_50kg)) {
-        if (count_50kg <= 10) {
+        if (count_50kg <= total_limit['50kg']) {
           place_order['copra_brand_id'] = brand;
           place_order['buyer_id'] = this.user['id'];
           place_order['quote_id'] = quote_id;
@@ -86,7 +104,7 @@ export class OrderPage {
           place_order['bag_count'] = count_50kg;
           place_order['date'] = this.today;
         } else {
-          this.displayToast('Not more than 10 Bags!');
+          this.displayToast('Not more than ' + total_limit['50kg'] +' Bags!');
           console.log('error');
         }
       } else {
@@ -94,7 +112,7 @@ export class OrderPage {
       }
     } else {
       if (Number.isInteger(count_25kg)) {
-        if (count_25kg <= 10) {
+        if (count_25kg <= total_limit['25kg']) {
           place_order['copra_brand_id'] = brand;
           place_order['buyer_id'] = this.user['id'];
           place_order['quote_id'] = quote_id;
@@ -102,7 +120,7 @@ export class OrderPage {
           place_order['bag_count'] = count_25kg;
           place_order['date'] = this.today;
         } else {
-          this.displayToast('Not more than 10 Bags!');
+          this.displayToast('Not more than '+ total_limit['25kg'] +' Bags!');
           console.log('error');
         }
       } else {
@@ -116,19 +134,26 @@ export class OrderPage {
       this.httpServerServiceProvider.registerDirectOrderToSale(place_order).subscribe(data => {
         console.log(data);
         this.displayToast('Order is placed for ₹' + this.domestic_quote_of_the_day)
+        this.maxOrderLimit();
       }, (error) => {
         console.log(error);
-        console.log(error.statusText);
-        if (error.statusText == 'Bad Request') {
-        this.displayToast('Maximum per day order quantity 10 bags is reached!');
-        }
+        // console.log(error.statusText);
+        // if (error.statusText == 'Bad Request') {
+        // this.displayToast('Maximum per day order quantity 10 bags is reached!');
+        // }
         // this.displayToast('Bag count must be a round number, not a fraction.')
+        this.displayToast('Error while placing an Order!')
       });
     }
   }
 
   totalCost(quote_rate, quantity, quantity_in_kgs) {
     return (quote_rate * quantity * quantity_in_kgs);
+  }
+
+  onInputChecked() {
+    this.bag_count_25kg = null; 
+    this.bag_count_50kg = null; 
   }
 
   logout() {
@@ -139,6 +164,37 @@ export class OrderPage {
       this.storage.clear();
       this.app.getRootNav().setRoot('LoginPage');
     });
+  }
+
+  maxOrderLimit() {
+    let balance: any;
+    let total_limit: number;
+    let kg50: any;
+    let kg25: any;
+    if (this.amount_balance == 0) {
+      this.buyer_limit['50kg'] = 10 - this.domestic_quotes.bag_count
+      this.buyer_limit['25kg'] = 10 - this.domestic_quotes.bag_count
+    } else {
+      balance = (this.amount_balance / this.domestic_quote_of_the_day);
+      total_limit = this.domestic_buyer_credit_limit_kgs + parseInt(balance); 
+      kg50 = (total_limit / 50);
+      kg25 = (total_limit / 25);
+      this.buyer_limit['50kg'] = parseInt(kg50) - this.domestic_quotes.bag_count
+      this.buyer_limit['25kg'] = parseInt(kg25) - this.domestic_quotes.bag_count
+    }
+
+    if (this.buyer_limit['50kg'] == 0 || this.buyer_limit['25kg'] == 0) {
+      this.httpServerServiceProvider.getTotalAndPendingCost().subscribe((data) => {
+        console.log(data);
+        this.payment_details = data;
+        this.pending_amount = data['pending_amount'];
+      }, (error) => {
+        console.log(error);
+      });
+    }
+
+    console.log(this.buyer_limit);
+    return this.buyer_limit;
   }
 
 }

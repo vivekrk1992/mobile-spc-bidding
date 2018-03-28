@@ -7,6 +7,7 @@ import { Storage } from '@ionic/storage';
 import { HttpServerServiceProvider } from '../../providers/http-server-service/http-server-service';
 import { PhonegapLocalNotification } from '@ionic-native/phonegap-local-notification';
 // import { DocumentViewer, DocumentViewerOptions } from '@ionic-native/document-viewer';
+import { AppVersion } from '@ionic-native/app-version';
 
 @IonicPage()
 @Component({
@@ -17,11 +18,16 @@ export class LoginPage {
   login_form: FormGroup;
   terms_conditions: any;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private formBuilder: FormBuilder, private storage: Storage, private httpServerServiceProvider: HttpServerServiceProvider, private localNotification: PhonegapLocalNotification, private platform: Platform) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, private formBuilder: FormBuilder, private storage: Storage, private httpServerServiceProvider: HttpServerServiceProvider, private localNotification: PhonegapLocalNotification, private platform: Platform, private appVersion: AppVersion) {
     this.login_form = this.formBuilder.group({
       user_name: [''],
       password: [''],
     });
+
+    this.appVersion.getAppName();
+    this.appVersion.getPackageName();
+    this.appVersion.getVersionCode();
+    this.appVersion.getVersionNumber();
 
     storage.get('token').then((token) => {
       if (token != null) {
