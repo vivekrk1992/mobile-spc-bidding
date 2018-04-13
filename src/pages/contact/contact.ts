@@ -1,3 +1,4 @@
+import { InvoiceDashboardPage } from './invoice-dashboard/invoice-dashboard';
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/forms';
 import { HttpServerServiceProvider } from '../../providers/http-server-service/http-server-service';
@@ -6,7 +7,7 @@ import { NavController, ToastController, Platform } from 'ionic-angular';
 import { value, Test } from '../../providers/interface/interface'
 import { FileOpener } from '@ionic-native/file-opener';
 import { File, FileEntry } from '@ionic-native/file';
-import { FileTransfer, FileTransferObject } from '@ionic-native/file-transfer'
+import { FileTransfer, FileTransferObject } from '@ionic-native/file-transfer';
 
 @Component({
   selector: 'page-contact',
@@ -21,7 +22,7 @@ export class ContactPage {
   buyer_invoice: any[] = [];
   payment_per_items: any;
 
-  constructor(private httpServerServiceProvider: HttpServerServiceProvider, public formBuilder: FormBuilder, private toastCtrl: ToastController, private fileOpener: FileOpener, private file: File, private platform: Platform, private transfer: FileTransfer) {
+  constructor(private httpServerServiceProvider: HttpServerServiceProvider, public formBuilder: FormBuilder, private toastCtrl: ToastController, private fileOpener: FileOpener, private file: File, private platform: Platform, private transfer: FileTransfer, private navCtrl: NavController) {
 
     // console.log('contact');
     // console.log(value);
@@ -131,6 +132,11 @@ export class ContactPage {
         alert(JSON.stringify(error))
       })
   }
+
+  routeToInvoiceDashboard() {
+    this.navCtrl.push(InvoiceDashboardPage);
+  }
+
 }
 
 

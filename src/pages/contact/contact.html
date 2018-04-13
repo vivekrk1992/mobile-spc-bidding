@@ -14,7 +14,7 @@
 
   <h5 style="text-align: center;">Invoice</h5>
   <ion-card *ngFor="let invoice of buyer_invoice">
-    <ion-row class="highlighted-section-header">
+    <ion-row class="highlighted-section-header" (click)="routeToInvoiceDashboard()">
       <ion-col>
         <span class="section-header-key">Date:</span>
         <span>{{invoice.sale_date | date: 'dd-MMM'}}</span>
