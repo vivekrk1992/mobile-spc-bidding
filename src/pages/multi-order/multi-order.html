@@ -12,7 +12,10 @@
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
   
-  <span class="logout-button" (click)="logout()">logout</span>
+  <div class="dashboard-logout-row">
+    <span style="float:right; padding: 0px 30px 0px 0px; color:rgb(235, 52, 52); font-size: medium" (click)="logout()">LogOut</span>
+    <span style="float:right; padding: 0px 0px 0px 0px; color:rgb(17, 149, 255); font-family: cursive; font-size: medium" (click)="logout()">{{company_name}} |&nbsp;&nbsp;</span>
+  </div>
   <br>
   <br>
   <ion-row>
@@ -27,6 +30,8 @@
     </ion-col>
     <ion-col>
       <h3 text-center padding-top (click)="routePaymentDetails()">Enter Payment Details</h3>
+      <br>
+      <span style="color: darkslategrey;font-size: larger;" (click)="showBankDetails()">Bank Details</span>
     </ion-col>
   </ion-row>
   <hr>
@@ -68,13 +73,13 @@
   
   <div *ngFor="let order of order_form">
     <ion-row>
-      <ion-col col-3>{{order.copra_brand.name}}</ion-col>
-      <ion-col col-3>{{order.bag_type.name}}&nbsp;x ₹{{domestic_quote_of_the_day}}</ion-col>
+      <ion-col col-4>{{order.copra_brand.name}}<br>{{order.copra_brand.notes}}</ion-col>
+      <ion-col col-3>{{order.bag_type.name}}&nbsp;x<span style="color:darkslateblue" *ngIf="domestic_quote_of_the_day != null"> ₹{{domestic_quote_of_the_day}}</span></ion-col>
       <ion-col col-1>
         <input type="number" class="custom-input-box" placeholder="# bags" (change)="calculateBagsToQuantity()" [(ngModel)]="order.bag_count">
       </ion-col>
-      <ion-col col-5>
-        ₹&nbsp;{{order.cost | number: '.2'}}
+      <ion-col col-4 *ngIf="order.cost != null">
+        <span style="color: rosybrown;">=&nbsp;₹&nbsp;{{order.cost | number: '.2'}}</span>
       </ion-col>
       <!-- <ion-col>
         <ion-input type="number" class="custom-input-box" step="0.01" placeholder="rate" [(ngModel)]="order.rate"></ion-input>

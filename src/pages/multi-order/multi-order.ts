@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, App, ToastController, LoadingController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, App, ToastController, LoadingController, AlertController } from 'ionic-angular';
 import { HttpServerServiceProvider } from '../../providers/http-server-service/http-server-service';
 import { Storage } from '@ionic/storage';
 
@@ -12,7 +12,7 @@ import { Storage } from '@ionic/storage';
 export class MultiOrderPage {
   user: any;
   domestic_data: any;
-  domestic_quote_of_the_day: any;
+  domestic_quote_of_the_day: any = null;
   order_form: any[] = [];
   maximum_weight_allowance: number = 0;
   currnt_order_total_weight: number = 0;
@@ -22,8 +22,9 @@ export class MultiOrderPage {
   user_balance: any;
   transport_id: any = null;
   product_cost: any = null;
+  company_name: any = null;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private httpServerServiceProvider: HttpServerServiceProvider, private app: App, private storage: Storage, private toastCtrl: ToastController, private loadingCtrl: LoadingController) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, private httpServerServiceProvider: HttpServerServiceProvider, private app: App, private storage: Storage, private toastCtrl: ToastController, private loadingCtrl: LoadingController, private alertCtrl: AlertController) {
     // this.domestic_data['user_payment_balance'] = 0;
   }
 
@@ -49,6 +50,7 @@ export class MultiOrderPage {
       console.log(data);
       this.domestic_data = data;
       this.user_balance = data['user_payment_balance'];
+      this.company_name = data['company_name'];
       if (data.hasOwnProperty('rate')) {
         this.createOrderForm(data['rate']);
         this.domestic_quote_of_the_day = data.rate;
@@ -74,7 +76,7 @@ export class MultiOrderPage {
   createOrderForm(today_rate = null) {
     this.order_form = [
       {
-        copra_brand: { 'id': 1, 'name': 'SHUBH (22-25 Pieces/Kg)' },
+        copra_brand: { 'id': 1, 'name': 'SHUBH', 'notes': '22-25 Pc/Kg' },
         bag_type: { 'id': 1, 'name': '50 kg Bori' },
         bag_count: '',
         rate: today_rate,
@@ -84,7 +86,7 @@ export class MultiOrderPage {
         cost: null
       },
       {
-        copra_brand: { 'id': 1, 'name': 'SHUBH (22-25 Pieces/Kg)' },
+        copra_brand: { 'id': 1, 'name': 'SHUBH', 'notes': '22-25 Pc/Kg' },
         bag_type: { 'id': 2, 'name': '25 kg Katta' },
         bag_count: '',
         rate: today_rate,
@@ -94,7 +96,7 @@ export class MultiOrderPage {
         cost: null
       },
       {
-        copra_brand: { 'id': 2, 'name': 'SPC (18-20 Pieces/Kg)' },
+        copra_brand: { 'id': 2, 'name': 'SPC', 'notes': '18-20 Pc/Kg' },
         bag_type: { 'id': 1, 'name': '50 kg Bori' },
         bag_count: '',
         rate: today_rate,
@@ -104,7 +106,7 @@ export class MultiOrderPage {
         cost: null
       },
       {
-        copra_brand: { 'id': 2, 'name': 'SPC (18-20 Pieces/Kg)' },
+        copra_brand: { 'id': 2, 'name': 'SPC', 'notes': '18-20 Pc/Kg' },
         bag_type: { 'id': 2, 'name': '25 kg Katta' },
         bag_count: '',
         rate: today_rate,
@@ -114,7 +116,7 @@ export class MultiOrderPage {
         cost: null
       },
       {
-        copra_brand: { 'id': 3, 'name': 'LABH (14-16 Pieces/Kg)' },
+        copra_brand: { 'id': 3, 'name': 'LABH', 'notes': '14-16 Pc/Kg' },
         bag_type: { 'id': 1, 'name': '50 kg Bori' },
         bag_count: '',
         rate: today_rate,
@@ -124,7 +126,7 @@ export class MultiOrderPage {
         cost: null
       },
       {
-        copra_brand: { 'id': 3, 'name': 'LABH (14-16 Pieces/Kg)' },
+        copra_brand: { 'id': 3, 'name': 'LABH', 'notes': '14-16 Pc/Kg' },
         bag_type: { 'id': 2, 'name': '25 kg Katta' },
         bag_count: '',
         rate: today_rate,
@@ -154,10 +156,11 @@ export class MultiOrderPage {
         collected_value.push(element)
         element.total_quantity = element.quantity_in_kgs * element.bag_count
         console.log(element.total_quantity)
-        // element.cost = element.total_quantity * element.rate
+        element.cost = element.total_quantity * element.rate
         total_weight += element.total_quantity
       } else {
         element.total_quantity = 0
+        element.cost = null;
       }
       this.currnt_order_total_weight = total_weight;
     });
@@ -186,7 +189,7 @@ export class MultiOrderPage {
     console.log('collected order bag');
 
     if (this.maximum_weight_allowance < this.currnt_order_total_weight) {
-      this.displayToast('Requested weight is ' + (this.currnt_order_total_weight - this.maximum_weight_allowance) + ' kgs, more than orderable limit');
+      alert('Requested weight is ' + (this.currnt_order_total_weight - this.maximum_weight_allowance) + ' kgs, more than orderable limit');
     } else {
       if (sale_dict['sales'].length != 0) {
         let loading = this.loadingCtrl.create({
@@ -226,6 +229,15 @@ export class MultiOrderPage {
     this.filterOrderBags();
     this.product_cost = (this.domestic_data.rate * this.currnt_order_total_weight)
     console.log(this.product_cost);
+  }
+
+  showBankDetails() {
+    let alert = this.alertCtrl.create({
+      title: 'Bank Details',
+      subTitle: `<p>Shree Parshwanath Corporation</p><p> A/C NO : 065405001702 </p><p> ICICI BANK CURRENT ACCOUNT </p><p> IFSC: ICIC0000654 </p><p> BRANCH: PALI</p>`,
+      buttons: ['OK']
+    });
+    alert.present();
   }
 
   logout() {

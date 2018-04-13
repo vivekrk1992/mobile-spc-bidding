@@ -9,4 +9,11 @@ page-multi-order {
         text-align: center;
     }
 
+    .form, input, optgroup, select {
+        width: 45px;
+    }
+
+    .dashboard-logout-row {
+        margin-top: 15px;
+    }
 }
