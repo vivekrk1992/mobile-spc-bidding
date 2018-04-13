@@ -22,6 +22,8 @@ export class AboutPage {
   bidding_list: any[] = [];
   show_paid_order: boolean = false;
   all_domestic_sales: any[] = [];
+  user: any;
+  all_date_wise_transactions: any;
 
   constructor(public navCtrl: NavController, private httpServerServiceProvider: HttpServerServiceProvider, private storage: Storage, private toastCtrl: ToastController) {
     // this.httpServerServiceProvider.getAllDomesticQuotesWithLatestBid().subscribe((data) => {
@@ -41,21 +43,24 @@ export class AboutPage {
     // });
 
     this.doRefresh();
+
   }
-
-
+  
+  
   doRefresh(event = null) {
-
-    this.httpServerServiceProvider.getSaleDetails().subscribe((data) => {
-      console.log(data);
-      this.all_domestic_sales = data;
-      if (event != null) { event.complete() }
-    }, (error) => {
-      console.log(error);
-      if (event != null) { event.complete() }
-    })
-
-
+    
+    this.storage.get('user').then((user) => {
+      console.log(user);
+      this.user = user;
+      this.httpServerServiceProvider.getTransactionsForDomesticBuyer({'buyer_id': this.user['id']}).subscribe((data) => {
+        console.log(data);
+        this.all_date_wise_transactions = data;
+        if (event != null) { event.complete() }
+      }, (error) => {
+        if (event != null) { event.complete() }
+        console.log(error);
+      });
+    });
 
     // this.httpServerServiceProvider.getAllDomesticQuotesWithLatestBid().subscribe((data) => {
     //   this.domestic_quotes = data;
@@ -99,20 +104,6 @@ export class AboutPage {
 
   routeToGrievancePage(bid_id) {
     this.navCtrl.push(GrievancePage, { 'from': 'history', 'bid_id': bid_id })
-  }
-
-  totalCost(quote_rate, quantity, quantity_in_kgs) {
-    return (quote_rate * quantity * quantity_in_kgs);
-  }
-
-  overallCost(rate, quantity, quantity_in_kgs) {
-    // this.total_cost += (rate * quantity * quantity_in_kgs);
-    // console.log(this.total_cost);
-    return (rate * quantity * quantity_in_kgs);
-  }
-
-  navToSaleOrderDetails(bid_details) {
-    this.navCtrl.push(SaleOrderDetailsPage, bid_details);
   }
 
   // showPaidOrder() {

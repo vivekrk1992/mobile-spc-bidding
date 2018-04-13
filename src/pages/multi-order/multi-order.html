@@ -1,0 +1,117 @@
+<ion-header>
+
+  <ion-navbar>
+    <span class="navbar-title">Shree Parshwanath Corporation</span>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+  <ion-refresher (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+  
+  <span class="logout-button" (click)="logout()">logout</span>
+  <br>
+  <br>
+  <ion-row>
+    <ion-col class="rate-col">
+      <!--Today's quote  -->
+      <h3 text-center padding-top>Today's Rate:</h3>
+      <h1 text-center>
+        <span>
+          ₹ {{domestic_quote_of_the_day}}
+        </span>
+      </h1>
+    </ion-col>
+    <ion-col>
+      <h3 text-center padding-top (click)="routePaymentDetails()">Enter Payment Details</h3>
+    </ion-col>
+  </ion-row>
+  <hr>
+  <ion-row [ngStyle]="{'color': getBackgroundColor(user_balance)}">
+    <ion-col *ngIf="user_balance > 0">
+      <span text-center style="font-weight: bold">Advance Amount: {{user_balance | number: '.2'}} ₹</span>
+    </ion-col>
+    <ion-col *ngIf="user_balance <= 0">
+      <span text-center style="font-weight: bold">Payment Due: {{ - user_balance | number: '.2'}} ₹</span>
+    </ion-col>
+  </ion-row>
+  <ion-row>
+    <ion-col style="font-weight: bold">
+      Maximum Weight Allowance: {{maximum_weight_allowance}} Kgs.
+    </ion-col>
+  </ion-row>
+  <ion-row>
+    <span *ngIf="weight_difference > 0" [ngStyle]="{'color': getBackgroundColor(weight_difference)}">
+      <ion-col col-2></ion-col>
+      <ion-col>
+        <h6 style="padding-left: 50px;">
+          You're eligible for
+          <em>{{ weight_difference }} kgs </em> of Copra
+          <hr>
+          <span>Product Cost: {{product_cost | number: '.2'}} ₹</span>
+        </h6>
+      </ion-col>
+    </span>
+    <span *ngIf="weight_difference <= 0" [ngStyle]="{'color': getBackgroundColor(weight_difference)}">
+      <ion-col col-2></ion-col>
+      <ion-col>
+        <h6>
+          You have reached/crossed the maximum orderable weight limit by
+          <em>{{ weight_difference }} kgs </em>.
+        </h6>
+      </ion-col>
+    </span>
+  </ion-row>
+  
+  <div *ngFor="let order of order_form">
+    <ion-row>
+      <ion-col col-3>{{order.copra_brand.name}}</ion-col>
+      <ion-col col-3>{{order.bag_type.name}}&nbsp;x ₹{{domestic_quote_of_the_day}}</ion-col>
+      <ion-col col-1>
+        <input type="number" class="custom-input-box" placeholder="# bags" (change)="calculateBagsToQuantity()" [(ngModel)]="order.bag_count">
+      </ion-col>
+      <ion-col col-5>
+        ₹&nbsp;{{order.cost | number: '.2'}}
+      </ion-col>
+      <!-- <ion-col>
+        <ion-input type="number" class="custom-input-box" step="0.01" placeholder="rate" [(ngModel)]="order.rate"></ion-input>
+      </ion-col> -->
+    </ion-row>
+  </div>
+  <br>
+  <ion-row radio-group [(ngModel)]="transport">
+    <ion-col>
+      <ion-item>
+        <ion-label>Self-Pickup</ion-label>
+        <ion-radio checked='true' [value]="false"></ion-radio>
+      </ion-item>
+    </ion-col>
+    <ion-col>
+      <ion-item>
+        <ion-label>Truck Transport</ion-label>
+        <ion-radio [value]="true"></ion-radio>
+      </ion-item>
+    </ion-col>
+  </ion-row>
+  <ion-row *ngIf="transport">
+    <ion-col>
+      <ion-item>
+        <ion-label style="color: darkslategray;">Transport</ion-label>
+        <ion-select interface="popover" [(ngModel)]="transport_id">
+          <ion-option *ngFor="let transport of transport_details" [value]="transport.id">{{transport.name}}</ion-option>
+        </ion-select>
+      </ion-item>
+    </ion-col>
+  </ion-row>
+  <ion-row>
+    <ion-col></ion-col>
+    <ion-col>
+      <button ion-button (click)="registerOrderForBuyer(order_form, transport, transport_id)">Place Order</button>
+    </ion-col>
+    <ion-col></ion-col>
+  </ion-row>
+
+</ion-content>

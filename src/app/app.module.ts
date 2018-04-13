@@ -11,6 +11,7 @@ import { OrderTabsPage } from '../pages/order-tabs/order-tabs';
 import { GrievancePage } from './../pages/grievance/grievance';
 import { BuyerProfilePage } from './../pages/buyer-profile/buyer-profile';
 import { OrderPage } from './../pages/order/order';
+import { MultiOrderPage } from './../pages/multi-order/multi-order';
 import {SaleOrderDetailsPage} from "../pages/sale-order-details/sale-order-details";
 
 import { StatusBar } from '@ionic-native/status-bar';
@@ -38,7 +39,8 @@ import { AppVersion } from '@ionic-native/app-version';
     SaleOrderDetailsPage,
     OrderPage,
     BuyerProfilePage,
-    OrderTabsPage
+    OrderTabsPage,
+    MultiOrderPage
   ],
   imports: [
     BrowserModule,
@@ -58,7 +60,8 @@ import { AppVersion } from '@ionic-native/app-version';
     SaleOrderDetailsPage,
     OrderPage,
     BuyerProfilePage,
-    OrderTabsPage
+    OrderTabsPage,
+    MultiOrderPage
   ],
   providers: [
     StatusBar,

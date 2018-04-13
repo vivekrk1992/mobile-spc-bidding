@@ -61,9 +61,8 @@
         <h2><strong>You need to Pay the <em> Pending Amount&nbsp;₹&nbsp;{{payment_details['pending_amount'] | number: '.2'}}</em>&nbsp; to continue the purchase!</strong></h2>
       </ion-col>
     </ion-row>
-  </span>
-
-  <ion-label *ngIf="brands" style="text-align: left; margin-left: 10px"><i>Step 2: Select Bag Size</i></ion-label>
+    
+    <ion-label *ngIf="brands" style="text-align: left; margin-left: 10px"><i>Step 2: Select Bag Size</i></ion-label>
     <ion-row *ngIf="brands" radio-group [(ngModel)]="selected_bag_type">
       <ion-col style="margin-left:10px;" *ngFor="let bag_type of bag_types">
         <ion-item style="background-color: #9C9085; border-radius: 5px">
@@ -72,24 +71,25 @@
         </ion-item>
       </ion-col>
     </ion-row>
-
-  <ion-row>
-    <ion-col *ngIf="selected_bag_type == 2">
-      <ion-label *ngIf="brands" style="text-align: left; margin-left: 10px"><i>Step 3: Enter Bag Count</i></ion-label>
-      <h4 style="text-align: center; margin-left: 10px"><strong>Your limit&nbsp;<em>{{buyer_limit['25kg']}} bags!</em></strong></h4>
-      <input style="border-radius:10px; height: 30px; text-align: center;" type="number" (click)="onInputChecked()" [(ngModel)]="bag_count_25kg" max="10">
-      <br> 25 Kgs
-      <br> Katta
-    </ion-col>
-    <ion-col *ngIf="selected_bag_type == 1">
-      <ion-label *ngIf="brands" style="text-align: left; margin-left: 10px"><i>Step 3: Enter Bag Count</i></ion-label>
-      <h4 style="text-align: center; margin-left: 10px"><strong>Your limit&nbsp;<em>{{buyer_limit['50kg']}} bags!</em></strong></h4>
-      <input style="border-radius:10px; height: 30px; text-align: center;" type="number" (click)="onInputChecked()" [(ngModel)]="bag_count_50kg" max="10">
-      <br> 50 Kgs
-      <br> Bori
-    </ion-col>
-  </ion-row>
-
+    
+    <ion-row>
+      <ion-col *ngIf="selected_bag_type == 2">
+        <ion-label *ngIf="brands" style="text-align: left; margin-left: 10px"><i>Step 3: Enter Bag Count</i></ion-label>
+        <h4 style="text-align: center; margin-left: 10px"><strong>Your limit&nbsp;<em>{{buyer_limit['25kg']}} bags!</em></strong></h4>
+        <input style="border-radius:10px; height: 30px; text-align: center;" type="number" (click)="onInputChecked()" [(ngModel)]="bag_count_25kg" max="10">
+        <br> 25 Kgs
+        <br> Katta
+      </ion-col>
+      <ion-col *ngIf="selected_bag_type == 1">
+        <ion-label *ngIf="brands" style="text-align: left; margin-left: 10px"><i>Step 3: Enter Bag Count</i></ion-label>
+        <h4 style="text-align: center; margin-left: 10px"><strong>Your limit&nbsp;<em>{{buyer_limit['50kg']}} bags!</em></strong></h4>
+        <input style="border-radius:10px; height: 30px; text-align: center;" type="number" (click)="onInputChecked()" [(ngModel)]="bag_count_50kg" max="10">
+        <br> 50 Kgs
+        <br> Bori
+      </ion-col>
+    </ion-row>
+  </span>
+    
   <h6 text-center *ngIf="selected_bag_type == 2">₹ {{domestic_quote_of_the_day}} x {{bag_count_25kg}} bags x 25 kgs = ₹ {{totalCost(domestic_quote_of_the_day, bag_count_25kg, 25) | number : '.2'}}
     <br>
     <h6 text-center>Net rate <em>inclusive</em> of Package Weight</h6></h6>

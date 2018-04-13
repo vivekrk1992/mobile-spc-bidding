@@ -45,6 +45,7 @@ export class OrderPage {
           this.amount_balance = data.amount_balance;
           this.maxOrderLimit();
         }, (error) => {
+          this.maxOrderLimit();
           console.log(error);
         });
       }
@@ -171,19 +172,20 @@ export class OrderPage {
     let total_limit: number;
     let kg50: any;
     let kg25: any;
-    if (this.amount_balance == 0) {
-      this.buyer_limit['50kg'] = 10 - this.domestic_quotes.bag_count
-      this.buyer_limit['25kg'] = 10 - this.domestic_quotes.bag_count
-    } else {
-      balance = (this.amount_balance / this.domestic_quote_of_the_day);
-      total_limit = this.domestic_buyer_credit_limit_kgs + parseInt(balance); 
-      kg50 = (total_limit / 50);
-      kg25 = (total_limit / 25);
-      this.buyer_limit['50kg'] = parseInt(kg50) - this.domestic_quotes.bag_count
-      this.buyer_limit['25kg'] = parseInt(kg25) - this.domestic_quotes.bag_count
-    }
+    balance = (this.amount_balance / this.domestic_quote_of_the_day);
+    total_limit = (this.domestic_buyer_credit_limit_kgs + parseInt(balance)) - this.domestic_quotes.quantity_in_kg; 
+    kg50 = (total_limit / 50);
+    kg25 = (total_limit / 25);
+    this.buyer_limit['50kg'] = parseInt(kg50)
+    this.buyer_limit['25kg'] = parseInt(kg25)
+    
+    // if (this.amount_balance == 0) {
+    //   this.buyer_limit['50kg'] = 10 - this.domestic_quotes.bag_count
+    //   this.buyer_limit['25kg'] = 20 - this.domestic_quotes.bag_count
+    // } else {
+    // }
 
-    if (this.buyer_limit['50kg'] == 0 || this.buyer_limit['25kg'] == 0) {
+    if (this.buyer_limit['50kg'] <= 0 || this.buyer_limit['25kg'] <= 0) {
       this.httpServerServiceProvider.getTotalAndPendingCost().subscribe((data) => {
         console.log(data);
         this.payment_details = data;
@@ -191,6 +193,8 @@ export class OrderPage {
       }, (error) => {
         console.log(error);
       });
+    } else {
+      this.pending_amount = 0;
     }
 
     console.log(this.buyer_limit);

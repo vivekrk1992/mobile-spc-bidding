@@ -161,47 +161,59 @@
       </span>
     </ion-card>
     <br> -->
-  
   <ion-row padding-top class="table-header-row">
-    <ion-col class="table-header-row-cell">
+    <ion-col col-2 class="table-header-row-cell">
       <span class="header-text">Date</span>
     </ion-col>
-    <ion-col class="table-header-row-cell">
+    <ion-col col-5 class="table-header-row-cell">
       <span class="header-text">Particulars</span>
     </ion-col>
-    <ion-col class="table-header-row-cell">
+    <ion-col col-3 class="table-header-row-cell">
       <span class="header-text">DR</span>
     </ion-col>
-    <ion-col class="table-header-row-cell">
+    <ion-col col-2 class="table-header-row-cell">
       <span class="header-text">CR</span>
+  </ion-col>
+</ion-row>
+<span *ngFor="let date_wise_transactions of all_date_wise_transactions">
+  <ion-row *ngFor="let order_transaction of date_wise_transactions['orders_completed']">
+    <ion-col col-2>
+      {{date_wise_transactions['transaction_date'] | date: 'dd-MMM'}}</ion-col>
+    <ion-col col-5>
+      Sale-{{order_transaction['invoice_number']}}
+      <br>
+      <span *ngFor="let particular_string of order_transaction['particular_strings']">
+        <span style="font-size: x-small">{{particular_string}}
+          <br>
+        </span>
+      </span>
     </ion-col>
+    <ion-col col-3>
+      <span style="font-size: smaller">{{order_transaction['order_total_cost']}}</span>
+      <span *ngIf="order_transaction['payment_status']['name']=='fully_paid'">
+        <ion-icon name="checkmark" style="font-size: x-small; color:green"></ion-icon>
+      </span>
+    </ion-col>
+    <ion-col col-2></ion-col>
   </ion-row>
-
-  <span *ngFor="let domestic_sale of all_domestic_sales">
-    <ion-row>
-      <ion-col>
-        <span class="tiny-date-cell">{{domestic_sale.sale_date | date: 'dd-MMM-yy'}}</span>
-      </ion-col>
-      <ion-col>
-        <ion-row *ngFor="let sale of domestic_sale['sales']">
-          <span *ngIf="sale['bag_type_id'] == 1">
-            <ion-col padding-top class="price-calculation-cell">
-              {{sale.rate}} ₹ x {{sale.bag_count}} bags x 50 Kgs
-            </ion-col>
-          </span>
-          <span *ngIf="sale['bag_type_id'] == 2">
-            <ion-col padding-top class="price-calculation-cell">
-              {{sale.rate}} ₹ x {{sale.bag_count}} bags x 25 Kgs
-            </ion-col>
-          </span>
-        </ion-row>
-      </ion-col><br>
-      <ion-col>
-        <span class="sum-value-row">{{domestic_sale.total_amount | number: '.2'}}</span>
-      </ion-col>
-      <ion-col></ion-col>
-    </ion-row>
-    <hr style="color:brown">
-
-  </span>
+  <ion-row *ngFor="let payment_transaction of date_wise_transactions['transactions_received']">
+    <ion-col col-2>
+      {{payment_transaction['date_sent'] | date: 'dd-MMM'}}</ion-col>
+    <ion-col col-5>
+      {{payment_transaction['mode_of_transaction']['name']}}
+      <br>
+      <span style="font-size: x-small">{{payment_transaction['transaction_id']}}</span>
+    </ion-col>
+    <ion-col col-2></ion-col>
+    <ion-col col-3>
+      <span style="font-size: smaller">
+        {{payment_transaction['amount']}}
+        <span *ngIf="payment_transaction['payment_status']['name']=='complete'">
+          <ion-icon name="done-all" style="font-size: x-small; color:green"></ion-icon>
+        </span>
+      </span>
+    </ion-col>
+    <!--<ion-col>{{payment_transaction['confirmed_by']['first_name']}}</ion-col>-->
+  </ion-row>
+</span>
 </ion-content>
