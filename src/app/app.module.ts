@@ -1,3 +1,4 @@
+import { InvoiceDashboardPage } from './../pages/contact/invoice-dashboard/invoice-dashboard';
 import { NgModule, ErrorHandler } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
@@ -40,7 +41,8 @@ import { AppVersion } from '@ionic-native/app-version';
     OrderPage,
     BuyerProfilePage,
     OrderTabsPage,
-    MultiOrderPage
+    MultiOrderPage,
+    InvoiceDashboardPage
   ],
   imports: [
     BrowserModule,
@@ -61,7 +63,8 @@ import { AppVersion } from '@ionic-native/app-version';
     OrderPage,
     BuyerProfilePage,
     OrderTabsPage,
-    MultiOrderPage
+    MultiOrderPage,
+    InvoiceDashboardPage
   ],
   providers: [
     StatusBar,
