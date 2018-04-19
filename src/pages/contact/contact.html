@@ -13,23 +13,35 @@
   </ion-refresher>
 
   <h5 style="text-align: center;">Invoice</h5>
+  <ion-row>
+    <ion-col col-4>
+      <span>Date</span>
+    </ion-col>
+    <ion-col col-4>
+      <span>#Invoice</span>
+    </ion-col>
+    <ion-col col-4>
+      <span>Cost</span>
+    </ion-col>
+  </ion-row>
   <ion-card *ngFor="let invoice of buyer_invoice">
-    <ion-row class="highlighted-section-header" (click)="routeToInvoiceDashboard()">
-      <ion-col>
-        <span class="section-header-key">Date:</span>
+    <ion-row class="highlighted-section-header" (click)="routeToInvoiceDashboard(invoice.id)">
+      <ion-col col-4>
         <span>{{invoice.sale_date | date: 'dd-MMM'}}</span>
       </ion-col>
-      <ion-col>
-        <span class="section-header-key">Cost:₹ &nbsp;</span>
-        <span>{{invoice.total_cost | number : '.2'}}</span>
+      <ion-col col-4>
+        <span>{{invoice.invoice_number}}</span>
       </ion-col>
-      <ion-col>
+      <ion-col col-4>
+        <span>₹&nbsp;{{invoice.total_cost | number : '.2'}}</span>
+      </ion-col>
+      <!-- <ion-col>
         <button>
           <span (click)="downloadPdf(invoice.invoice)">
             <ion-icon name="download"></ion-icon>
           </span>
         </button>
-      </ion-col>
+      </ion-col> -->
     </ion-row>
   </ion-card>
 

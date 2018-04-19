@@ -21,40 +21,51 @@
   </ion-row>
   <h1 style="text-align:center">Grievances</h1>
   <h5 style="text-align:center">Sales made in last<strong><em>Three Days</em></strong></h5>
-  <ion-list radio-group *ngFor="let sale of sale_list" [(ngModel)]="sale_id">
-    <ion-item style="width: 310px; margin-left: 20px;">
-      <ion-label>
-        <span style="color: darkslategray; font-size: medium; font-weight:bold;">{{sale.sale_date | date: 'dd-MMM'}}&nbsp;:&nbsp;</span>
-        {{sale.brand_name}}, {{sale.bag_type_weight}}&nbsp;Kg-&nbsp;{{sale.bag_count}}&nbsp;Bag(s)
-      </ion-label>
-      <ion-radio [value]="sale.id"></ion-radio>
-    </ion-item>
-  </ion-list>
-  <br>
-  <ion-card style="padding-top:30px; background-color: #AB9E92;">
-    <ion-list>
-      <ion-item-sliding>
-        <ion-item (click)="takePicture()">
-          <ion-avatar item-start>
-            <ion-icon style="font-size: 25px" name="camera"></ion-icon>
-          </ion-avatar>
-          <h2 *ngIf="image == null">Take a picture</h2>
-          <h2 *ngIf="image != null">Picture Taken&nbsp;&nbsp;&nbsp;<span><ion-icon name="checkmark-circle"></ion-icon></span></h2>
-        </ion-item>
-      </ion-item-sliding>
-    </ion-list>
-    <ion-row>
-      <ion-item>
-        <ion-label floating>Your Complain</ion-label>
-        <ion-textarea elastic style="color:black; line-height:normal; height:100%" [(ngModel)]="complain"></ion-textarea>
+  <span *ngFor="let sale of sale_list; let sale_index=index">
+    <ion-list radio-group [(ngModel)]="sale_id">
+      <ion-item style="width: 310px; margin-left: 20px;">
+        <ion-label>
+          <span style="color: darkslategray; font-size: medium; font-weight:bold;">{{sale.sale_date | date: 'dd-MMM'}}&nbsp;:&nbsp;</span>
+          {{sale.brand_name}}, {{sale.bag_type_weight}}&nbsp;Kg-&nbsp;{{sale.bag_count}}&nbsp;Bag(s)
+        </ion-label>
+        <ion-radio [value]="sale.id"></ion-radio>
       </ion-item>
-    </ion-row>
-    <ion-row>
-      <ion-col></ion-col>
-      <ion-col>
-        <button ion-button (click)="submitComplain(sale_id, complain)">Submit</button>
-      </ion-col>
-      <ion-col></ion-col>
-    </ion-row>
-  </ion-card>
+      <ion-item style="margin-top: 5px">
+        <ion-label style="color: darkslategray;">Select Grievance Type</ion-label>
+        <ion-select [(ngModel)]="selected_grievance_type[sale_index]" interface="popover">
+          <ion-option text-capitalize *ngFor="let grievance_type of grievance_types" [value]="grievance_type.id">{{grievance_type.name | rmUnderScore}}</ion-option>
+        </ion-select>
+      </ion-item>
+      <!-- <ion-card style="padding-top:30px; background-color: #AB9E92;"> -->
+        <span *ngFor="let image of complain_images[sale_index]; let last_image=last; let image_index=index">
+          <ion-item class="camera-location">
+            <ion-avatar item-start>
+              <ion-icon (click)="takePicture(sale_index, image_index)" style="font-size: 25px" name="camera"></ion-icon>
+            </ion-avatar>
+            <span *ngIf="!last_image || image_index == 0">
+              <h2 *ngIf="complain_images[sale_index][image_index] == null"><span (click)="takePicture(sale_index, image_index)">Take a picture</span><span><button float-right fab mini (click)="addImageCount(sale_index)"><ion-icon name="add"></ion-icon></button></span></h2>
+            </span>
+            <span *ngIf="last_image && image_index != 0">
+              <h2 *ngIf="complain_images[sale_index][image_index] == null"><span (click)="takePicture(sale_index, image_index)">Take a picture</span><span><button float-right fab mini (click)="popImageCount(sale_index)"><ion-icon name="remove"></ion-icon></button></span></h2>
+            </span>
+            <h2 *ngIf="complain_images[sale_index][image_index] != null">Picture Taken&nbsp;&nbsp;&nbsp;<span><ion-icon name="checkmark-circle"></ion-icon></span></h2>
+          </ion-item>
+        </span>
+      </ion-list>
+      <!-- </ion-card> -->
+      <!-- <ion-row> -->
+        <ion-item>
+          <ion-label floating>Your Complain</ion-label>
+          <ion-textarea elastic style="color:black; line-height:normal; height:100%" [(ngModel)]="complain[sale_index]"></ion-textarea>
+        </ion-item>
+      <!-- </ion-row> -->
+      <ion-row>
+        <ion-col></ion-col>
+        <ion-col>
+          <button ion-button (click)="submitComplain(sale_id, complain[sale_index], sale_index, selected_grievance_type[sale_index])">Submit</button>
+        </ion-col>
+        <ion-col></ion-col>
+      </ion-row>
+      <hr style="background-color: burlywood;">
+    </span>
 </ion-content>

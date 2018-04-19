@@ -50,6 +50,7 @@ export class PaymentDetailsPage {
       this.utr_number = null;
       this.amount = null;
       this.mode_of_payment = null;
+      this.navCtrl.pop();
     }, (error) => {
       loading.dismiss();      
       console.log(error);

@@ -13,7 +13,7 @@ export class MultiOrderPage {
   user: any;
   domestic_data: any;
   domestic_quote_of_the_day: any = null;
-  order_form: any[] = [];
+  // order_form: any[] = [];
   maximum_weight_allowance: number = 0;
   currnt_order_total_weight: number = 0;
   weight_difference: number = null;
@@ -23,11 +23,86 @@ export class MultiOrderPage {
   transport_id: any = null;
   product_cost: any = null;
   company_name: any = null;
+  current_stock: any;
+  gold_weight_allowance: number = 1250;
+  silver_weight_allowance: number = 500;
+  bronze_weight_allowance: number = 250;
+  weight_allowance: number = 0;
+
+  order_form = [
+  {
+    copra_brand: { 'id': 1, 'name': 'SHUBH', 'notes': '22-25 Pc/Kg' },
+    bag_type: { 'id': 1, 'name': '50 kg Bori' },
+    bag_count: null,
+    rate: null,
+    buyer_id: null,
+    quantity_in_kgs: 50,
+    total_quantity: 0,
+    cost: null,
+    disabled: false
+  },
+  {
+    copra_brand: { 'id': 1, 'name': 'SHUBH', 'notes': '22-25 Pc/Kg' },
+    bag_type: { 'id': 2, 'name': '25 kg Katta' },
+    bag_count: null,
+    rate: null,
+    buyer_id: null,
+    quantity_in_kgs: 25,
+    total_quantity: 0,
+    cost: null,
+    disabled: false
+  },
+  {
+    copra_brand: { 'id': 2, 'name': 'SPC', 'notes': '18-20 Pc/Kg' },
+    bag_type: { 'id': 1, 'name': '50 kg Bori' },
+    bag_count: null,
+    rate: null,
+    buyer_id: null,
+    quantity_in_kgs: 50,
+    total_quantity: 0,
+    cost: null,
+    disabled: false
+  },
+  {
+    copra_brand: { 'id': 2, 'name': 'SPC', 'notes': '18-20 Pc/Kg' },
+    bag_type: { 'id': 2, 'name': '25 kg Katta' },
+    bag_count: null,
+    rate: null,
+    buyer_id: null,
+    quantity_in_kgs: 25,
+    total_quantity: 0,
+    cost: null,
+    disabled: false
+  },
+  {
+    copra_brand: { 'id': 3, 'name': 'LABH', 'notes': '14-16 Pc/Kg' },
+    bag_type: { 'id': 1, 'name': '50 kg Bori' },
+    bag_count: null,
+    rate: null,
+    buyer_id: null,
+    quantity_in_kgs: 50,
+    total_quantity: 0,
+    cost: null,
+    disabled: false
+  },
+  {
+    copra_brand: { 'id': 3, 'name': 'LABH', 'notes': '14-16 Pc/Kg' },
+    bag_type: { 'id': 2, 'name': '25 kg Katta' },
+    bag_count: null,
+    rate: null,
+    buyer_id: null,
+    quantity_in_kgs: 25,
+    total_quantity: 0,
+    cost: null,
+    disabled: false
+  }
+];
 
   constructor(public navCtrl: NavController, public navParams: NavParams, private httpServerServiceProvider: HttpServerServiceProvider, private app: App, private storage: Storage, private toastCtrl: ToastController, private loadingCtrl: LoadingController, private alertCtrl: AlertController) {
     // this.domestic_data['user_payment_balance'] = 0;
-  }
 
+  }
+  
   ionViewWillEnter() {
     this.user_balance = null;
     console.log('ionViewWillEnter MultiOrderPage');
@@ -38,104 +113,64 @@ export class MultiOrderPage {
     }, (error) => {
       console.log(error);
     });
-
-    this.storage.get('user').then((user) => {
-      console.log(user);
-      this.user = user;
-    });
   }
-
+  
   doRefresh(event = null) {
     this.httpServerServiceProvider.getTodayDomesticQuote().subscribe((data) => {
       console.log(data);
       this.domestic_data = data;
       this.user_balance = data['user_payment_balance'];
       this.company_name = data['company_name'];
+
+      if (data['eligibility'] == 'gold') {
+        this.weight_allowance = this.gold_weight_allowance;
+      } else if (data['eligibility'] == 'silver') {
+        this.weight_allowance = this.silver_weight_allowance;
+      } else if (data['eligibility'] == 'bronze') {
+        this.weight_allowance = this.bronze_weight_allowance
+      }
+
       if (data.hasOwnProperty('rate')) {
-        this.createOrderForm(data['rate']);
         this.domestic_quote_of_the_day = data.rate;
       }
+
       if (data['user_payment_balance'] >= 0) {
-        this.maximum_weight_allowance = (Math.floor(data['user_payment_balance'] / data['rate']) + data['domestic_buyer_maximum_weight_limit'])
+        this.maximum_weight_allowance = (Math.floor(data['user_payment_balance'] / data['rate']) + this.weight_allowance)
         this.weight_difference = this.maximum_weight_allowance;
       } else {
         this.maximum_weight_allowance = 0;
       }
       if (event != null) { event.complete() }
-      
+
     }, (error) => {
       if (event != null) { event.complete() }
-      this.createOrderForm();
+    });
+
+    // get user from local storage
+    this.storage.get('user').then((user) => {
+      this.user = user;
+
+      // get current status to enable/disable the form
+      this.httpServerServiceProvider.getCurrentStock({'ddp_id': 1}).subscribe((data) => {
+        this.current_stock = data;
+        for (let index in this.order_form) {
+          if (this.current_stock[this.order_form[index]['copra_brand']['id']][this.order_form[index]['bag_type']['id']] >= 10) {
+            this.order_form[index]['disabled'] = false
+            this.order_form[index]['rate'] = this.domestic_quote_of_the_day
+            this.order_form[index]['buyer_id'] = this.user['id']
+          }
+          else {
+            this.order_form[index]['disabled'] = true
+          }
+        }
+      }, (error) => {
+        console.log(error);
+      });
     });
   }
 
   routePaymentDetails() {
     this.navCtrl.push('PaymentDetailsPage');
-  }
-
-  createOrderForm(today_rate = null) {
-    this.order_form = [
-      {
-        copra_brand: { 'id': 1, 'name': 'SHUBH', 'notes': '22-25 Pc/Kg' },
-        bag_type: { 'id': 1, 'name': '50 kg Bori' },
-        bag_count: '',
-        rate: today_rate,
-        buyer_id: this.user['id'],
-        quantity_in_kgs: 50,
-        total_quantity: 0,
-        cost: null
-      },
-      {
-        copra_brand: { 'id': 1, 'name': 'SHUBH', 'notes': '22-25 Pc/Kg' },
-        bag_type: { 'id': 2, 'name': '25 kg Katta' },
-        bag_count: '',
-        rate: today_rate,
-        buyer_id: this.user['id'],
-        quantity_in_kgs: 25,
-        total_quantity: 0,
-        cost: null
-      },
-      {
-        copra_brand: { 'id': 2, 'name': 'SPC', 'notes': '18-20 Pc/Kg' },
-        bag_type: { 'id': 1, 'name': '50 kg Bori' },
-        bag_count: '',
-        rate: today_rate,
-        buyer_id: this.user['id'],
-        quantity_in_kgs: 50,
-        total_quantity: 0,
-        cost: null
-      },
-      {
-        copra_brand: { 'id': 2, 'name': 'SPC', 'notes': '18-20 Pc/Kg' },
-        bag_type: { 'id': 2, 'name': '25 kg Katta' },
-        bag_count: '',
-        rate: today_rate,
-        buyer_id: this.user['id'],
-        quantity_in_kgs: 25,
-        total_quantity: 0,
-        cost: null
-      },
-      {
-        copra_brand: { 'id': 3, 'name': 'LABH', 'notes': '14-16 Pc/Kg' },
-        bag_type: { 'id': 1, 'name': '50 kg Bori' },
-        bag_count: '',
-        rate: today_rate,
-        buyer_id: this.user['id'],
-        quantity_in_kgs: 50,
-        total_quantity: 0,
-        cost: null
-      },
-      {
-        copra_brand: { 'id': 3, 'name': 'LABH', 'notes': '14-16 Pc/Kg' },
-        bag_type: { 'id': 2, 'name': '25 kg Katta' },
-        bag_count: '',
-        rate: today_rate,
-        buyer_id: this.user['id'],
-        quantity_in_kgs: 25,
-        total_quantity: 0,
-        cost: null
-      }
-    ];
   }
 
   getBackgroundColor(amount) {
@@ -204,13 +239,18 @@ export class MultiOrderPage {
           loading.dismiss();
           this.doRefresh();
           this.product_cost = null;
+          this.order_form.forEach(element => {
+            element.bag_count = null;
+            element.cost = null;
+            element.total_quantity = 0;
+          });
         }, (error) => {
           console.log(error);
           this.displayToast(error);
           loading.dismiss();
         });
       } else {
-        this.displayToast('Form shoud not be empty!');
+        alert('Form shoud not be empty!');
       }
     }
   }
@@ -238,6 +278,15 @@ export class MultiOrderPage {
       buttons: ['OK']
     });
     alert.present();
+  }
+
+  disabledFormStyle(status) {
+    if(status) {
+      return '100'
+    }
+    else {
+      return '500'
+    }
   }
 
   logout() {

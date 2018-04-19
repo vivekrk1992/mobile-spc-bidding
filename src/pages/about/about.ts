@@ -42,15 +42,16 @@ export class AboutPage {
     //   }
     // });
 
-    this.doRefresh();
-
+    
   }
   
+  ionViewWillEnter() {
+    this.doRefresh();
+  }
   
   doRefresh(event = null) {
     
     this.storage.get('user').then((user) => {
-      console.log(user);
       this.user = user;
       this.httpServerServiceProvider.getTransactionsForDomesticBuyer({'buyer_id': this.user['id']}).subscribe((data) => {
         console.log(data);

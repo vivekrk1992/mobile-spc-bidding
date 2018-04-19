@@ -1,18 +1,55 @@
-<!--
-  Generated template for the InvoiceDashboardPage page.
-
-  See http://ionicframework.com/docs/components/#navigation for more info on
-  Ionic pages and navigation.
--->
 <ion-header>
 
   <ion-navbar>
-    <ion-title>invoice-dashboard</ion-title>
+    <ion-title><span class="navbar-title">Invoice Dashboard</span></ion-title>
   </ion-navbar>
 
 </ion-header>
 
 
 <ion-content padding>
-
+  <ion-row padding-top>
+    <ion-col>
+      <span class="header-text align-header">Date:</span>
+    </ion-col>
+    <ion-col>
+      <span>{{sale_group_data['sale_date'] | date: 'dd-MMM-yyyy'}}</span>
+    </ion-col>
+  </ion-row>
+  <ion-row>
+    <ion-col>
+      <span class="header-text align-header">Invoice Number:</span>
+    </ion-col>
+    <ion-col>
+      <span (click)="downloadPdf(sale_group_data.invoice, sale_group_data.invoice_number)">{{sale_group_data['invoice_number']}}&nbsp;
+        <ion-icon name="download"></ion-icon>
+      </span>
+    </ion-col>
+  </ion-row>
+  <ion-row>
+    <ion-col>
+      <span class="header-text align-header">Product Cost:</span>
+    </ion-col>
+    <ion-col>
+      <span>{{sale_group_data['product_cost'] | number: '.2'}} Rs.</span>
+    </ion-col>
+  </ion-row>
+  <br>
+  <ion-row>
+    <ion-col>
+      <span class="header-text align-header">Related Documents</span>
+    </ion-col>
+  </ion-row>
+  <span *ngIf="sale_group_data.hasOwnProperty('sale_group_properties')">
+    <ion-row class="property-row" *ngFor="let property_file of sale_group_data['sale_group_properties']">
+      <ion-col>
+        <span text-capitalize class="header-text align-header">{{property_file['property']['term'] | rmUnderScore}}:</span>
+      </ion-col>
+      <ion-col col-3>
+        <span (click)="downloadDocs(property_file.mime_type, property_file.value, property_file.extension, property_file['property']['term'], sale_group_data['invoice_number'])">
+          <ion-icon name="download"></ion-icon>
+        </span>
+      </ion-col>
+    </ion-row>
+  </span>
 </ion-content>

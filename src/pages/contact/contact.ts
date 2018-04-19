@@ -1,13 +1,13 @@
-import { InvoiceDashboardPage } from './invoice-dashboard/invoice-dashboard';
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/forms';
 import { HttpServerServiceProvider } from '../../providers/http-server-service/http-server-service';
-import { NavController, ToastController, Platform } from 'ionic-angular';
+import { NavController, ToastController, Platform, LoadingController } from 'ionic-angular';
 // import { InterfaceProvider } from './../../providers/interface/interface';
 import { value, Test } from '../../providers/interface/interface'
 import { FileOpener } from '@ionic-native/file-opener';
 import { File, FileEntry } from '@ionic-native/file';
 import { FileTransfer, FileTransferObject } from '@ionic-native/file-transfer';
+import { InvoiceDashboardPage } from './invoice-dashboard/invoice-dashboard';
 
 @Component({
   selector: 'page-contact',
@@ -22,7 +22,7 @@ export class ContactPage {
   buyer_invoice: any[] = [];
   payment_per_items: any;
 
-  constructor(private httpServerServiceProvider: HttpServerServiceProvider, public formBuilder: FormBuilder, private toastCtrl: ToastController, private fileOpener: FileOpener, private file: File, private platform: Platform, private transfer: FileTransfer, private navCtrl: NavController) {
+  constructor(private httpServerServiceProvider: HttpServerServiceProvider, public formBuilder: FormBuilder, private toastCtrl: ToastController, private fileOpener: FileOpener, private file: File, private platform: Platform, private transfer: FileTransfer, private navCtrl: NavController, private loadingCtrl: LoadingController) {
 
     // console.log('contact');
     // console.log(value);
@@ -57,12 +57,15 @@ export class ContactPage {
 
     // this.interTest({'name': 'vivek', 'age': 25})
 
-    this.doRefresh()
-
+    
   }
-
+  
   interTest(data: Test) {
     console.log(data);
+  }
+  
+  ionViewWillEnter() {
+    this.doRefresh();
   }
 
   doRefresh(event = null) {
@@ -133,8 +136,24 @@ export class ContactPage {
       })
   }
 
-  routeToInvoiceDashboard() {
-    this.navCtrl.push(InvoiceDashboardPage);
+  routeToInvoiceDashboard(sale_group_id) {
+    let sale_group_data: any;
+    let loading = this.loadingCtrl.create({
+      content: 'Loading Please Wait...'
+    });
+    
+    loading.present();
+
+    this.httpServerServiceProvider.getSaleGroupDetails({'sale_group_id' : sale_group_id}).subscribe((data) => {
+      console.log(data);
+      sale_group_data = data;
+      this.navCtrl.push(InvoiceDashboardPage, sale_group_data);
+      setTimeout(() => {
+        loading.dismiss();
+      }, 1000);
+    }, (error) => {
+      console.log(error);
+    });
   }
 
 }

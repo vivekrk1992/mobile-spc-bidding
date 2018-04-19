@@ -204,4 +204,19 @@ export class HttpServerServiceProvider {
     return this.http.post(this.global.base_url + 'main/serve/transactions/for/domestic/buyer/', data, { headers: this.headers })
       .map((res) => res.json());
   }
+
+  getSaleGroupDetails(data) {
+    return this.http.post(this.global.base_url + 'main/serve/sale/group/details/', data, { headers: this.headers })
+      .map((res) => res.json());
+  }
+
+  getCurrentStock(data) {
+    return this.http.post(this.global.base_url + 'main/serve/stock/inventory/now/', data, {headers: this.headers})
+      .map((res) => res.json());
+  }
+
+  getGrievanceTypes() {
+    return this.http.get(this.global.base_url + 'main/serve/grievance/type/', {headers: this.headers})
+      .map((res) => res.json());
+  }
 }

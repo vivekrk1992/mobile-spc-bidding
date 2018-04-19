@@ -215,5 +215,24 @@
     </ion-col>
     <!--<ion-col>{{payment_transaction['confirmed_by']['first_name']}}</ion-col>-->
   </ion-row>
+  <ion-row *ngFor="let remittance of date_wise_transactions['remittance']">
+    <ion-col col-2>
+      {{remittance['remittance_sent_on'] | date: 'dd-MMM'}}
+    </ion-col>
+    <ion-col col-5>
+      {{remittance['remittance_mode']['name']}}
+      <br>
+      <span style="font-size: x-small">{{remittance['remittance_id']}}</span>
+    </ion-col>
+    <ion-col col-2></ion-col>
+    <ion-col col-3>
+      <span style="font-size: smaller">
+        {{remittance['amount']}}
+        <span *ngIf="remittance['remittance_status']['name']=='complete'">
+          <ion-icon name="done-all" style="font-size: x-small; color:green"></ion-icon>
+        </span>
+      </span>
+    </ion-col>
+  </ion-row>
 </span>
 </ion-content>
