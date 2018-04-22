@@ -30,15 +30,15 @@
         </ion-label>
         <ion-radio [value]="sale.id"></ion-radio>
       </ion-item>
-      <ion-item style="margin-top: 5px">
-        <ion-label style="color: darkslategray;">Select Grievance Type</ion-label>
+      <ion-item style="width: 280px; margin-left: 35px;">
+        <ion-label style="color: darkslategray;">Grievance Type</ion-label>
         <ion-select [(ngModel)]="selected_grievance_type[sale_index]" interface="popover">
           <ion-option text-capitalize *ngFor="let grievance_type of grievance_types" [value]="grievance_type.id">{{grievance_type.name | rmUnderScore}}</ion-option>
         </ion-select>
       </ion-item>
       <!-- <ion-card style="padding-top:30px; background-color: #AB9E92;"> -->
         <span *ngFor="let image of complain_images[sale_index]; let last_image=last; let image_index=index">
-          <ion-item class="camera-location">
+          <ion-item class="camera-location" style="width: 280px; margin-left: 35px;">
             <ion-avatar item-start>
               <ion-icon (click)="takePicture(sale_index, image_index)" style="font-size: 25px" name="camera"></ion-icon>
             </ion-avatar>

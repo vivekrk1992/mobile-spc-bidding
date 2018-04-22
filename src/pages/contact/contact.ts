@@ -57,24 +57,32 @@ export class ContactPage {
 
     // this.interTest({'name': 'vivek', 'age': 25})
 
-    
+
   }
-  
+
   interTest(data: Test) {
     console.log(data);
   }
-  
+
   ionViewWillEnter() {
     this.doRefresh();
   }
 
   doRefresh(event = null) {
+    let loading = this.loadingCtrl.create({
+      content: 'Please wait...'
+    });
+
+    loading.present();
+
     this.httpServerServiceProvider.getInvoiceDetails().subscribe((data) => {
       console.log(data);
       this.buyer_invoice = data;
+      loading.dismiss();
       if (event != null) { event.complete() }
-    }, () => {
+    }, (error) => {
       if (event != null) { event.complete() }
+      loading.dismiss();
     });
   }
 
@@ -141,10 +149,10 @@ export class ContactPage {
     let loading = this.loadingCtrl.create({
       content: 'Loading Please Wait...'
     });
-    
+
     loading.present();
 
-    this.httpServerServiceProvider.getSaleGroupDetails({'sale_group_id' : sale_group_id}).subscribe((data) => {
+    this.httpServerServiceProvider.getSaleGroupDetails({ 'sale_group_id': sale_group_id }).subscribe((data) => {
       console.log(data);
       sale_group_data = data;
       this.navCtrl.push(InvoiceDashboardPage, sale_group_data);

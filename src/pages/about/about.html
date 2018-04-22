@@ -215,7 +215,7 @@
     </ion-col>
     <!--<ion-col>{{payment_transaction['confirmed_by']['first_name']}}</ion-col>-->
   </ion-row>
-  <ion-row *ngFor="let remittance of date_wise_transactions['remittance']">
+  <ion-row *ngFor="let remittance of date_wise_transactions['remittance']" style="color: salmon;">
     <ion-col col-2>
       {{remittance['remittance_sent_on'] | date: 'dd-MMM'}}
     </ion-col>

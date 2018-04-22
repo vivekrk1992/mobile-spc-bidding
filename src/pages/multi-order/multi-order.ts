@@ -24,10 +24,6 @@ export class MultiOrderPage {
   product_cost: any = null;
   company_name: any = null;
   current_stock: any;
-  gold_weight_allowance: number = 1250;
-  silver_weight_allowance: number = 500;
-  bronze_weight_allowance: number = 250;
-  weight_allowance: number = 0;
 
   order_form = [
   {
@@ -122,20 +118,13 @@ export class MultiOrderPage {
       this.user_balance = data['user_payment_balance'];
       this.company_name = data['company_name'];
 
-      if (data['eligibility'] == 'gold') {
-        this.weight_allowance = this.gold_weight_allowance;
-      } else if (data['eligibility'] == 'silver') {
-        this.weight_allowance = this.silver_weight_allowance;
-      } else if (data['eligibility'] == 'bronze') {
-        this.weight_allowance = this.bronze_weight_allowance
-      }
 
       if (data.hasOwnProperty('rate')) {
         this.domestic_quote_of_the_day = data.rate;
       }
 
       if (data['user_payment_balance'] >= 0) {
-        this.maximum_weight_allowance = (Math.floor(data['user_payment_balance'] / data['rate']) + this.weight_allowance)
+        this.maximum_weight_allowance = (Math.floor(data['user_payment_balance'] / data['rate']) + data['domestic_buyer_maximum_weight_limit'])
         this.weight_difference = this.maximum_weight_allowance;
       } else {
         this.maximum_weight_allowance = 0;
@@ -267,7 +256,7 @@ export class MultiOrderPage {
   calculateBagsToQuantity() {
     this.product_cost = 0;
     this.filterOrderBags();
-    this.product_cost = (this.domestic_data.rate * this.currnt_order_total_weight)
+    this.product_cost = (this.domestic_quote_of_the_day * this.currnt_order_total_weight)
     console.log(this.product_cost);
   }
 

@@ -1,6 +1,6 @@
 import { GrievancePage } from './../grievance/grievance';
 import { Component } from '@angular/core';
-import { NavController, ToastController } from 'ionic-angular';
+import { NavController, ToastController, LoadingController } from 'ionic-angular';
 import { Storage } from '@ionic/storage';
 import { HttpServerServiceProvider } from '../../providers/http-server-service/http-server-service';
 import { SaleOrderDetailsPage } from "../sale-order-details/sale-order-details";
@@ -25,7 +25,7 @@ export class AboutPage {
   user: any;
   all_date_wise_transactions: any;
 
-  constructor(public navCtrl: NavController, private httpServerServiceProvider: HttpServerServiceProvider, private storage: Storage, private toastCtrl: ToastController) {
+  constructor(public navCtrl: NavController, private httpServerServiceProvider: HttpServerServiceProvider, private storage: Storage, private toastCtrl: ToastController, private loadingCtrl: LoadingController) {
     // this.httpServerServiceProvider.getAllDomesticQuotesWithLatestBid().subscribe((data) => {
     //   this.domestic_quotes = data;
     // });
@@ -50,15 +50,22 @@ export class AboutPage {
   }
   
   doRefresh(event = null) {
+    let loading = this.loadingCtrl.create({
+      content: 'Please wait...'
+    });
+
+    loading.present();
     
     this.storage.get('user').then((user) => {
       this.user = user;
       this.httpServerServiceProvider.getTransactionsForDomesticBuyer({'buyer_id': this.user['id']}).subscribe((data) => {
         console.log(data);
         this.all_date_wise_transactions = data;
+        loading.dismiss();
         if (event != null) { event.complete() }
       }, (error) => {
         if (event != null) { event.complete() }
+        loading.dismiss();
         console.log(error);
       });
     });

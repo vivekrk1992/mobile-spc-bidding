@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, Platform } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, Platform, LoadingController } from 'ionic-angular';
 import { File } from '@ionic-native/file';
 import { FileOpener } from '@ionic-native/file-opener';
 
@@ -12,7 +12,7 @@ import { FileOpener } from '@ionic-native/file-opener';
 export class InvoiceDashboardPage {
   sale_group_data: any;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private platform: Platform, private file: File, private fileOpener: FileOpener) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, private platform: Platform, private file: File, private fileOpener: FileOpener, private loadingCtrl: LoadingController) {
   }
 
   ionViewCanEnter() {
@@ -22,6 +22,12 @@ export class InvoiceDashboardPage {
   }
 
   downloadPdf(file_string, invoice_number) {
+    let loading = this.loadingCtrl.create({
+      content: 'Please wait...'
+    });
+
+    loading.present();
+
     let filename: string = 'spc_invoice_number_' + String(invoice_number) + '.pdf';
 
     const binary_string = window.atob(file_string);
@@ -37,15 +43,22 @@ export class InvoiceDashboardPage {
       this.file.writeFile(this.file.externalApplicationStorageDirectory, filename, blob, { replace: true })
         .then(() => {
           this.fileOpener.open(this.file.externalApplicationStorageDirectory + filename, 'application/pdf')
-          alert('File Downloaded to' + this.file.externalApplicationStorageDirectory);
+          loading.dismiss();
         })
-    })
+      })
       .catch((error) => {
+        loading.dismiss();
         alert(JSON.stringify(error))
       })
   }
 
   downloadDocs(mime_type, file_string, extension, property, invoice_number) {
+    let loading = this.loadingCtrl.create({
+      content: 'Please wait...'
+    });
+
+    loading.present();
+
     let data_type = mime_type.split(';base64');
     let mime = data_type[0].split('data:');
     console.log(data_type);
@@ -60,16 +73,17 @@ export class InvoiceDashboardPage {
       bytes[i] = binary_string.charCodeAt(i);
     }
     this.platform.ready().then(() => {
-      const blob: Blob = new Blob([bytes], { type: mime });
+      const blob: Blob = new Blob([bytes], { type: mime[1] });
       console.log(blob);
 
       this.file.writeFile(this.file.externalApplicationStorageDirectory, filename, blob, { replace: true })
         .then(() => {
-          this.fileOpener.open(this.file.externalApplicationStorageDirectory + filename, mime)
-          alert('File Downloaded to' + this.file.externalApplicationStorageDirectory);
+          loading.dismiss();
+          this.fileOpener.open(this.file.externalApplicationStorageDirectory + filename, mime[1])
         })
-    })
+      })
       .catch((error) => {
+        loading.dismiss();
         alert(JSON.stringify(error))
       })
   }

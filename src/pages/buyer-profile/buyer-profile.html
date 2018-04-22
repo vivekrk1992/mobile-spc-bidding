@@ -10,128 +10,148 @@
 
 
 <ion-content padding>
-  <h4 class="page-title">Please Submit documents for KYC check</h4>
-  <form [formGroup]="business_form" (ngSubmit)="updateUserCVPropertity(business_form.value, address_form.value, gst_form.value)">
-
-
-    <!--Business Registration certificate-->
-    <ion-row class="checkbox-row">
-      <ion-col col-1><ion-checkbox></ion-checkbox></ion-col>
-      <ion-col col-1>1.</ion-col>
-      <ion-col col-5>
-          <ion-label style="color: darkslategray;" for="businessRegisterInputFile">Business Registration <br>Certificate</ion-label>
-        </ion-col>
-      <ion-col  col-5>
-        <input type="file" class="input-width" (change)="changeBusinessDocs($event)" id="businessRegisterInputFile" aria-describedby="fileHelp">
-      </ion-col>
-    </ion-row>
-
-    <!--Address proof-->
-    
-    <span [formGroup]="address_form">
-    <ion-row class="checkbox-row">
-      <ion-col col-1><ion-checkbox></ion-checkbox></ion-col>
-      <ion-col col-1>2.</ion-col>
-      <ion-col>
-        <ion-item>
-          <ion-label style="color: darkslategray;" for="businessRegisterInputFile">Address proof</ion-label>
-          <ion-select formControlName="property_id">
-            <ion-option value="6">Aadhar Card</ion-option>
-            <ion-option value="7">Passport</ion-option>
-            <ion-option value="8">Liscense</ion-option>
-            <ion-option value="9">PAN Card</ion-option>
-            <ion-option value="11">Voter ID</ion-option>
-          </ion-select>
-        </ion-item>
-      </ion-col>
-    </ion-row>
-    <ion-row>
-      <ion-col col-4></ion-col>
-      <ion-col col-5 *ngIf="address_form.value['property_id'] != null">
-        <input type="file" class="input-width" (change)="changeResidentialDocs($event)" id="addressProofInputFile" aria-describedby="fileHelp">
-      </ion-col>
-    </ion-row>
-    </span>
-    <ion-row>
-      <ion-col col-1></ion-col>
-      <ion-col col-1></ion-col>
-
-      <ion-col col-5>
-        <!-- <ion-item>
-          <ion-radio item-left value="7" class="radio-button-style"></ion-radio>
-          <ion-label style="margin-left: 0px">Aadhar Card</ion-label>
-        </ion-item>
-
-        <ion-item>
-          <ion-radio item-left value="8" class="radio-button-style"></ion-radio>
-          <ion-label style="margin-left: 0px">Passport</ion-label>
-        </ion-item>
-
-        <ion-item>
-          <ion-radio item-left value="9" class="radio-button-style"></ion-radio>
-          <ion-label style="margin-left: 0px">Liscense</ion-label>
-        </ion-item>
-
-        <ion-item>
-          <ion-radio item-left value="11" class="radio-button-style"></ion-radio>
-          <ion-label style="margin-left: 0px">Liscense ID</ion-label>
-        </ion-item> -->
-      </ion-col>
-    </ion-row>
-
-    <!--<span [formGroup]="address_form">-->
-      <!--<ion-row>-->
-        <!--<ion-col>-->
-          <!--<ion-item>-->
-            <!--<ion-label style="color: darkslategray;" for="addressProofInputFile">Upload any one of the following document for Address Proof:</ion-label>-->
-            <!--<ion-select formControlName="property_id">-->
-              <!--<ion-option value="7">Aadhar Card</ion-option>-->
-              <!--<ion-option value="8">Passport</ion-option>-->
-              <!--<ion-option value="9">Liscense</ion-option>-->
-              <!--<ion-option value="11">Liscense ID</ion-option>-->
-            <!--</ion-select>-->
-          <!--</ion-item>-->
-        <!--</ion-col>-->
-        <!--<ion-col>-->
-          <!--<input type="file" class="input-width" (change)="changeResidentialDocs($event)" id="addressProofInputFile" aria-describedby="fileHelp">-->
-        <!--</ion-col>-->
-      <!--</ion-row>-->
-    <!--</span>-->
-
-
-
-    <span [formGroup]="gst_form">
+  <span *ngIf="complete_percentage != 75 || complete_percentage == null">
+    <h4 class="page-title">Please Submit documents for KYC check</h4>
+    <form [formGroup]="business_form" (ngSubmit)="updateUserCVPropertity(business_form.value, address_form.value, gst_form.value)">
+  
+  
+      <!--Business Registration certificate-->
       <ion-row class="checkbox-row">
-      <ion-col col-1><ion-checkbox></ion-checkbox></ion-col>
-      <ion-col col-1>3.</ion-col>
-      <ion-col col-10>
-        <ion-item>
-          <ion-label style="color: darkslategray;" fixed>GST Number:</ion-label>
-          <ion-input formControlName="value" type="text"></ion-input>
-        </ion-item>
+        <ion-col col-1><ion-checkbox></ion-checkbox></ion-col>
+        <ion-col col-1>1.</ion-col>
+        <ion-col col-5>
+            <ion-label style="color: darkslategray;" for="businessRegisterInputFile">Business Registration <br>Certificate</ion-label>
+          </ion-col>
+        <ion-col  col-5>
+          <input type="file" class="input-width" (change)="changeBusinessDocs($event)" id="businessRegisterInputFile" aria-describedby="fileHelp">
+        </ion-col>
+      </ion-row>
+  
+      <!--Address proof-->
+      
+      <span [formGroup]="address_form">
+      <ion-row class="checkbox-row">
+        <ion-col col-1><ion-checkbox></ion-checkbox></ion-col>
+        <ion-col col-1>2.</ion-col>
+        <ion-col>
+          <ion-item>
+            <ion-label style="color: darkslategray;" for="businessRegisterInputFile">Address proof</ion-label>
+            <ion-select formControlName="property_id">
+              <ion-option value="6">Aadhar Card</ion-option>
+              <ion-option value="7">Passport</ion-option>
+              <ion-option value="8">Liscense</ion-option>
+              <ion-option value="9">PAN Card</ion-option>
+              <ion-option value="11">Voter ID</ion-option>
+            </ion-select>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col col-4></ion-col>
+        <ion-col col-5 *ngIf="address_form.value['property_id'] != null">
+          <input type="file" class="input-width" (change)="changeResidentialDocs($event)" id="addressProofInputFile" aria-describedby="fileHelp">
+        </ion-col>
+      </ion-row>
+      </span>
+      <ion-row>
+        <ion-col col-1></ion-col>
+        <ion-col col-1></ion-col>
+  
+        <ion-col col-5>
+          <!-- <ion-item>
+            <ion-radio item-left value="7" class="radio-button-style"></ion-radio>
+            <ion-label style="margin-left: 0px">Aadhar Card</ion-label>
+          </ion-item>
+  
+          <ion-item>
+            <ion-radio item-left value="8" class="radio-button-style"></ion-radio>
+            <ion-label style="margin-left: 0px">Passport</ion-label>
+          </ion-item>
+  
+          <ion-item>
+            <ion-radio item-left value="9" class="radio-button-style"></ion-radio>
+            <ion-label style="margin-left: 0px">Liscense</ion-label>
+          </ion-item>
+  
+          <ion-item>
+            <ion-radio item-left value="11" class="radio-button-style"></ion-radio>
+            <ion-label style="margin-left: 0px">Liscense ID</ion-label>
+          </ion-item> -->
+        </ion-col>
+      </ion-row>
+  
+      <!--<span [formGroup]="address_form">-->
+        <!--<ion-row>-->
+          <!--<ion-col>-->
+            <!--<ion-item>-->
+              <!--<ion-label style="color: darkslategray;" for="addressProofInputFile">Upload any one of the following document for Address Proof:</ion-label>-->
+              <!--<ion-select formControlName="property_id">-->
+                <!--<ion-option value="7">Aadhar Card</ion-option>-->
+                <!--<ion-option value="8">Passport</ion-option>-->
+                <!--<ion-option value="9">Liscense</ion-option>-->
+                <!--<ion-option value="11">Liscense ID</ion-option>-->
+              <!--</ion-select>-->
+            <!--</ion-item>-->
+          <!--</ion-col>-->
+          <!--<ion-col>-->
+            <!--<input type="file" class="input-width" (change)="changeResidentialDocs($event)" id="addressProofInputFile" aria-describedby="fileHelp">-->
+          <!--</ion-col>-->
+        <!--</ion-row>-->
+      <!--</span>-->
+  
+  
+  
+      <span [formGroup]="gst_form">
+        <ion-row class="checkbox-row">
+        <ion-col col-1><ion-checkbox></ion-checkbox></ion-col>
+        <ion-col col-1>3.</ion-col>
+        <ion-col col-10>
+          <ion-item>
+            <ion-label style="color: darkslategray;" fixed>GST Number:</ion-label>
+            <ion-input formControlName="value" type="text"></ion-input>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+  
+        <!--<ion-row>-->
+          <!--<ion-col>-->
+            <!--<ion-item>-->
+              <!--<ion-label style="color: darkslategray;">GST Number</ion-label>-->
+              <!--<ion-input formControlName="value" type="text"></ion-input>-->
+            <!--</ion-item>-->
+          <!--</ion-col>-->
+        <!--</ion-row>-->
+      </span>
+  
+      <ion-row>
+        <ion-col col-3></ion-col>
+        <ion-col><button ion-button type="submit">Upload Documents</button></ion-col>
+      </ion-row>
+      <ion-row class="checkbox-row">
+        <ion-col col-10>
+          <ion-label style="color: darkslategray;" for="businessRegisterInputFile">** and wait for approval from SPC (<24 hrs)</ion-label>
+        </ion-col>
+      </ion-row>
+    </form>
+  </span>
+
+  <span *ngIf="complete_percentage == 75">
+    <ion-row style="margin: 200px 0 0px 10px;">
+      <ion-col>
+        <h5 style="text-align: center;">Dear User, Documents that you have uploaded for <strong><em>{{company_name}}</em></strong> have been sent to <em>SPC for Approval</em>. Please wait for the approval message via SMS. Once approved re-login to use the application</h5>
       </ion-col>
     </ion-row>
-
-      <!--<ion-row>-->
-        <!--<ion-col>-->
-          <!--<ion-item>-->
-            <!--<ion-label style="color: darkslategray;">GST Number</ion-label>-->
-            <!--<ion-input formControlName="value" type="text"></ion-input>-->
-          <!--</ion-item>-->
-        <!--</ion-col>-->
-      <!--</ion-row>-->
-    </span>
-
+    <br>
+    <br>
     <ion-row>
-      <ion-col col-3></ion-col>
-      <ion-col><button ion-button type="submit">Upload Documents</button></ion-col>
-    </ion-row>
-    <ion-row class="checkbox-row">
-      <ion-col col-10>
-        <ion-label style="color: darkslategray;" for="businessRegisterInputFile">** and wait for approval from SPC (<24 hrs)</ion-label>
+      <ion-col style="padding:20px;">
+        Please contact Shravan(7538812444) for if you need assistance
+        <a style="text-decoration:none" href="tel:+917538812444">
+          <ion-icon name="call"></ion-icon>
+        </a>
       </ion-col>
     </ion-row>
-  </form>
+  </span>
   <button ion-button small color="dark" outline (click)="routeLoginPage()">
     Back
   </button>

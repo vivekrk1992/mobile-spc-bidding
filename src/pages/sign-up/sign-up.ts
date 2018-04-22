@@ -45,6 +45,9 @@ export class SignUpPage {
         this.presentConfirm();
       }, (error) => {
         console.log(error);
+        let detailed_error = JSON.parse(error._body);
+        console.log(detailed_error.detail);
+        alert(JSON.stringify(detailed_error.detail));
       });
     } else {
       this.mismatchAlert();
@@ -95,13 +98,19 @@ export class SignUpPage {
 
   confirmOtp(data) {
     console.log(data);
-    this.httpServerServiceProvider.confirmOtp(data).subscribe(() => {
+    this.httpServerServiceProvider.confirmOtp(data).subscribe((data) => {
       console.log('otp confirmed successfully!');
       this.displayToastMessage('OTP confirmed successfully!', 'top');
       this.navCtrl.pop();
-    }, () => {
+    }, (error) => {
+      console.log(error);
       console.log('OTP does not match');
-    }, () => console.log('process completed'))
+      this.displayToastMessage(error, 'top');
+      // alert()
+      let detailed_error = JSON.parse(error._body);
+      console.log(detailed_error.detail);
+      alert(JSON.stringify(detailed_error.detail));
+    });
   }
 
   openSignupTermsAndConditions() {

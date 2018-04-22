@@ -19,6 +19,8 @@ export class BuyerProfilePage {
   isDropdownSelected: any;
   user: any
   address_proof: any;
+  complete_percentage: any = null;
+  company_name: any = null;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, private formBuilder: FormBuilder, private storage: Storage, private httpServerServiceProvider: HttpServerServiceProvider, private app: App, private toastCtrl: ToastController) {
     this.business_form = this.formBuilder.group({
@@ -40,8 +42,16 @@ export class BuyerProfilePage {
     });
   }
 
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad BuyerProfilePage');
+  ionViewWillEnter() {
+    console.log('ionViewWillEnter BuyerProfilePage');
+    this.storage.get('user_properties').then((user_property) => {
+      console.log('with in storage');
+      console.log(user_property);
+      if (user_property.hasOwnProperty('buyer_profile_complete_percentage')) {
+        this.complete_percentage = user_property['buyer_profile_complete_percentage']
+        this.company_name = user_property['company_name'];
+      }
+    });
   }
 
 
@@ -97,6 +107,7 @@ export class BuyerProfilePage {
     this.httpServerServiceProvider.saveUserPropertyFile(cv_profile).subscribe(data => {
       console.log(data);
       this.displayToast('Document(s) Uploaded Successfully!');
+      this.routeLoginPage();
     }, (error) => {
       console.log(error);
       this.displayToast('Error!');

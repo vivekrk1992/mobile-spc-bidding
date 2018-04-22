@@ -32,16 +32,25 @@ export class GrievancePage {
   }
 
   doRefresh(event = null) {
+    let loading = this.loadingCtrl.create({
+      content: 'Please wait...'
+    });
+
+    loading.present();
+
     this.httpServerServiceProvider.getSaleListFor3Days().subscribe((data) => {
       console.log(data);
       this.sale_list = data;
-      this.complain_images = [[], []];      
+      this.complain_images = [[], []];     
+
+      loading.dismiss();
       for (let index in this.sale_list) {
         this.complain_images[index].push(null);
       }
       if (event != null) { event.complete() }
-    }, () => {
+    }, (error) => {
       if (event != null) { event.complete() }
+      loading.dismiss();
     });
   }
   
