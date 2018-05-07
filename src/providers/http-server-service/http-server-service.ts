@@ -219,4 +219,9 @@ export class HttpServerServiceProvider {
     return this.http.get(this.global.base_url + 'main/serve/grievance/type/', {headers: this.headers})
       .map((res) => res.json());
   }
+
+  getQuoteAdjustmentFactor() {
+    return this.http.get(this.global.base_url + 'main/serve/today/quote/adjustment/factor/', { headers: this.headers })
+      .map((res) => res.json());
+  }
 }

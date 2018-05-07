@@ -21,7 +21,9 @@
   <ion-row>
     <ion-col class="rate-col">
       <!--Today's quote  -->
-      <h3 text-center padding-top>Today's Rate:</h3>
+      <h3 text-center padding-top>Today's Rate:<br>
+        <span style="font-size: x-small;">(SPC 50 Kg)</span>
+      </h3>
       <h1 text-center>
         <span>
           ₹ {{domestic_quote_of_the_day}}
@@ -36,10 +38,10 @@
   </ion-row>
   <hr>
   <ion-row [ngStyle]="{'color': getBackgroundColor(user_balance)}">
-    <ion-col *ngIf="user_balance > 0">
+    <ion-col *ngIf="user_balance >= 0">
       <span text-center style="font-weight: bold">Advance Amount: {{user_balance | number: '.2'}} ₹</span>
     </ion-col>
-    <ion-col *ngIf="user_balance <= 0">
+    <ion-col *ngIf="user_balance < 0">
       <span text-center style="font-weight: bold">Payment Due: {{ - user_balance | number: '.2'}} ₹</span>
     </ion-col>
   </ion-row>
@@ -52,9 +54,9 @@
     <span *ngIf="weight_difference > 0" [ngStyle]="{'color': getBackgroundColor(weight_difference)}">
       <ion-col col-2></ion-col>
       <ion-col>
-        <h6 style="padding-left: 50px;">
+        <h6 style="padding-left: 80px;">
           You're eligible for
-          <em>{{ weight_difference }} kgs </em> of Copra
+          <em>{{ weight_difference }} kgs </em>
           <hr>
           <span>Product Cost: {{product_cost | number: '.2'}} ₹</span>
         </h6>
@@ -88,7 +90,7 @@
   <div *ngFor="let order of order_form">
     <ion-row [ngStyle]="{'font-weight': disabledFormStyle(order.disabled)}">
       <ion-col col-4>{{order.copra_brand.name}}<br><span style="font-size: smaller;">{{order.copra_brand.notes}}</span></ion-col>
-      <ion-col col-3>{{order.bag_type.name}}&nbsp;x<span style="color:darkslateblue;font-size: smaller;" *ngIf="domestic_quote_of_the_day != null"> ₹{{domestic_quote_of_the_day}}</span></ion-col>
+      <ion-col col-3>{{order.bag_type.name}}&nbsp;x<span style="color:darkslateblue;font-size: smaller;"> ₹{{order.rate}}</span></ion-col>
       <ion-col col-1>
         <input type="number" class="custom-input-box" placeholder="# bags" [disabled]="order.disabled" (change)="calculateBagsToQuantity()" [(ngModel)]="order.bag_count">
       </ion-col>

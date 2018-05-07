@@ -23,7 +23,7 @@ export class MultiOrderPage {
   transport_id: any = null;
   product_cost: any = null;
   company_name: any = null;
-  current_stock: any;
+  // current_stock: any;
 
   order_form = [
   {
@@ -138,23 +138,40 @@ export class MultiOrderPage {
     // get user from local storage
     this.storage.get('user').then((user) => {
       this.user = user;
-
-      // get current status to enable/disable the form
-      this.httpServerServiceProvider.getCurrentStock({'ddp_id': 1}).subscribe((data) => {
-        this.current_stock = data;
-        for (let index in this.order_form) {
-          if (this.current_stock[this.order_form[index]['copra_brand']['id']][this.order_form[index]['bag_type']['id']] >= 10) {
-            this.order_form[index]['disabled'] = false
-            this.order_form[index]['rate'] = this.domestic_quote_of_the_day
-            this.order_form[index]['buyer_id'] = this.user['id']
-          }
-          else {
-            this.order_form[index]['disabled'] = true
-          }
-        }
+      this.httpServerServiceProvider.getQuoteAdjustmentFactor().subscribe((data) => {
+        console.log(data);
+        let quote_adjustment_rate = data;
+        // get current status to enable/disable the form
+        this.httpServerServiceProvider.getCurrentStock({'ddp_id': 1}).subscribe((data) => {
+          let current_stock = data;
+          this.order_form.forEach((obj) => {
+            obj.buyer_id = this.user['id'];
+            if (quote_adjustment_rate.hasOwnProperty(obj.copra_brand['id'])) {
+              obj.rate = quote_adjustment_rate[obj.copra_brand['id']][obj.bag_type['id']]['rate'];
+            }
+            if (current_stock[obj.copra_brand['id']][obj.bag_type['id']] > 5) {
+              obj.disabled = false;
+            } else {
+              console.log('in disable')
+              obj.disabled = true;
+            }
+          })
+          // for (let index in this.order_form) {
+          //   if (this.current_stock[this.order_form[index]['copra_brand']['id']][this.order_form[index]['bag_type']['id']] >= 10) {
+          //     this.order_form[index]['disabled'] = false;
+          //     this.order_form[index]['rate'] = quote_adjustment_rate[this.order_form[index]['copra_brand']['id']][this.order_form[index]['bag_type']['id']]['rate'];
+          //     this.order_form[index]['buyer_id'] = this.user['id'];
+          //   }
+          //   else {
+          //     this.order_form[index]['disabled'] = true;
+          //   }
+          // }
+        }, (error) => {
+          console.log(error);
+        });
       }, (error) => {
         console.log(error);
-      });
+      })
     });
   }
 
@@ -172,6 +189,7 @@ export class MultiOrderPage {
 
   filterOrderBags() {
     let collected_value: any[] = [];
+    let total_cost = 0
     let total_weight = 0
     this.order_form.forEach(element => {
       console.log(element.bag_count);
@@ -182,11 +200,13 @@ export class MultiOrderPage {
         console.log(element.total_quantity)
         element.cost = element.total_quantity * element.rate
         total_weight += element.total_quantity
+        total_cost += element.cost
       } else {
         element.total_quantity = 0
         element.cost = null;
       }
       this.currnt_order_total_weight = total_weight;
+      this.product_cost = total_cost;
     });
 
     console.log(this.currnt_order_total_weight);
@@ -256,7 +276,7 @@ export class MultiOrderPage {
   calculateBagsToQuantity() {
     this.product_cost = 0;
     this.filterOrderBags();
-    this.product_cost = (this.domestic_quote_of_the_day * this.currnt_order_total_weight)
+    // this.product_cost = (this.domestic_quote_of_the_day * this.currnt_order_total_weight)
     console.log(this.product_cost);
   }
 
