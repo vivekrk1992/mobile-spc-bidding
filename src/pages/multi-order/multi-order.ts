@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, App, ToastController, LoadingController, AlertController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, App, ToastController, LoadingController, AlertController, Platform } from 'ionic-angular';
 import { HttpServerServiceProvider } from '../../providers/http-server-service/http-server-service';
 import { Storage } from '@ionic/storage';
+import { Push, PushObject, PushOptions } from '@ionic-native/push';
 
 
 @IonicPage()
@@ -24,9 +25,71 @@ export class MultiOrderPage {
   product_cost: any = null;
   company_name: any = null;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private httpServerServiceProvider: HttpServerServiceProvider, private app: App, private storage: Storage, private toastCtrl: ToastController, private loadingCtrl: LoadingController, private alertCtrl: AlertController) {
+  constructor(public navCtrl: NavController, public navParams: NavParams,
+    private httpServerServiceProvider: HttpServerServiceProvider,
+    private app: App, private storage: Storage, private toastCtrl: ToastController,
+    private loadingCtrl: LoadingController, private alertCtrl: AlertController,
+    private push: Push, private platform: Platform
+  ) {
     // this.domestic_data['user_payment_balance'] = 0;
+
+
+    this.push.hasPermission()
+      .then((res: any) => {
+
+        if (res.isEnabled) {
+          alert('We have permission to send push notifications');
+          console.log('We have permission to send push notifications');
+          this.platform.ready().then(() => {
+            this.initPush()
+          });
+
+        } else {
+          alert('We do not have permission to send push notifications');
+          console.log('We do not have permission to send push notifications');
+        }
+
+      });
   }
+
+  initPush() {
+    alert('with in init push')
+    const options: PushOptions = {
+      // android: {},
+      android: { senderID: '886007059031', forceShow: true, sound: true, vibrate: true, clearBadge: true },
+      ios: {
+        alert: 'true',
+        badge: true,
+        sound: 'false'
+      },
+      windows: {},
+    };
+
+    const pushObject: PushObject = this.push.init(options);
+
+    pushObject.on('notification').subscribe((data: any) => {
+      alert('geted notification');
+      if (data.additionalData.foreground) {
+        let youralert = this.alertCtrl.create({
+          title: 'New Push notification',
+          message: data.message
+        });
+        youralert.present();
+      }
+    });
+
+    pushObject.on('registration').subscribe((registration: any) => {
+      //do whatever you want with the registration ID
+      alert(registration.registrationId)
+      // alert(JSON.parse(registration));
+      // alert(JSON.stringify(registration));
+    });
+
+    pushObject.on('error').subscribe(error => alert('Error with Push plugin' + error));
+
+  }
+
+
 
   ionViewWillEnter() {
     this.user_balance = null;
@@ -62,7 +125,7 @@ export class MultiOrderPage {
         this.maximum_weight_allowance = 0;
       }
       if (event != null) { event.complete() }
-      
+
     }, (error) => {
       if (event != null) { event.complete() }
       this.createOrderForm();
@@ -139,9 +202,13 @@ export class MultiOrderPage {
   }
 
   getBackgroundColor(amount) {
-    if (amount <= 0) {
+    if (amount < 0) {
       return 'red';
-    } else {
+    }
+    else if (amount == 0 || amount == null) {
+      return 'black';
+    }
+    else {
       return 'green';
     }
   }

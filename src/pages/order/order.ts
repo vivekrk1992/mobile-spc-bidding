@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, ToastController, App } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ToastController, App, AlertController } from 'ionic-angular';
 import { HttpServerServiceProvider } from '../../providers/http-server-service/http-server-service';
 import { Storage } from '@ionic/storage';
 
@@ -10,6 +10,7 @@ import { Storage } from '@ionic/storage';
   templateUrl: 'order.html',
 })
 export class OrderPage {
+  sender_id = '886007059031'
   bag_count = 0;
   brands: any;
   selected_bag_type: any;
@@ -28,8 +29,13 @@ export class OrderPage {
   amount_balance: number = 0;
   buyer_limit: {} = {};
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private httpServerServiceProvider: HttpServerServiceProvider, private toastCtrl: ToastController, private app: App, private storage: Storage) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, private httpServerServiceProvider: HttpServerServiceProvider,
+    private toastCtrl: ToastController, private app: App, private storage: Storage,
+    private alertCtrl: AlertController
+  ) {
+    alert('with in constructor');
   }
+  
 
   doRefresh(event = null) {
     this.httpServerServiceProvider.getTodayDomesticQuote().subscribe((data) => {
@@ -105,7 +111,7 @@ export class OrderPage {
           place_order['bag_count'] = count_50kg;
           place_order['date'] = this.today;
         } else {
-          this.displayToast('Not more than ' + total_limit['50kg'] +' Bags!');
+          this.displayToast('Not more than ' + total_limit['50kg'] + ' Bags!');
           console.log('error');
         }
       } else {
@@ -121,7 +127,7 @@ export class OrderPage {
           place_order['bag_count'] = count_25kg;
           place_order['date'] = this.today;
         } else {
-          this.displayToast('Not more than '+ total_limit['25kg'] +' Bags!');
+          this.displayToast('Not more than ' + total_limit['25kg'] + ' Bags!');
           console.log('error');
         }
       } else {
@@ -153,8 +159,8 @@ export class OrderPage {
   }
 
   onInputChecked() {
-    this.bag_count_25kg = null; 
-    this.bag_count_50kg = null; 
+    this.bag_count_25kg = null;
+    this.bag_count_50kg = null;
   }
 
   logout() {
@@ -173,12 +179,12 @@ export class OrderPage {
     let kg50: any;
     let kg25: any;
     balance = (this.amount_balance / this.domestic_quote_of_the_day);
-    total_limit = (this.domestic_buyer_credit_limit_kgs + parseInt(balance)) - this.domestic_quotes.quantity_in_kg; 
+    total_limit = (this.domestic_buyer_credit_limit_kgs + parseInt(balance)) - this.domestic_quotes.quantity_in_kg;
     kg50 = (total_limit / 50);
     kg25 = (total_limit / 25);
     this.buyer_limit['50kg'] = parseInt(kg50)
     this.buyer_limit['25kg'] = parseInt(kg25)
-    
+
     // if (this.amount_balance == 0) {
     //   this.buyer_limit['50kg'] = 10 - this.domestic_quotes.bag_count
     //   this.buyer_limit['25kg'] = 20 - this.domestic_quotes.bag_count

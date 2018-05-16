@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "886007059031",
+    "firebase_url": "https://spc-test-project-c86da.firebaseio.com",
+    "project_id": "spc-test-project-c86da",
+    "storage_bucket": "spc-test-project-c86da.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:886007059031:android:42e01c97b4e462c4",
+        "android_client_info": {
+          "package_name": "com.spc.test"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "886007059031-dn7dmaihho7fq2pk2en54feaahprpaq7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDcrl4JArZGspbu2gbKS6jynBoUUzrx9ZQ"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

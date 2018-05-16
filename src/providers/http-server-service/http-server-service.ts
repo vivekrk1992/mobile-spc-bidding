@@ -204,4 +204,8 @@ export class HttpServerServiceProvider {
     return this.http.post(this.global.base_url + 'main/serve/transactions/for/domestic/buyer/', data, { headers: this.headers })
       .map((res) => res.json());
   }
+
+  saveFcmDeviceToken(data) {
+    return this.http.post(this.global.base_url + 'main/save/fcm/device/token/', data);
+  }
 }

@@ -6,8 +6,6 @@ import { OrderTabsPage } from '../order-tabs/order-tabs';
 import { Storage } from '@ionic/storage';
 import { HttpServerServiceProvider } from '../../providers/http-server-service/http-server-service';
 import { PhonegapLocalNotification } from '@ionic-native/phonegap-local-notification';
-// import { DocumentViewer, DocumentViewerOptions } from '@ionic-native/document-viewer';
-import { AppVersion } from '@ionic-native/app-version';
 
 @IonicPage()
 @Component({
@@ -18,16 +16,11 @@ export class LoginPage {
   login_form: FormGroup;
   terms_conditions: any;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private formBuilder: FormBuilder, private storage: Storage, private httpServerServiceProvider: HttpServerServiceProvider, private localNotification: PhonegapLocalNotification, private platform: Platform, private appVersion: AppVersion) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, private formBuilder: FormBuilder, private storage: Storage, private httpServerServiceProvider: HttpServerServiceProvider, private localNotification: PhonegapLocalNotification, private platform: Platform) {
     this.login_form = this.formBuilder.group({
       user_name: [''],
       password: [''],
     });
-
-    this.appVersion.getAppName();
-    this.appVersion.getPackageName();
-    this.appVersion.getVersionCode();
-    this.appVersion.getVersionNumber();
 
     storage.get('token').then((token) => {
       if (token != null) {
@@ -36,20 +29,20 @@ export class LoginPage {
       }
     });
 
-    this.localNotification.requestPermission().then(
-      (permission) => {
-        if (permission === 'granted') {
+    // this.localNotification.requestPermission().then(
+    //   (permission) => {
+    //     if (permission === 'granted') {
 
-          // Create the notification
-          this.localNotification.create('My Title', {
-            tag: 'message1',
-            body: 'My body',
-            icon: 'assets/icon/favicon.ico'
-          });
+    //       // Create the notification
+    //       this.localNotification.create('My Title', {
+    //         tag: 'message1',
+    //         body: 'My body',
+    //         icon: 'assets/icon/favicon.ico'
+    //       });
 
-        }
-      }
-    );
+    //     }
+    //   }
+    // );
 
   }
 

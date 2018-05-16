@@ -46,20 +46,20 @@ export class HomePage implements OnInit{
     //   this.stock_details = data;
     // });
 
-    this.localNotification.requestPermission().then(
-      (permission) => {
-        console.log(permission);
-        if (permission === 'denied') {
-          // Create the notification
-          this.localNotification.create('My Title', {
-            tag: 'home',
-            body: 'My body',
-            icon: 'assets/icon/favicon.ico'
-          });
+    // this.localNotification.requestPermission().then(
+    //   (permission) => {
+    //     console.log(permission);
+    //     if (permission === 'denied') {
+    //       // Create the notification
+    //       this.localNotification.create('My Title', {
+    //         tag: 'home',
+    //         body: 'My body',
+    //         icon: 'assets/icon/favicon.ico'
+    //       });
 
-        }
-      }
-    );
+    //     }
+    //   }
+    // );
 
     this.storage.get('user').then((user_data) => {
       this.user = user_data;
