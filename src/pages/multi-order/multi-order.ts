@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, App, ToastController, LoadingController, AlertController } from 'ionic-angular';
 import { HttpServerServiceProvider } from '../../providers/http-server-service/http-server-service';
 import { Storage } from '@ionic/storage';
+import { GlobalProvider } from '../../providers/global/global'
 
 
 @IonicPage()
@@ -26,81 +27,82 @@ export class MultiOrderPage {
   // current_stock: any;
   today_orders: any = [];
   show_today_orders: boolean = false;
+  app_version: any = {};
 
   order_form = [
-  {
-    copra_brand: { 'id': 1, 'name': 'SHUBH', 'notes': '22-25 Pc/Kg' },
-    bag_type: { 'id': 1, 'name': '50 kg Bori' },
-    bag_count: null,
-    rate: null,
-    buyer_id: null,
-    quantity_in_kgs: 50,
-    total_quantity: 0,
-    cost: null,
-    disabled: false
-  },
-  {
-    copra_brand: { 'id': 1, 'name': 'SHUBH', 'notes': '22-25 Pc/Kg' },
-    bag_type: { 'id': 2, 'name': '25 kg Katta' },
-    bag_count: null,
-    rate: null,
-    buyer_id: null,
-    quantity_in_kgs: 25,
-    total_quantity: 0,
-    cost: null,
-    disabled: false
-  },
-  {
-    copra_brand: { 'id': 2, 'name': 'SPC', 'notes': '18-20 Pc/Kg' },
-    bag_type: { 'id': 1, 'name': '50 kg Bori' },
-    bag_count: null,
-    rate: null,
-    buyer_id: null,
-    quantity_in_kgs: 50,
-    total_quantity: 0,
-    cost: null,
-    disabled: false
-  },
-  {
-    copra_brand: { 'id': 2, 'name': 'SPC', 'notes': '18-20 Pc/Kg' },
-    bag_type: { 'id': 2, 'name': '25 kg Katta' },
-    bag_count: null,
-    rate: null,
-    buyer_id: null,
-    quantity_in_kgs: 25,
-    total_quantity: 0,
-    cost: null,
-    disabled: false
-  },
-  {
-    copra_brand: { 'id': 3, 'name': 'LABH', 'notes': '14-16 Pc/Kg' },
-    bag_type: { 'id': 1, 'name': '50 kg Bori' },
-    bag_count: null,
-    rate: null,
-    buyer_id: null,
-    quantity_in_kgs: 50,
-    total_quantity: 0,
-    cost: null,
-    disabled: false
-  },
-  {
-    copra_brand: { 'id': 3, 'name': 'LABH', 'notes': '14-16 Pc/Kg' },
-    bag_type: { 'id': 2, 'name': '25 kg Katta' },
-    bag_count: null,
-    rate: null,
-    buyer_id: null,
-    quantity_in_kgs: 25,
-    total_quantity: 0,
-    cost: null,
-    disabled: false
-  }
-];
+    {
+      copra_brand: { 'id': 1, 'name': 'SHUBH', 'notes': '22-25 Pc/Kg' },
+      bag_type: { 'id': 1, 'name': '50 kg Bori' },
+      bag_count: null,
+      rate: null,
+      buyer_id: null,
+      quantity_in_kgs: 50,
+      total_quantity: 0,
+      cost: null,
+      disabled: false
+    },
+    {
+      copra_brand: { 'id': 1, 'name': 'SHUBH', 'notes': '22-25 Pc/Kg' },
+      bag_type: { 'id': 2, 'name': '25 kg Katta' },
+      bag_count: null,
+      rate: null,
+      buyer_id: null,
+      quantity_in_kgs: 25,
+      total_quantity: 0,
+      cost: null,
+      disabled: false
+    },
+    {
+      copra_brand: { 'id': 2, 'name': 'SPC', 'notes': '18-20 Pc/Kg' },
+      bag_type: { 'id': 1, 'name': '50 kg Bori' },
+      bag_count: null,
+      rate: null,
+      buyer_id: null,
+      quantity_in_kgs: 50,
+      total_quantity: 0,
+      cost: null,
+      disabled: false
+    },
+    {
+      copra_brand: { 'id': 2, 'name': 'SPC', 'notes': '18-20 Pc/Kg' },
+      bag_type: { 'id': 2, 'name': '25 kg Katta' },
+      bag_count: null,
+      rate: null,
+      buyer_id: null,
+      quantity_in_kgs: 25,
+      total_quantity: 0,
+      cost: null,
+      disabled: false
+    },
+    {
+      copra_brand: { 'id': 3, 'name': 'LABH', 'notes': '14-16 Pc/Kg' },
+      bag_type: { 'id': 1, 'name': '50 kg Bori' },
+      bag_count: null,
+      rate: null,
+      buyer_id: null,
+      quantity_in_kgs: 50,
+      total_quantity: 0,
+      cost: null,
+      disabled: false
+    },
+    {
+      copra_brand: { 'id': 3, 'name': 'LABH', 'notes': '14-16 Pc/Kg' },
+      bag_type: { 'id': 2, 'name': '25 kg Katta' },
+      bag_count: null,
+      rate: null,
+      buyer_id: null,
+      quantity_in_kgs: 25,
+      total_quantity: 0,
+      cost: null,
+      disabled: false
+    }
+  ];
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private httpServerServiceProvider: HttpServerServiceProvider, private app: App, private storage: Storage, private toastCtrl: ToastController, private loadingCtrl: LoadingController, private alertCtrl: AlertController) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, private httpServerServiceProvider: HttpServerServiceProvider, private app: App, private storage: Storage, private toastCtrl: ToastController, private loadingCtrl: LoadingController, private alertCtrl: AlertController, private global: GlobalProvider) {
     // this.domestic_data['user_payment_balance'] = 0;
 
   }
-  
+
   ionViewWillEnter() {
     this.user_balance = null;
     console.log('ionViewWillEnter MultiOrderPage');
@@ -112,8 +114,9 @@ export class MultiOrderPage {
       console.log(error);
     });
   }
-  
+
   doRefresh(event = null) {
+    this.getAppVersion();
     this.httpServerServiceProvider.getTodayDomesticQuote().subscribe((data) => {
       console.log(data);
       this.domestic_data = data;
@@ -144,7 +147,7 @@ export class MultiOrderPage {
         console.log(data);
         let quote_adjustment_rate = data;
         // get current status to enable/disable the form
-        this.httpServerServiceProvider.getCurrentStock({'ddp_id': 1}).subscribe((data) => {
+        this.httpServerServiceProvider.getCurrentStock({ 'ddp_id': 1 }).subscribe((data) => {
           let current_stock = data;
           this.order_form.forEach((obj) => {
             obj.buyer_id = this.user['id'];
@@ -302,7 +305,7 @@ export class MultiOrderPage {
   }
 
   disabledFormStyle(status) {
-    if(status) {
+    if (status) {
       return '100'
     }
     else {
@@ -324,4 +327,25 @@ export class MultiOrderPage {
     });
   }
 
+  getAppVersion() {
+    this.httpServerServiceProvider.getAppVersion().subscribe((data) => {
+      console.log(data);
+      // this.global.validateApp(data);
+      this.validateApp(data);
+    }, (error) => {
+      console.log(error);
+    })
+  }
+
+  validateApp(data) {
+    if (data['version'] != this.global.app_version) {
+      alert('Please update latest version of your app from play store');
+      if (data['relogin']) {
+        this.logout();   
+      }
+      window.open("https://play.google.com/store/apps/details?id=spc.exportcopra.buyer","_system");
+    } else {
+      console.log('app validate');
+    }
+  }
 }

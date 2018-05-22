@@ -13,7 +13,7 @@ import { GrievancePage } from './../pages/grievance/grievance';
 import { BuyerProfilePage } from './../pages/buyer-profile/buyer-profile';
 import { OrderPage } from './../pages/order/order';
 import { MultiOrderPage } from './../pages/multi-order/multi-order';
-import {SaleOrderDetailsPage} from "../pages/sale-order-details/sale-order-details";
+import { SaleOrderDetailsPage } from "../pages/sale-order-details/sale-order-details";
 
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
@@ -21,13 +21,13 @@ import { HttpServerServiceProvider } from '../providers/http-server-service/http
 import { IonicStorageModule } from '@ionic/storage';
 import { HttpModule } from '@angular/http';
 import { PhonegapLocalNotification } from '@ionic-native/phonegap-local-notification';
-import {PipesModule} from "../pipes/pipes.module";
+import { PipesModule } from "../pipes/pipes.module";
 import { GlobalProvider } from '../providers/global/global';
 import { Camera } from '@ionic-native/camera';
 import { FileOpener } from '@ionic-native/file-opener'
 import { File } from '@ionic-native/file'
-import { FileTransfer } from '@ionic-native/file-transfer'
-import { AppVersion } from '@ionic-native/app-version';
+import { FileTransfer } from '@ionic-native/file-transfer';
+import { FCM } from '@ionic-native/fcm';
   
 @NgModule({
   declarations: [
@@ -77,7 +77,7 @@ import { AppVersion } from '@ionic-native/app-version';
     FileOpener,
     File,
     FileTransfer,
-    AppVersion
+    FCM,
   ]
 })
 export class AppModule {}

@@ -39,6 +39,11 @@ export class HttpServerServiceProvider {
       .map(res => console.log(res));
   }
 
+  getAppVersion() {
+    return this.http.get(this.global.base_url + 'main/version/check/mobile/spc/buyer/', { headers: this.headers })
+      .map((res) => res.json());
+  }
+
   // signup
   signUp(value) {
     return this.http.post(this.global.base_url + 'main/signup/', value);
