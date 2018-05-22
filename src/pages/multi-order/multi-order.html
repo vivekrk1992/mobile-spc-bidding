@@ -37,6 +37,47 @@
     </ion-col>
   </ion-row>
   <hr>
+  <h6 text-center>Description</h6>
+  <ion-row>
+    <ion-col>
+      <span>EDIBLE DRY COCONUT PEELED & SHELLED</span>
+    </ion-col>
+    <ion-col col-3>
+      <span>HSN: 08011920</span>
+    </ion-col>
+    <ion-col col-2>
+      <span>GST: 0%</span>
+    </ion-col>
+  </ion-row>
+  <hr>
+  <span *ngIf="show_today_orders">
+    <h6 text-center>Today's Order(s)</h6>
+    <div style="max-height: 50px;overflow: auto;">
+      <ion-row>
+        <ion-col>
+          <span style="font-size: medium;font-weight: bold;font-style: italic;">Date</span>
+        </ion-col>
+        <ion-col>
+          <span style="font-size: medium;font-weight: bold;font-style: italic;">Status</span>
+        </ion-col>
+        <ion-col>
+          <span style="font-size: medium;font-weight: bold;font-style: italic;">Cost</span>
+        </ion-col>
+      </ion-row>
+      <ion-row *ngFor="let today_order of today_orders" (click)="onClickDetailOrder(today_order)">
+        <ion-col>
+          <span>{{today_order['sale_date'] | date: 'dd-MMM'}}</span>
+        </ion-col>
+        <ion-col>
+          <span style="text-transform: capitalize;">{{today_order['sale_status']['name'] | rmUnderScore}}</span>
+        </ion-col>
+        <ion-col>
+          <span>{{today_order['order_total_cost'] | number: '.2'}}</span>
+        </ion-col>
+      </ion-row>
+    </div>
+    <hr>
+  </span>
   <ion-row [ngStyle]="{'color': getBackgroundColor(user_balance)}">
     <ion-col *ngIf="user_balance >= 0">
       <span text-center style="font-weight: bold">Advance Amount: {{user_balance | number: '.2'}} ₹</span>
@@ -102,6 +143,13 @@
       </ion-col> -->
     </ion-row>
   </div>
+  <ion-row>
+    <ion-col col-2></ion-col>
+    <ion-col>
+      <span style="font-size: 13px;">*All rates are based upon gross weight (inclusive of weight of <em>Gunny</em> bag)</span>
+    </ion-col>
+    <ion-col col-2></ion-col>
+  </ion-row>
   <br>
   <ion-row radio-group [(ngModel)]="transport">
     <ion-col>

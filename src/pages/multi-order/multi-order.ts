@@ -24,6 +24,8 @@ export class MultiOrderPage {
   product_cost: any = null;
   company_name: any = null;
   // current_stock: any;
+  today_orders: any = [];
+  show_today_orders: boolean = false;
 
   order_form = [
   {
@@ -169,6 +171,16 @@ export class MultiOrderPage {
         }, (error) => {
           console.log(error);
         });
+        let buyer_dict = { 'buyer_id': this.user['id'] }
+        this.httpServerServiceProvider.getTodayOrderHistory(buyer_dict).subscribe((data) => {
+          console.log(data);
+          this.today_orders = data;
+          if (this.today_orders.length != 0) {
+            this.show_today_orders = true;
+          }
+        }, (error) => {
+          console.log(error);
+        });
       }, (error) => {
         console.log(error);
       })
@@ -296,6 +308,10 @@ export class MultiOrderPage {
     else {
       return '500'
     }
+  }
+
+  onClickDetailOrder(order_detail) {
+    this.navCtrl.push('OrderHistoryPage', order_detail);
   }
 
   logout() {

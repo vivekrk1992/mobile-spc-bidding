@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { IonicPageModule } from 'ionic-angular';
 import { MultiOrderPage } from './multi-order';
+import { PipesModule } from '../../pipes/pipes.module';
 
 @NgModule({
   declarations: [
@@ -8,6 +9,7 @@ import { MultiOrderPage } from './multi-order';
   ],
   imports: [
     IonicPageModule.forChild(MultiOrderPage),
+    PipesModule,
   ],
 })
 export class MultiOrderPageModule {}

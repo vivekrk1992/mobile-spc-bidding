@@ -1,0 +1,58 @@
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>
+      <span class="navbar-title">Order History</span>
+    </ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+<ion-row padding-top>
+  <ion-col>
+    <span class="header-text align-header">Date:</span>
+  </ion-col>
+  <ion-col>
+    <span class="align-value">{{ordered_history['sale_date'] | date: 'dd-MMM'}}</span>
+  </ion-col>
+</ion-row>
+<ion-row>
+  <ion-col>
+    <span class="header-text align-header">Particulars:</span>
+  </ion-col>
+  <ion-col class="align-value">
+    <ion-row *ngFor="let particular of ordered_history['particular_strings']">
+      <ion-col>
+        <span style="float: left;margin-left: -20px;">{{particular}}</span>
+      </ion-col>
+    </ion-row>
+  </ion-col>
+</ion-row>
+<ion-row>
+  <ion-col>
+    <span class="header-text align-header">Product Cost:</span>
+  </ion-col>
+  <ion-col>
+    <span class="align-value">{{ordered_history['order_total_cost'] | number : '.2'}}&nbsp;Rs.</span>
+  </ion-col>
+</ion-row>
+<ion-row>
+  <ion-col>
+    <span class="header-text align-header">Amount Paid:</span>
+  </ion-col>
+  <ion-col>
+    <span class="align-value">{{ordered_history['amount_received'] | number : '.2'}}&nbsp;Rs.</span>
+  </ion-col>
+</ion-row>
+<ion-row>
+  <ion-col>
+    <span class="header-text align-header">Amount to be paid:</span>
+  </ion-col>
+  <ion-col>
+    <span class="align-value">{{ordered_history['pending_amount'] | number : '.2'}}&nbsp;Rs.</span>
+  </ion-col>
+</ion-row>
+
+</ion-content>

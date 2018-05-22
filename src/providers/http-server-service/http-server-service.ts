@@ -211,17 +211,22 @@ export class HttpServerServiceProvider {
   }
 
   getCurrentStock(data) {
-    return this.http.post(this.global.base_url + 'main/serve/stock/inventory/now/', data, {headers: this.headers})
+    return this.http.post(this.global.base_url + 'main/serve/stock/inventory/now/', data, { headers: this.headers })
       .map((res) => res.json());
   }
 
   getGrievanceTypes() {
-    return this.http.get(this.global.base_url + 'main/serve/grievance/type/', {headers: this.headers})
+    return this.http.get(this.global.base_url + 'main/serve/grievance/type/', { headers: this.headers })
       .map((res) => res.json());
   }
 
   getQuoteAdjustmentFactor() {
     return this.http.get(this.global.base_url + 'main/serve/today/quote/adjustment/factor/', { headers: this.headers })
+      .map((res) => res.json());
+  }
+
+  getTodayOrderHistory(data) {
+    return this.http.post(this.global.base_url + 'main/serve/today/order/history/for/buyer/', data, { headers: this.headers })
       .map((res) => res.json());
   }
 }
