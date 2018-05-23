@@ -1,5 +1,4 @@
 import { GrievancePage } from './../grievance/grievance';
-import { PhonegapLocalNotification } from '@ionic-native/phonegap-local-notification';
 import { Component, OnInit } from '@angular/core';
 import {NavController, Toast, ToastController, Platform, AlertController, App} from 'ionic-angular';
 import { HttpServerServiceProvider } from '../../providers/http-server-service/http-server-service';
@@ -37,7 +36,7 @@ export class HomePage implements OnInit{
   user = {};
 
   constructor(public navCtrl: NavController, private httpServerServiceProvider: HttpServerServiceProvider, private storage: Storage,
-    private toastCtrl: ToastController, private platform: Platform, private localNotification: PhonegapLocalNotification,
+    private toastCtrl: ToastController, private platform: Platform,
     private alertCtrl: AlertController, private global: GlobalProvider, private app: App) {
     console.log(this.global.bag_quantity);
     this.delivery_date = this.dateIncrement(this.delivery_date, 2);
@@ -45,21 +44,6 @@ export class HomePage implements OnInit{
     // httpServerServiceProvider.getStockDetails().subscribe((data) => {
     //   this.stock_details = data;
     // });
-
-    this.localNotification.requestPermission().then(
-      (permission) => {
-        console.log(permission);
-        if (permission === 'denied') {
-          // Create the notification
-          this.localNotification.create('My Title', {
-            tag: 'home',
-            body: 'My body',
-            icon: 'assets/icon/favicon.ico'
-          });
-
-        }
-      }
-    );
 
     this.storage.get('user').then((user_data) => {
       this.user = user_data;

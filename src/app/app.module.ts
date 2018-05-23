@@ -20,7 +20,6 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import { HttpServerServiceProvider } from '../providers/http-server-service/http-server-service';
 import { IonicStorageModule } from '@ionic/storage';
 import { HttpModule } from '@angular/http';
-import { PhonegapLocalNotification } from '@ionic-native/phonegap-local-notification';
 import { PipesModule } from "../pipes/pipes.module";
 import { GlobalProvider } from '../providers/global/global';
 import { Camera } from '@ionic-native/camera';
@@ -71,7 +70,6 @@ import { FCM } from '@ionic-native/fcm';
     SplashScreen,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     HttpServerServiceProvider,
-    PhonegapLocalNotification,
     GlobalProvider,
     Camera,
     FileOpener,

@@ -3,6 +3,7 @@ import { IonicPage, NavController, NavParams, App, ToastController, LoadingContr
 import { HttpServerServiceProvider } from '../../providers/http-server-service/http-server-service';
 import { Storage } from '@ionic/storage';
 import { GlobalProvider } from '../../providers/global/global'
+import { FCM } from '@ionic-native/fcm';
 
 
 @IonicPage()
@@ -98,7 +99,9 @@ export class MultiOrderPage {
     }
   ];
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private httpServerServiceProvider: HttpServerServiceProvider, private app: App, private storage: Storage, private toastCtrl: ToastController, private loadingCtrl: LoadingController, private alertCtrl: AlertController, private global: GlobalProvider) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, private httpServerServiceProvider: HttpServerServiceProvider,
+    private app: App, private storage: Storage, private toastCtrl: ToastController, private loadingCtrl: LoadingController,
+     private alertCtrl: AlertController, private global: GlobalProvider, private fcm: FCM) {
     // this.domestic_data['user_payment_balance'] = 0;
 
   }
@@ -188,6 +191,7 @@ export class MultiOrderPage {
         console.log(error);
       })
     });
+    this.saveFcmDeviceTokenToServer()
   }
 
   routePaymentDetails() {
@@ -347,5 +351,20 @@ export class MultiOrderPage {
     } else {
       console.log('app validate');
     }
+  }
+
+
+  saveFcmDeviceTokenToServer() {
+    this.fcm.getToken().then(token => {
+      let data = {'token': token};
+      this.httpServerServiceProvider.sendFcmDeviceToken(data).subscribe(data => {
+        alert('success');
+      }, (error) => {
+        alert(JSON.stringify(error));
+      }
+      );
+    }, (error) => {
+      alert(JSON.stringify(error))
+    });
   }
 }

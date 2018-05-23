@@ -3,8 +3,7 @@ import { Injectable } from '@angular/core';
 @Injectable()
 export class GlobalProvider {
   private _bag_quantity = 50;
-  // private app_version: string = '0.0.1';
-  private _app_version: string = '0.0.1';
+  private _app_version: string = '0.0.4';
   // private _base_url: string = 'http://api.exportcopra.com/';
   // private _base_url: string = 'http://127.0.0.1:8000/';
   private _base_url: string = 'http://192.168.0.102:8000/';

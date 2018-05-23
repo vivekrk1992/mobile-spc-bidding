@@ -44,6 +44,10 @@ export class HttpServerServiceProvider {
       .map((res) => res.json());
   }
 
+  sendFcmDeviceToken(data) {
+    return this.http.post(this.global.base_url + 'main/save/fcm/device/token/', data, { headers: this.headers });
+  }
+
   // signup
   signUp(value) {
     return this.http.post(this.global.base_url + 'main/signup/', value);

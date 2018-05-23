@@ -5,7 +5,6 @@ import { TabsPage } from '../tabs/tabs';
 import { OrderTabsPage } from '../order-tabs/order-tabs';
 import { Storage } from '@ionic/storage';
 import { HttpServerServiceProvider } from '../../providers/http-server-service/http-server-service';
-import { PhonegapLocalNotification } from '@ionic-native/phonegap-local-notification';
 // import { DocumentViewer, DocumentViewerOptions } from '@ionic-native/document-viewer';
 
 @IonicPage()
@@ -17,7 +16,7 @@ export class LoginPage {
   login_form: FormGroup;
   terms_conditions: any;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private formBuilder: FormBuilder, private storage: Storage, private httpServerServiceProvider: HttpServerServiceProvider, private localNotification: PhonegapLocalNotification, private platform: Platform) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, private formBuilder: FormBuilder, private storage: Storage, private httpServerServiceProvider: HttpServerServiceProvider, private platform: Platform) {
     this.login_form = this.formBuilder.group({
       user_name: [''],
       password: [''],
@@ -29,21 +28,6 @@ export class LoginPage {
         this.readyPlatform()
       }
     });
-
-    this.localNotification.requestPermission().then(
-      (permission) => {
-        if (permission === 'granted') {
-
-          // Create the notification
-          this.localNotification.create('My Title', {
-            tag: 'message1',
-            body: 'My body',
-            icon: 'assets/icon/favicon.ico'
-          });
-
-        }
-      }
-    );
 
   }
 
