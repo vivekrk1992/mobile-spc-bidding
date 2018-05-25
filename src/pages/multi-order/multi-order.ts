@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, App, ToastController, LoadingController, AlertController } from 'ionic-angular';
+import { Component, ChangeDetectorRef } from '@angular/core';
+import { IonicPage, NavController, NavParams, App, ToastController, LoadingController, AlertController, Events } from 'ionic-angular';
 import { HttpServerServiceProvider } from '../../providers/http-server-service/http-server-service';
 import { Storage } from '@ionic/storage';
 import { GlobalProvider } from '../../providers/global/global'
@@ -101,12 +101,20 @@ export class MultiOrderPage {
 
   constructor(public navCtrl: NavController, public navParams: NavParams, private httpServerServiceProvider: HttpServerServiceProvider,
     private app: App, private storage: Storage, private toastCtrl: ToastController, private loadingCtrl: LoadingController,
-     private alertCtrl: AlertController, private global: GlobalProvider, private fcm: FCM) {
+    private alertCtrl: AlertController, private global: GlobalProvider, private fcm: FCM, private events: Events,
+    private ref: ChangeDetectorRef
+  ) {
     // this.domestic_data['user_payment_balance'] = 0;
+    this.events.subscribe('today_quote', (data) => {
+      // alert('Multi order page');
 
+      // alert(JSON.stringify(data));
+      this.doRefresh();
+    })
   }
 
   ionViewWillEnter() {
+    this.saveFcmDeviceTokenToServer()
     this.user_balance = null;
     console.log('ionViewWillEnter MultiOrderPage');
     this.doRefresh();
@@ -119,6 +127,7 @@ export class MultiOrderPage {
   }
 
   doRefresh(event = null) {
+    // alert('do refresh called');
     this.getAppVersion();
     this.httpServerServiceProvider.getTodayDomesticQuote().subscribe((data) => {
       console.log(data);
@@ -174,6 +183,8 @@ export class MultiOrderPage {
           //     this.order_form[index]['disabled'] = true;
           //   }
           // }
+          this.ref.detectChanges();
+
         }, (error) => {
           console.log(error);
         });
@@ -191,7 +202,7 @@ export class MultiOrderPage {
         console.log(error);
       })
     });
-    this.saveFcmDeviceTokenToServer()
+
   }
 
   routePaymentDetails() {
@@ -345,9 +356,9 @@ export class MultiOrderPage {
     if (data['version'] != this.global.app_version) {
       alert('Please update latest version of your app from play store');
       if (data['relogin']) {
-        this.logout();   
+        this.logout();
       }
-      window.open("https://play.google.com/store/apps/details?id=spc.exportcopra.buyer","_system");
+      window.open("https://play.google.com/store/apps/details?id=spc.exportcopra.buyer", "_system");
     } else {
       console.log('app validate');
     }
@@ -356,7 +367,7 @@ export class MultiOrderPage {
 
   saveFcmDeviceTokenToServer() {
     this.fcm.getToken().then(token => {
-      let data = {'token': token};
+      let data = { 'token': token };
       this.httpServerServiceProvider.sendFcmDeviceToken(data).subscribe(data => {
         alert('success');
       }, (error) => {

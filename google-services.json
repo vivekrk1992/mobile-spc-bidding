@@ -1,27 +1,31 @@
 {
   "project_info": {
-    "project_number": "869460264174",
-    "firebase_url": "https://spc-buyer.firebaseio.com",
-    "project_id": "spc-buyer",
-    "storage_bucket": "spc-buyer.appspot.com"
+    "project_number": "886007059031",
+    "firebase_url": "https://spc-test-project-c86da.firebaseio.com",
+    "project_id": "spc-test-project-c86da",
+    "storage_bucket": "spc-test-project-c86da.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:869460264174:android:199c43ada7152f7c",
+        "mobilesdk_app_id": "1:886007059031:android:42e01c97b4e462c4",
         "android_client_info": {
-          "package_name": "spc.exportcopra.buyer"
+          "package_name": "com.spc.test"
         }
       },
       "oauth_client": [
         {
-          "client_id": "869460264174-bp00s5og5u11bdp11m9jk1sd70jbtnlb.apps.googleusercontent.com",
+          "client_id": "886007059031-dn7dmaihho7fq2pk2en54feaahprpaq7.apps.googleusercontent.com",
+          "client_type": 3
+        },
+        {
+          "client_id": "886007059031-dn7dmaihho7fq2pk2en54feaahprpaq7.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDYizyxg5AIo7zKbLJzBnSfIlnwNmZ_xUg"
+          "current_key": "AIzaSyDcrl4JArZGspbu2gbKS6jynBoUUzrx9ZQ"
         }
       ],
       "services": {
