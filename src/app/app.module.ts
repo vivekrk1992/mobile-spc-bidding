@@ -28,6 +28,8 @@ import { FileOpener } from '@ionic-native/file-opener'
 import { File } from '@ionic-native/file'
 import { FileTransfer } from '@ionic-native/file-transfer'
 import { AppVersion } from '@ionic-native/app-version';
+import { TimerComponent } from '../components/timer/timer';
+import { ConfirmOrderPage } from '../pages/confirm-order/confirm-order';
   
 @NgModule({
   declarations: [
@@ -42,7 +44,9 @@ import { AppVersion } from '@ionic-native/app-version';
     BuyerProfilePage,
     OrderTabsPage,
     MultiOrderPage,
-    InvoiceDashboardPage
+    InvoiceDashboardPage,
+    TimerComponent,
+    ConfirmOrderPage
   ],
   imports: [
     BrowserModule,
@@ -64,7 +68,8 @@ import { AppVersion } from '@ionic-native/app-version';
     BuyerProfilePage,
     OrderTabsPage,
     MultiOrderPage,
-    InvoiceDashboardPage
+    InvoiceDashboardPage,
+    ConfirmOrderPage
   ],
   providers: [
     StatusBar,

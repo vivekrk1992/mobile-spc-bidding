@@ -1,0 +1,18 @@
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>
+      <span class="navbar-title">Order Confirmation</span>
+    </ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+  <timer #timer timeInSeconds="600"></timer>
+
+  <button ion-button round color="secondary" (click)="onConfirm()">Confirm</button>
+  <button ion-button round color="danger" (click)="onDisapprove()">Disapprove</button>
+
+</ion-content>

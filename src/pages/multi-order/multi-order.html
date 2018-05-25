@@ -14,7 +14,7 @@
   
   <div class="dashboard-logout-row">
     <span style="float:right; padding: 0px 30px 0px 0px; color:rgb(235, 52, 52); font-size: medium" (click)="logout()">LogOut</span>
-    <span style="float:right; padding: 0px 0px 0px 0px; color:rgb(17, 149, 255); font-family: cursive; font-size: medium" (click)="logout()">{{company_name}} |&nbsp;&nbsp;</span>
+    <span style="float:right; padding: 0px 0px 0px 0px; color:rgb(17, 149, 255); font-family: cursive; font-size: medium" (click)="routeUserProfile()">{{company_name}} <ion-icon name="contact"></ion-icon>&nbsp;&nbsp;|&nbsp;&nbsp;</span>
   </div>
   <br>
   <br>
@@ -31,25 +31,31 @@
       </h1>
     </ion-col>
     <ion-col>
-      <h3 text-center padding-top (click)="routePaymentDetails()">Enter Remittance Details</h3>
+      <h3 text-center padding-top (click)="routePaymentDetails()">Enter Remittance</h3>
       <br>
-      <span style="color: darkslategrey;font-size: larger;" (click)="showBankDetails()">RTGS Bank Details</span>
+      <span style="color: darkslategrey; font-size: larger;" (click)="showBankDetails()">RTGS/UPA Details</span><br><br>
+      <span [ngStyle]="{'color': getBackgroundColor(user_balance)}" text-center style="font-weight: bold; font-size: larger;">Account Balance: {{user_balance | number: '.2'}} ₹</span>
     </ion-col>
   </ion-row>
   <hr>
-  <h6 text-center>Description</h6>
   <ion-row>
-    <ion-col>
-      <span>EDIBLE DRY COCONUT PEELED & SHELLED</span>
-    </ion-col>
-    <ion-col col-3>
-      <span>HSN: 08011920</span>
-    </ion-col>
-    <ion-col col-2>
+    <ion-col style="font-size: x-small;">
+      <span><em>EDIBLE DRY COCONUT PEELED & SHELLED,&nbsp;</em></span>
+      <span>HSN: 08011920,&nbsp;</span>
       <span>GST: 0%</span>
     </ion-col>
   </ion-row>
   <hr>
+  <!-- <ion-row [ngStyle]="{'color': getBackgroundColor(user_balance)}">
+    <ion-col *ngIf="user_balance >= 0">
+      <span text-center style="font-weight: bold">Advance Amount: {{user_balance | number: '.2'}} ₹</span>
+      <button ion-button round (click)="onClickPayNow()">Pay Now</button>
+    </ion-col>
+    <ion-col *ngIf="user_balance < 0">
+      <span text-center style="font-weight: bold; font-size: medium;">Payment Due: {{ - user_balance | number: '.2'}} ₹</span>
+      <button ion-button round (click)="onClickPayNow()">Pay Now</button>
+    </ion-col>
+  </ion-row> -->
   <span *ngIf="show_today_orders">
     <h6 text-center>Today's Order(s)</h6>
     <div style="max-height: 50px;overflow: auto;">
@@ -78,24 +84,11 @@
     </div>
     <hr>
   </span>
-  <ion-row [ngStyle]="{'color': getBackgroundColor(user_balance)}">
-    <ion-col *ngIf="user_balance >= 0">
-      <span text-center style="font-weight: bold">Advance Amount: {{user_balance | number: '.2'}} ₹</span>
-    </ion-col>
-    <ion-col *ngIf="user_balance < 0">
-      <span text-center style="font-weight: bold">Payment Due: {{ - user_balance | number: '.2'}} ₹</span>
-    </ion-col>
-  </ion-row>
-  <ion-row>
-    <ion-col style="font-weight: bold">
-      Maximum Weight Allowance: {{maximum_weight_allowance}} Kgs.
-    </ion-col>
-  </ion-row>
   <ion-row>
     <span *ngIf="weight_difference > 0" [ngStyle]="{'color': getBackgroundColor(weight_difference)}">
       <ion-col col-2></ion-col>
       <ion-col>
-        <h6 style="padding-left: 80px;">
+        <h6 style="padding-left: 110px; font-size: small;">
           You're eligible for
           <em>{{ weight_difference }} kgs </em>
           <hr>
@@ -106,13 +99,14 @@
     <span *ngIf="weight_difference <= 0" [ngStyle]="{'color': getBackgroundColor(weight_difference)}">
       <ion-col col-2></ion-col>
       <ion-col>
-        <h6>
+        <h6 style="font-size: small;">
           You have reached/crossed the maximum orderable weight limit by
           <em>{{ weight_difference }} kgs </em>.
         </h6>
       </ion-col>
     </span>
   </ion-row>
+  
   
   <ion-row>
     <ion-col col-4>

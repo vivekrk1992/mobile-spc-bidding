@@ -1,7 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { IonicPage, NavController, NavParams, App, ToastController, LoadingController, AlertController } from 'ionic-angular';
 import { HttpServerServiceProvider } from '../../providers/http-server-service/http-server-service';
 import { Storage } from '@ionic/storage';
+import { ConfirmOrderPage } from '../confirm-order/confirm-order';
 
 
 @IonicPage()
@@ -26,81 +27,83 @@ export class MultiOrderPage {
   // current_stock: any;
   today_orders: any = [];
   show_today_orders: boolean = false;
+  maxtime: any = 600
 
   order_form = [
-  {
-    copra_brand: { 'id': 1, 'name': 'SHUBH', 'notes': '22-25 Pc/Kg' },
-    bag_type: { 'id': 1, 'name': '50 kg Bori' },
-    bag_count: null,
-    rate: null,
-    buyer_id: null,
-    quantity_in_kgs: 50,
-    total_quantity: 0,
-    cost: null,
-    disabled: false
-  },
-  {
-    copra_brand: { 'id': 1, 'name': 'SHUBH', 'notes': '22-25 Pc/Kg' },
-    bag_type: { 'id': 2, 'name': '25 kg Katta' },
-    bag_count: null,
-    rate: null,
-    buyer_id: null,
-    quantity_in_kgs: 25,
-    total_quantity: 0,
-    cost: null,
-    disabled: false
-  },
-  {
-    copra_brand: { 'id': 2, 'name': 'SPC', 'notes': '18-20 Pc/Kg' },
-    bag_type: { 'id': 1, 'name': '50 kg Bori' },
-    bag_count: null,
-    rate: null,
-    buyer_id: null,
-    quantity_in_kgs: 50,
-    total_quantity: 0,
-    cost: null,
-    disabled: false
-  },
-  {
-    copra_brand: { 'id': 2, 'name': 'SPC', 'notes': '18-20 Pc/Kg' },
-    bag_type: { 'id': 2, 'name': '25 kg Katta' },
-    bag_count: null,
-    rate: null,
-    buyer_id: null,
-    quantity_in_kgs: 25,
-    total_quantity: 0,
-    cost: null,
-    disabled: false
-  },
-  {
-    copra_brand: { 'id': 3, 'name': 'LABH', 'notes': '14-16 Pc/Kg' },
-    bag_type: { 'id': 1, 'name': '50 kg Bori' },
-    bag_count: null,
-    rate: null,
-    buyer_id: null,
-    quantity_in_kgs: 50,
-    total_quantity: 0,
-    cost: null,
-    disabled: false
-  },
-  {
-    copra_brand: { 'id': 3, 'name': 'LABH', 'notes': '14-16 Pc/Kg' },
-    bag_type: { 'id': 2, 'name': '25 kg Katta' },
-    bag_count: null,
-    rate: null,
-    buyer_id: null,
-    quantity_in_kgs: 25,
-    total_quantity: 0,
-    cost: null,
-    disabled: false
-  }
-];
+    {
+      copra_brand: { 'id': 1, 'name': 'SHUBH', 'notes': '22-25 Pc/Kg' },
+      bag_type: { 'id': 1, 'name': '50 kg Bori' },
+      bag_count: null,
+      rate: null,
+      buyer_id: null,
+      quantity_in_kgs: 50,
+      total_quantity: 0,
+      cost: null,
+      disabled: false
+    },
+    {
+      copra_brand: { 'id': 1, 'name': 'SHUBH', 'notes': '22-25 Pc/Kg' },
+      bag_type: { 'id': 2, 'name': '25 kg Katta' },
+      bag_count: null,
+      rate: null,
+      buyer_id: null,
+      quantity_in_kgs: 25,
+      total_quantity: 0,
+      cost: null,
+      disabled: false
+    },
+    {
+      copra_brand: { 'id': 2, 'name': 'SPC', 'notes': '18-20 Pc/Kg' },
+      bag_type: { 'id': 1, 'name': '50 kg Bori' },
+      bag_count: null,
+      rate: null,
+      buyer_id: null,
+      quantity_in_kgs: 50,
+      total_quantity: 0,
+      cost: null,
+      disabled: false
+    },
+    {
+      copra_brand: { 'id': 2, 'name': 'SPC', 'notes': '18-20 Pc/Kg' },
+      bag_type: { 'id': 2, 'name': '25 kg Katta' },
+      bag_count: null,
+      rate: null,
+      buyer_id: null,
+      quantity_in_kgs: 25,
+      total_quantity: 0,
+      cost: null,
+      disabled: false
+    },
+    {
+      copra_brand: { 'id': 3, 'name': 'LABH', 'notes': '14-16 Pc/Kg' },
+      bag_type: { 'id': 1, 'name': '50 kg Bori' },
+      bag_count: null,
+      rate: null,
+      buyer_id: null,
+      quantity_in_kgs: 50,
+      total_quantity: 0,
+      cost: null,
+      disabled: false
+    },
+    {
+      copra_brand: { 'id': 3, 'name': 'LABH', 'notes': '14-16 Pc/Kg' },
+      bag_type: { 'id': 2, 'name': '25 kg Katta' },
+      bag_count: null,
+      rate: null,
+      buyer_id: null,
+      quantity_in_kgs: 25,
+      total_quantity: 0,
+      cost: null,
+      disabled: false
+    }
+  ];
 
   constructor(public navCtrl: NavController, public navParams: NavParams, private httpServerServiceProvider: HttpServerServiceProvider, private app: App, private storage: Storage, private toastCtrl: ToastController, private loadingCtrl: LoadingController, private alertCtrl: AlertController) {
     // this.domestic_data['user_payment_balance'] = 0;
+    // this.StartTimer()
 
   }
-  
+
   ionViewWillEnter() {
     this.user_balance = null;
     console.log('ionViewWillEnter MultiOrderPage');
@@ -112,7 +115,7 @@ export class MultiOrderPage {
       console.log(error);
     });
   }
-  
+
   doRefresh(event = null) {
     this.httpServerServiceProvider.getTodayDomesticQuote().subscribe((data) => {
       console.log(data);
@@ -144,7 +147,7 @@ export class MultiOrderPage {
         console.log(data);
         let quote_adjustment_rate = data;
         // get current status to enable/disable the form
-        this.httpServerServiceProvider.getCurrentStock({'ddp_id': 1}).subscribe((data) => {
+        this.httpServerServiceProvider.getCurrentStock({ 'ddp_id': 1 }).subscribe((data) => {
           let current_stock = data;
           this.order_form.forEach((obj) => {
             obj.buyer_id = this.user['id'];
@@ -192,10 +195,12 @@ export class MultiOrderPage {
   }
 
   getBackgroundColor(amount) {
-    if (amount <= 0) {
+    if (amount < 0) {
       return 'red';
-    } else {
+    } else if (amount > 0) {
       return 'green';
+    } else {
+      return 'black';
     }
   }
 
@@ -253,7 +258,7 @@ export class MultiOrderPage {
         });
 
         loading.present();
-
+        // this.navCtrl.push(ConfirmOrderPage, sale_dict);
         this.httpServerServiceProvider.registerDirectOrderToSale(sale_dict).subscribe(data => {
           console.log(data);
           this.displayToast('Order Placed!');
@@ -270,6 +275,7 @@ export class MultiOrderPage {
           this.displayToast(error);
           loading.dismiss();
         });
+        // loading.dismiss();
       } else {
         alert('Form shoud not be empty!');
       }
@@ -295,14 +301,21 @@ export class MultiOrderPage {
   showBankDetails() {
     let alert = this.alertCtrl.create({
       title: 'Bank Details',
-      subTitle: `<p>Shree Parshwanath Corporation</p><p> A/C NO : 065405001702 </p><p> ICICI BANK CURRENT ACCOUNT </p><p> IFSC: ICIC0000654 </p><p> BRANCH: PALI</p>`,
+      subTitle: `<p><strong>RTGS Details:</strong></p>
+      <p>Shree Parshwanath Corporation</p>
+      <p> A/C NO : 065405001702 </p>
+      <p> ICICI BANK CURRENT ACCOUNT </p>
+      <p> IFSC: ICIC0000654 </p>
+      <p> BRANCH: PALI</p>
+      <br><p><strong>UPI Details:</strong></p>
+      <p>UPI ID: spcshubh@icici</p>`,
       buttons: ['OK']
     });
     alert.present();
   }
 
   disabledFormStyle(status) {
-    if(status) {
+    if (status) {
       return '100'
     }
     else {
@@ -312,6 +325,38 @@ export class MultiOrderPage {
 
   onClickDetailOrder(order_detail) {
     this.navCtrl.push('OrderHistoryPage', order_detail);
+  }
+
+  onClickPayNow() {
+    console.log('Button Pay now pressed!');
+  }
+
+  routeUserProfile() {
+    let buyer_profile_dict = {};
+    buyer_profile_dict['user_details'] = this.domestic_data
+    buyer_profile_dict['user_details']['weight_allowance'] = this.maximum_weight_allowance
+    buyer_profile_dict['user_details']['payment_background_color'] = this.getBackgroundColor(this.user_balance)
+    this.navCtrl.push('UserProfilePage', buyer_profile_dict);
+  }
+
+
+  StartTimer() {
+    let timer = setTimeout(x => {
+      if (this.maxtime <= 0) { }
+      this.maxtime -= 1;
+
+      if (this.maxtime > 0) {
+        this.StartTimer();
+      }
+
+      else {
+        console.log('QWERT')
+      }
+
+    }, 1000);
+
+    console.log(timer);
+
   }
 
   logout() {
