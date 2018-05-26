@@ -1,0 +1,45 @@
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>
+      <span class="navbar-title">User Profile</span>
+      </ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+  <ion-row padding-top>
+    <ion-col>
+      <span class="header-text align-header">Company Name:</span>
+    </ion-col>
+    <ion-col>
+      <span class="align-value">{{buyer_data['company_name']}}</span>
+    </ion-col>
+  </ion-row>
+  <ion-row>
+    <ion-col>
+      <span class="header-text align-header">Star Limit:</span>
+    </ion-col>
+    <ion-col>
+      <span class="align-value" style="text-transform: capitalize;">{{buyer_data['star_limit']}}</span>
+    </ion-col>
+  </ion-row>
+  <ion-row>
+    <ion-col>
+      <span class="header-text align-header">Account Balance:</span>
+    </ion-col>
+    <ion-col>
+      <span class="align-value" [ngStyle]="{'color': buyer_data['payment_background_color']}">{{buyer_data['user_payment_balance']}} ₹</span>
+    </ion-col>
+  </ion-row>
+  <ion-row>
+    <ion-col>
+      <span class="header-text align-header">Weight Allowance:</span>
+    </ion-col>
+    <ion-col>
+      <span class="align-value">{{buyer_data['weight_allowance']}} Kgs</span>
+    </ion-col>
+  </ion-row>
+</ion-content>

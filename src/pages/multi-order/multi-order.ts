@@ -104,11 +104,7 @@ export class MultiOrderPage {
     private alertCtrl: AlertController, private global: GlobalProvider, private fcm: FCM, private events: Events,
     private ref: ChangeDetectorRef
   ) {
-    // this.domestic_data['user_payment_balance'] = 0;
     this.events.subscribe('today_quote', (data) => {
-      // alert('Multi order page');
-
-      // alert(JSON.stringify(data));
       this.doRefresh();
     })
   }
@@ -127,7 +123,6 @@ export class MultiOrderPage {
   }
 
   doRefresh(event = null) {
-    // alert('do refresh called');
     this.getAppVersion();
     this.httpServerServiceProvider.getTodayDomesticQuote().subscribe((data) => {
       console.log(data);
@@ -210,10 +205,12 @@ export class MultiOrderPage {
   }
 
   getBackgroundColor(amount) {
-    if (amount <= 0) {
+    if (amount < 0) {
       return 'red';
-    } else {
+    } else if (amount > 0) {
       return 'green';
+    } else {
+      return 'black';
     }
   }
 
@@ -271,7 +268,7 @@ export class MultiOrderPage {
         });
 
         loading.present();
-
+        // this.navCtrl.push(ConfirmOrderPage, sale_dict);
         this.httpServerServiceProvider.registerDirectOrderToSale(sale_dict).subscribe(data => {
           console.log(data);
           this.displayToast('Order Placed!');
@@ -288,6 +285,7 @@ export class MultiOrderPage {
           this.displayToast(error);
           loading.dismiss();
         });
+        // loading.dismiss();
       } else {
         alert('Form shoud not be empty!');
       }
@@ -313,7 +311,14 @@ export class MultiOrderPage {
   showBankDetails() {
     let alert = this.alertCtrl.create({
       title: 'Bank Details',
-      subTitle: `<p>Shree Parshwanath Corporation</p><p> A/C NO : 065405001702 </p><p> ICICI BANK CURRENT ACCOUNT </p><p> IFSC: ICIC0000654 </p><p> BRANCH: PALI</p>`,
+      subTitle: `<p><strong>RTGS Details:</strong></p>
+      <p>Shree Parshwanath Corporation</p>
+      <p> A/C NO : 065405001702 </p>
+      <p> ICICI BANK CURRENT ACCOUNT </p>
+      <p> IFSC: ICIC0000654 </p>
+      <p> BRANCH: PALI</p>
+      <br><p><strong>UPI Details:</strong></p>
+      <p>UPI ID: spcshubh@icici</p>`,
       buttons: ['OK']
     });
     alert.present();
@@ -330,6 +335,18 @@ export class MultiOrderPage {
 
   onClickDetailOrder(order_detail) {
     this.navCtrl.push('OrderHistoryPage', order_detail);
+  }
+
+  onClickPayNow() {
+    console.log('Button Pay now pressed!');
+  }
+
+  routeUserProfile() {
+    let buyer_profile_dict = {};
+    buyer_profile_dict['user_details'] = this.domestic_data
+    buyer_profile_dict['user_details']['weight_allowance'] = this.maximum_weight_allowance
+    buyer_profile_dict['user_details']['payment_background_color'] = this.getBackgroundColor(this.user_balance)
+    this.navCtrl.push('UserProfilePage', buyer_profile_dict);
   }
 
   logout() {
@@ -369,13 +386,10 @@ export class MultiOrderPage {
     this.fcm.getToken().then(token => {
       let data = { 'token': token };
       this.httpServerServiceProvider.sendFcmDeviceToken(data).subscribe(data => {
-        alert('success');
       }, (error) => {
-        alert(JSON.stringify(error));
       }
       );
     }, (error) => {
-      alert(JSON.stringify(error))
     });
   }
 }

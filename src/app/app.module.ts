@@ -27,7 +27,9 @@ import { FileOpener } from '@ionic-native/file-opener'
 import { File } from '@ionic-native/file'
 import { FileTransfer } from '@ionic-native/file-transfer';
 import { FCM } from '@ionic-native/fcm';
-  
+import { TimerComponent } from '../components/timer/timer';
+import { ConfirmOrderPage } from '../pages/confirm-order/confirm-order';
+
 @NgModule({
   declarations: [
     MyApp,
@@ -41,7 +43,9 @@ import { FCM } from '@ionic-native/fcm';
     BuyerProfilePage,
     OrderTabsPage,
     MultiOrderPage,
-    InvoiceDashboardPage
+    InvoiceDashboardPage,
+    TimerComponent,
+    ConfirmOrderPage
   ],
   imports: [
     BrowserModule,
@@ -63,7 +67,8 @@ import { FCM } from '@ionic-native/fcm';
     BuyerProfilePage,
     OrderTabsPage,
     MultiOrderPage,
-    InvoiceDashboardPage
+    InvoiceDashboardPage,
+    ConfirmOrderPage
   ],
   providers: [
     StatusBar,
