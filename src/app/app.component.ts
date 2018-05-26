@@ -24,6 +24,8 @@ export class MyApp {
           // alert('data in foreground');
           this.events.publish('today_quote', data)
         }
+      }, (error) => {
+        console.log('error');
       });
     });
   }

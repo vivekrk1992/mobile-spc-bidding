@@ -1,10 +1,11 @@
-import { Component, ChangeDetectorRef } from '@angular/core';
+import { Component, ChangeDetectorRef, ViewChild } from '@angular/core';
 import { IonicPage, NavController, NavParams, App, ToastController, LoadingController, AlertController, Events } from 'ionic-angular';
 import { HttpServerServiceProvider } from '../../providers/http-server-service/http-server-service';
 import { Storage } from '@ionic/storage';
 import { GlobalProvider } from '../../providers/global/global'
 import { FCM } from '@ionic-native/fcm';
-
+import { ConfirmOrderPage } from '../confirm-order/confirm-order';
+import { TimerComponent } from '../../components/timer/timer';
 
 @IonicPage()
 @Component({
@@ -12,6 +13,8 @@ import { FCM } from '@ionic-native/fcm';
   templateUrl: 'multi-order.html',
 })
 export class MultiOrderPage {
+  @ViewChild(TimerComponent) timer: TimerComponent;
+  // @ViewChild(TimerComponent) timer: TimerComponent[];
   user: any;
   domestic_data: any;
   domestic_quote_of_the_day: any = null;
@@ -104,16 +107,28 @@ export class MultiOrderPage {
     private alertCtrl: AlertController, private global: GlobalProvider, private fcm: FCM, private events: Events,
     private ref: ChangeDetectorRef
   ) {
+
+    
     this.events.subscribe('today_quote', (data) => {
       this.doRefresh();
     })
+
+    this.fcm.onNotification().subscribe(data => {
+      if (data.wasTapped) {
+        alert('data in background');
+      } else {
+        // alert('data in foreground');
+        this.events.publish('today_quote', data)
+      }
+    });
+
   }
 
   ionViewWillEnter() {
+    this.doRefresh();
     this.saveFcmDeviceTokenToServer()
     this.user_balance = null;
     console.log('ionViewWillEnter MultiOrderPage');
-    this.doRefresh();
     this.httpServerServiceProvider.getDomesticTransportByCity().subscribe((data) => {
       console.log(data);
       this.transport_details = data;
@@ -123,7 +138,7 @@ export class MultiOrderPage {
   }
 
   doRefresh(event = null) {
-    this.getAppVersion();
+    // this.getAppVersion();
     this.httpServerServiceProvider.getTodayDomesticQuote().subscribe((data) => {
       console.log(data);
       this.domestic_data = data;
@@ -185,8 +200,16 @@ export class MultiOrderPage {
         });
         let buyer_dict = { 'buyer_id': this.user['id'] }
         this.httpServerServiceProvider.getTodayOrderHistory(buyer_dict).subscribe((data) => {
-          console.log(data);
           this.today_orders = data;
+          alert(JSON.stringify(this.today_orders));
+          this.today_orders.forEach((element, index) => {
+            element['time_in_second'] = 10000;         
+            alert(element['time_created'])
+          });
+          // setTimeout(() => {
+          //   this.timer.startTimer();
+          // }, 100)
+          // alert(JSON.stringify(this.today_orders));
           if (this.today_orders.length != 0) {
             this.show_today_orders = true;
           }
@@ -268,7 +291,7 @@ export class MultiOrderPage {
         });
 
         loading.present();
-        // this.navCtrl.push(ConfirmOrderPage, sale_dict);
+        this.navCtrl.push(ConfirmOrderPage, sale_dict);
         this.httpServerServiceProvider.registerDirectOrderToSale(sale_dict).subscribe(data => {
           console.log(data);
           this.displayToast('Order Placed!');
@@ -285,7 +308,7 @@ export class MultiOrderPage {
           this.displayToast(error);
           loading.dismiss();
         });
-        // loading.dismiss();
+        loading.dismiss();
       } else {
         alert('Form shoud not be empty!');
       }
@@ -359,27 +382,27 @@ export class MultiOrderPage {
     });
   }
 
-  getAppVersion() {
-    this.httpServerServiceProvider.getAppVersion().subscribe((data) => {
-      console.log(data);
-      // this.global.validateApp(data);
-      this.validateApp(data);
-    }, (error) => {
-      console.log(error);
-    })
-  }
+  // getAppVersion() {
+  //   this.httpServerServiceProvider.getAppVersion().subscribe((data) => {
+  //     console.log(data);
+  //     // this.global.validateApp(data);
+  //     // this.validateApp(data);
+  //   }, (error) => {
+  //     console.log(error);
+  //   })
+  // }
 
-  validateApp(data) {
-    if (data['version'] != this.global.app_version) {
-      alert('Please update latest version of your app from play store');
-      if (data['relogin']) {
-        this.logout();
-      }
-      window.open("https://play.google.com/store/apps/details?id=spc.exportcopra.buyer", "_system");
-    } else {
-      console.log('app validate');
-    }
-  }
+  // validateApp(data) {
+  //   if (data['version'] != this.global.app_version) {
+  //     alert('Please update latest version of your app from play store');
+  //     if (data['relogin']) {
+  //       this.logout();
+  //     }
+  //     window.open("https://play.google.com/store/apps/details?id=spc.exportcopra.buyer", "_system");
+  //   } else {
+  //     console.log('app validate');
+  //   }
+  // }
 
 
   saveFcmDeviceTokenToServer() {

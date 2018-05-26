@@ -11,17 +11,19 @@
   <ion-refresher (ionRefresh)="doRefresh($event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
-  
+
   <div class="dashboard-logout-row">
     <span style="float:right; padding: 0px 30px 0px 0px; color:rgb(235, 52, 52); font-size: medium" (click)="logout()">LogOut</span>
-    <span style="float:right; padding: 0px 0px 0px 0px; color:rgb(17, 149, 255); font-family: cursive; font-size: medium" (click)="routeUserProfile()">{{company_name}} <ion-icon name="contact"></ion-icon>&nbsp;&nbsp;|&nbsp;&nbsp;</span>
+    <span style="float:right; padding: 0px 0px 0px 0px; color:rgb(17, 149, 255); font-family: cursive; font-size: medium" (click)="routeUserProfile()">{{company_name}}
+      <ion-icon name="contact"></ion-icon>&nbsp;&nbsp;|&nbsp;&nbsp;</span>
   </div>
   <br>
   <br>
   <ion-row>
     <ion-col class="rate-col">
       <!--Today's quote  -->
-      <h3 text-center padding-top>Today's Rate:<br>
+      <h3 text-center padding-top>Today's Rate
+        <br>
         <span style="font-size: x-small;">(SPC 50 Kg)</span>
       </h3>
       <h1 text-center>
@@ -29,20 +31,25 @@
           ₹ {{domestic_quote_of_the_day}}
         </span>
       </h1>
+
+      <ion-row>
+        <ion-col style="font-size: x-small;">
+          <span>
+            <em>EDIBLE DRY COCONUT PEELED & SHELLED,&nbsp;</em>
+          </span>
+          <span>HSN: 08011920,&nbsp;</span>
+          <span>GST: 0%</span>
+        </ion-col>
+      </ion-row>
     </ion-col>
     <ion-col>
-      <h3 text-center padding-top (click)="routePaymentDetails()">Enter Remittance</h3>
+      <h3 text-center padding-top (click)="routePaymentDetails()">Remittance</h3>
+      <button ion-button outline (click)="routePaymentDetails()">Record Remitt
+      </button>
       <br>
-      <span style="color: darkslategrey; font-size: larger;" (click)="showBankDetails()">RTGS/UPA Details</span><br><br>
+      <button ion-button outline (click)="showBankDetails()">RTGS/UPA Details</button>
+      <!-- <span style="color: darkslategrey; font-size: larger;"> </span><br><br> -->
       <span [ngStyle]="{'color': getBackgroundColor(user_balance)}" text-center style="font-weight: bold; font-size: larger;">Account Balance: {{user_balance | number: '.2'}} ₹</span>
-    </ion-col>
-  </ion-row>
-  <hr>
-  <ion-row>
-    <ion-col style="font-size: x-small;">
-      <span><em>EDIBLE DRY COCONUT PEELED & SHELLED,&nbsp;</em></span>
-      <span>HSN: 08011920,&nbsp;</span>
-      <span>GST: 0%</span>
     </ion-col>
   </ion-row>
   <hr>
@@ -58,9 +65,9 @@
   </ion-row> -->
   <span *ngIf="show_today_orders">
     <h6 text-center>Today's Order(s)</h6>
-    <div style="max-height: 50px;overflow: auto;">
+    <div style="max-height: 70px;overflow: auto;">
       <ion-row>
-        <ion-col>
+        <ion-col col-4>
           <span style="font-size: medium;font-weight: bold;font-style: italic;">Date</span>
         </ion-col>
         <ion-col>
@@ -70,44 +77,54 @@
           <span style="font-size: medium;font-weight: bold;font-style: italic;">Cost</span>
         </ion-col>
       </ion-row>
-      <ion-row *ngFor="let today_order of today_orders" (click)="onClickDetailOrder(today_order)">
+      <ion-row *ngFor="let today_order of today_orders; let timer_index = index" (click)="onClickDetailOrder(today_order)">
         <ion-col>
-          <span>{{today_order['sale_date'] | date: 'dd-MMM'}}</span>
+          <div style="width: 65%; font-size: 13px; padding: 0%; margin: 0%; float: left; height: 25px;">
+            <timer #timer [timeInSeconds]="today_order['time_in_second']"> {{timer | startTimer}}</timer>
+            <!-- <timer #timer[timer_index] [timeInSeconds]="today_order['time_in_second']"> {{timer[timer_index] | startTimer}}</timer> -->
+          </div>
         </ion-col>
-        <ion-col>
+        <!-- <ion-col>
           <span style="text-transform: capitalize;">{{today_order['sale_status']['name'] | rmUnderScore}}</span>
-        </ion-col>
-        <ion-col>
-          <span>{{today_order['order_total_cost'] | number: '.2'}}</span>
+        </ion-col> -->
+        <ion-col style="float: right;">
+          <ion-row>
+            <span style="text-transform: capitalize;">{{today_order['sale_status']['name'] | rmUnderScore}}</span>
+          </ion-row>
+          <ion-row>
+            <span>{{today_order['order_total_cost'] | number: '.2'}}</span>
+          </ion-row>
         </ion-col>
       </ion-row>
     </div>
     <hr>
   </span>
-  <ion-row>
-    <span *ngIf="weight_difference > 0" [ngStyle]="{'color': getBackgroundColor(weight_difference)}">
-      <ion-col col-2></ion-col>
-      <ion-col>
-        <h6 style="padding-left: 110px; font-size: small;">
-          You're eligible for
-          <em>{{ weight_difference }} kgs </em>
-          <hr>
-          <span>Product Cost: {{product_cost | number: '.2'}} ₹</span>
-        </h6>
-      </ion-col>
-    </span>
-    <span *ngIf="weight_difference <= 0" [ngStyle]="{'color': getBackgroundColor(weight_difference)}">
-      <ion-col col-2></ion-col>
-      <ion-col>
-        <h6 style="font-size: small;">
-          You have reached/crossed the maximum orderable weight limit by
-          <em>{{ weight_difference }} kgs </em>.
-        </h6>
-      </ion-col>
-    </span>
+
+
+  <h3 text-center padding-top> Place Order</h3>
+  <ion-row *ngIf="weight_difference > 0" [ngStyle]="{'color': getBackgroundColor(weight_difference)}">
+    <ion-col col-5>
+      <h6 style="font-size: small;">
+        Eligiblity:
+        <em>{{ weight_difference }} kgs </em>
+      </h6>
+    </ion-col>
+    <ion-col col-2></ion-col>
+    <ion-col col-5>
+      <h6 style="font-size: small;">
+        <span>Product Cost: {{product_cost | number: '.2'}} ₹</span>
+      </h6>
+    </ion-col>
   </ion-row>
-  
-  
+  <ion-row *ngIf="weight_difference <= 0" [ngStyle]="{'color': getBackgroundColor(weight_difference)}">
+    <ion-col>
+      <h6 style="font-size: small;">
+        You have reached/crossed the maximum orderable weight limit by
+        <em>{{ weight_difference }} kgs </em>.
+      </h6>
+    </ion-col>
+  </ion-row>
+
   <ion-row>
     <ion-col col-4>
       <span style="font-size: medium;font-weight: bold;font-style: italic;">Brand</span>
@@ -124,10 +141,16 @@
   </ion-row>
   <div *ngFor="let order of order_form">
     <ion-row [ngStyle]="{'font-weight': disabledFormStyle(order.disabled)}">
-      <ion-col col-4>{{order.copra_brand.name}}<br><span style="font-size: smaller;">{{order.copra_brand.notes}}</span></ion-col>
-      <ion-col col-3>{{order.bag_type.name}}&nbsp;x<span style="color:darkslateblue;font-size: smaller;"> ₹{{order.rate}}</span></ion-col>
+      <ion-col col-4>{{order.copra_brand.name}}
+        <br>
+        <span style="font-size: smaller;">{{order.copra_brand.notes}}</span>
+      </ion-col>
+      <ion-col col-3>{{order.bag_type.name}}&nbsp;x
+        <span style="color:darkslateblue;font-size: smaller;"> ₹{{order.rate}}</span>
+      </ion-col>
       <ion-col col-1>
-        <input type="number" class="custom-input-box" placeholder="# bags" [disabled]="order.disabled" (change)="calculateBagsToQuantity()" [(ngModel)]="order.bag_count">
+        <input type="number" class="custom-input-box" placeholder="# bags" [disabled]="order.disabled" (change)="calculateBagsToQuantity()"
+          [(ngModel)]="order.bag_count">
       </ion-col>
       <ion-col col-4 *ngIf="order.cost != null">
         <span style="color: rosybrown;">=&nbsp;₹&nbsp;{{order.cost | number: '.2'}}</span>
@@ -140,7 +163,8 @@
   <ion-row>
     <ion-col col-2></ion-col>
     <ion-col>
-      <span style="font-size: 13px;">*All rates are based upon gross weight (inclusive of weight of <em>Gunny</em> bag)</span>
+      <span style="font-size: 13px;">*All rates are based upon gross weight (inclusive of weight of
+        <em>Gunny</em> bag)</span>
     </ion-col>
     <ion-col col-2></ion-col>
   </ion-row>
