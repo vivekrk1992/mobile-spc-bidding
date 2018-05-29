@@ -32,6 +32,7 @@ export class MultiOrderPage {
   today_orders: any = [];
   show_today_orders: boolean = false;
   app_version: any = {};
+  gst_percentage: any = null; 
 
   order_form = [
     {
@@ -201,10 +202,10 @@ export class MultiOrderPage {
         let buyer_dict = { 'buyer_id': this.user['id'] }
         this.httpServerServiceProvider.getTodayOrderHistory(buyer_dict).subscribe((data) => {
           this.today_orders = data;
-          alert(JSON.stringify(this.today_orders));
+          // alert(JSON.stringify(this.today_orders));
           this.today_orders.forEach((element, index) => {
             element['time_in_second'] = 10000;         
-            alert(element['time_created'])
+            // alert(element['time_created'])
           });
           // setTimeout(() => {
           //   this.timer.startTimer();
@@ -282,35 +283,38 @@ export class MultiOrderPage {
     console.log(sale_dict);
     console.log('collected order bag');
 
-    if (this.maximum_weight_allowance < this.currnt_order_total_weight) {
-      alert('Requested weight is ' + (this.currnt_order_total_weight - this.maximum_weight_allowance) + ' kgs, more than orderable limit');
+    if (this.gst_percentage == null) {
+      alert('Select the Purpose for dried coconuts!')
     } else {
-      if (sale_dict['sales'].length != 0) {
-        let loading = this.loadingCtrl.create({
-          content: 'Please wait...'
-        });
-
-        loading.present();
-        this.navCtrl.push(ConfirmOrderPage, sale_dict);
-        this.httpServerServiceProvider.registerDirectOrderToSale(sale_dict).subscribe(data => {
-          console.log(data);
-          this.displayToast('Order Placed!');
-          loading.dismiss();
-          this.doRefresh();
-          this.product_cost = null;
-          this.order_form.forEach(element => {
-            element.bag_count = null;
-            element.cost = null;
-            element.total_quantity = 0;
-          });
-        }, (error) => {
-          console.log(error);
-          this.displayToast(error);
-          loading.dismiss();
-        });
-        loading.dismiss();
+      if (this.maximum_weight_allowance < this.currnt_order_total_weight) {
+        alert('Requested weight is ' + (this.currnt_order_total_weight - this.maximum_weight_allowance) + ' kgs, more than orderable limit');
       } else {
-        alert('Form shoud not be empty!');
+        if (sale_dict['sales'].length != 0) {
+          let loading = this.loadingCtrl.create({
+            content: 'Please wait...'
+          });
+  
+          loading.present();
+          // this.navCtrl.push(ConfirmOrderPage, sale_dict);
+          this.httpServerServiceProvider.registerDirectOrderToSale(sale_dict).subscribe(data => {
+            console.log(data);
+            alert('Your order have been placed, Thank You for the order!');
+            loading.dismiss();
+            this.doRefresh();
+            this.product_cost = null;
+            this.order_form.forEach(element => {
+              element.bag_count = null;
+              element.cost = null;
+              element.total_quantity = 0;
+            });
+          }, (error) => {
+            console.log(error);
+            this.displayToast(error);
+            loading.dismiss();
+          });
+        } else {
+          alert('Form shoud not be empty!');
+        }
       }
     }
   }
