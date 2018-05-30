@@ -22,7 +22,7 @@
   <ion-row>
     <ion-col class="rate-col">
       <!--Today's quote  -->
-      <h3 text-center padding-top>Today's Rate
+      <h3 text-center padding-top>Rate
         <br>
         <span style="font-size: x-small;">(SPC 50 Kg)</span>
       </h3>
@@ -129,7 +129,7 @@
       </h6>
     </ion-col>
   </ion-row>
-  <ion-row>
+  <ion-row *ngIf="user_balance <= 0">
     <h6 text-center>&nbsp;Hello:<br> You have insufficient balance to make orders now. <br>Please transfer the amount via <button ion-button clear (click)="showBankDetails()">RTGS/UPI/Cash</button> before placing
     the order. <br>Thank you very much for your business. If you have transferred, please record it <button ion-button clear (click)="routePaymentDetails()">here</button></h6>
   </ion-row>
@@ -138,7 +138,7 @@
       <ion-item>
       <!-- <ion-item style="background-color: #9C9085; border-radius: 5px"> -->
         <!-- <ion-radio item-left [value]="0" class="radio-button-style"></ion-radio> -->
-        <ion-radio item-left checked='true' [value]="0"></ion-radio>
+        <ion-radio item-left [value]="0"></ion-radio>
         <ion-label style="margin-left: 0px; white-space: normal;font-size: small;">0% GST<br>EDIBLE, HUMAN CONSUMPTION
         </ion-label>
       </ion-item>
