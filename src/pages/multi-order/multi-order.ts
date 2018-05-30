@@ -32,7 +32,7 @@ export class MultiOrderPage {
   today_orders: any = [];
   show_today_orders: boolean = false;
   app_version: any = {};
-  gst_percentage: any = null; 
+  gst_percentage: any = 0; 
 
   order_form = [
     {
@@ -114,15 +114,6 @@ export class MultiOrderPage {
       this.doRefresh();
       this.displayToast('Your quote rate is updated!');
     })
-
-    this.fcm.onNotification().subscribe(data => {
-      if (data.wasTapped) {
-        alert('data in background');
-      } else {
-        // alert('data in foreground');
-        this.events.publish('today_quote', data)
-      }
-    });
 
   }
 

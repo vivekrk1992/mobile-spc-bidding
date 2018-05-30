@@ -21,7 +21,6 @@ export class MyApp {
       this.fcm.onNotification().subscribe(data => {
         if(data.wasTapped) {
         } else {
-          alert('data in foreground');
           this.events.publish('today_quote', data)
         }
       }, (error) => {
