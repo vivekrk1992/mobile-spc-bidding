@@ -112,6 +112,7 @@ export class MultiOrderPage {
     
     this.events.subscribe('today_quote', (data) => {
       this.doRefresh();
+      this.displayToast('Your quote rate is updated!');
     })
 
     this.fcm.onNotification().subscribe(data => {
