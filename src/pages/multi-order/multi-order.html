@@ -8,12 +8,24 @@
 
 
 <ion-content padding>
+  <!-- <div>
+    <h2>{{ 'TITLE' | translate }}</h2>
+    <label>
+      {{ 'SELECT' | translate }}
+      
+    </label>
+  </div> -->
   <ion-refresher (ionRefresh)="doRefresh($event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
 
   <div class="dashboard-logout-row">
-    <span style="float:right; padding: 0px 30px 0px 0px; color:rgb(235, 52, 52); font-size: medium" (click)="logout()">LogOut</span>
+    <span (change)="setDefaultLanguage(langSelect.value)">
+      <select #langSelect (change)="translate.use(langSelect.value)">
+        <option *ngFor="let lang of translate.getLangs()" [value]="lang" [selected]="lang === translate.currentLang">{{ lang }}</option>
+      </select>
+    </span>
+    <span style="float:right; padding: 0px 30px 0px 0px; color:rgb(235, 52, 52); font-size: medium" (click)="logout()">{{'LogOut' | translate}}</span>
     <span style="float:right; padding: 0px 0px 0px 0px; color:rgb(17, 149, 255); font-family: cursive; font-size: medium" (click)="routeUserProfile()">{{company_name}}
       <ion-icon name="contact"></ion-icon>&nbsp;&nbsp;|&nbsp;&nbsp;</span>
   </div>
@@ -22,9 +34,9 @@
   <ion-row>
     <ion-col class="rate-col">
       <!--Today's quote  -->
-      <h3 text-center padding-top>Rate
+      <h3 text-center padding-top>{{ 'Rate' | translate}}
         <br>
-        <span style="font-size: x-small;">(SPC 50 Kg)</span>
+        <span style="font-size: x-small;">({{'SPC' | translate}} 50 Kg)</span>
       </h3>
       <h1 text-center>
         <span>
@@ -43,13 +55,13 @@
       </ion-row>
     </ion-col>
     <ion-col>
-      <h3 text-center padding-top (click)="routePaymentDetails()">Remittance</h3>
-      <button ion-button outline (click)="routePaymentDetails()">Record Remitt
+      <h3 text-center padding-top (click)="routePaymentDetails()">{{'Remittance' | translate}}</h3>
+      <button ion-button outline (click)="routePaymentDetails()">{{'RECORD REMMITTANCE' | translate}}
       </button>
       <br>
-      <button ion-button outline (click)="showBankDetails()">RTGS/UPA Details</button>
+      <button ion-button outline (click)="showBankDetails()">{{'RTGS/UPA Details' | translate}}</button>
       <!-- <span style="color: darkslategrey; font-size: larger;"> </span><br><br> -->
-      <span [ngStyle]="{'color': getBackgroundColor(user_balance)}" text-center style="font-weight: bold; font-size: larger;">Account Balance: {{user_balance | number: '.2'}} ₹</span>
+      <span [ngStyle]="{'color': getBackgroundColor(user_balance)}" text-center style="font-weight: bold; font-size: larger;">{{'Account Balance' | translate}}: {{user_balance | number: '.2'}} ₹</span>
     </ion-col>
   </ion-row>
   <hr>
@@ -63,6 +75,9 @@
       <button ion-button round (click)="onClickPayNow()">Pay Now</button>
     </ion-col>
   </ion-row> -->
+  <span *ngIf="new_date_today >= restricted_time">
+    <h6 text-center style="color: red;">{{'No Order will be taken after 3 PM!' | translate}}</h6>
+  </span><br>
   <span *ngIf="show_today_orders">
     <h6 text-center>Today's Order(s)</h6>
     <div style="max-height: 70px;overflow: auto;">
@@ -106,32 +121,31 @@
   </span>
 
 
-  <h3 text-center padding-top> Place Order</h3>
+  <h3 text-center padding-top>{{'Place Order' | translate}}</h3>
   <ion-row *ngIf="weight_difference > 0" [ngStyle]="{'color': getBackgroundColor(weight_difference)}">
     <ion-col col-5>
       <h6 style="font-size: small;">
-        Eligiblity:
+        {{'Eligiblity' | translate}}:
         <em>{{ weight_difference }} kgs </em>
       </h6>
     </ion-col>
     <ion-col col-2></ion-col>
     <ion-col col-5>
       <h6 style="font-size: small;">
-        <span>Product Cost: {{product_cost | number: '.2'}} ₹</span>
+        <span>{{'Product Cost' | translate}}: {{product_cost | number: '.2'}} ₹</span>
       </h6>
     </ion-col>
   </ion-row>
   <ion-row *ngIf="weight_difference <= 0" [ngStyle]="{'color': getBackgroundColor(weight_difference)}">
     <ion-col>
       <h6 style="font-size: small;">
-        You have reached/crossed the maximum orderable weight limit by
+        {{'You have reached/crossed the maximum orderable weight limit by' | translate}}
         <em>{{ weight_difference }} kgs </em>.
       </h6>
     </ion-col>
   </ion-row>
   <ion-row *ngIf="user_balance <= 0">
-    <h6 text-center>&nbsp;Hello:<br> You have insufficient balance to make orders now. <br>Please transfer the amount via <button ion-button clear (click)="showBankDetails()">RTGS/UPI/Cash</button> before placing
-    the order. <br>Thank you very much for your business. If you have transferred, please record it <button ion-button clear (click)="routePaymentDetails()">here</button></h6>
+    <h6 text-center>&nbsp;{{'Hello' | translate}}:<br> {{'You have insufficient balance to make orders now.' | translate}} <br>{{'Please transfer the amount via' | translate}} <button ion-button clear (click)="showBankDetails()">{{'RTGS/UPI/Cash' | translate}}</button> {{'before placing the order' | translate}}. <br>{{'Thank you very much for your business. If you have transferred, please record it' | translate}} <button ion-button clear (click)="routePaymentDetails()">here</button></h6>
   </ion-row>
   <ion-row radio-group [(ngModel)]="gst_percentage">
     <ion-col style="margin-left:10px;">
@@ -139,39 +153,39 @@
       <!-- <ion-item style="background-color: #9C9085; border-radius: 5px"> -->
         <!-- <ion-radio item-left [value]="0" class="radio-button-style"></ion-radio> -->
         <ion-radio item-left [value]="0"></ion-radio>
-        <ion-label style="margin-left: 0px; white-space: normal;font-size: small;">0% GST<br>EDIBLE, HUMAN CONSUMPTION
+        <ion-label style="margin-left: 0px; white-space: normal;font-size: small;">0% GST<br>{{'EDIBLE' | translate}}, {{'HUMAN CONSUMPTION' | translate}}
         </ion-label>
       </ion-item>
     </ion-col>
     <ion-col style="margin-left:10px;">
       <ion-item>
         <ion-radio item-left [value]="5"></ion-radio>
-        <ion-label style="margin-left: 0px;white-space: normal;font-size: small;">5% GST<br>OIL MILLING<br><br>
+        <ion-label style="margin-left: 0px;white-space: normal;font-size: small;">5% GST<br>{{'OIL MILLING' | translate}}<br><br>
         </ion-label>
       </ion-item>
     </ion-col>
   </ion-row>
   <ion-row>
     <ion-col col-4>
-      <span style="font-size: medium;font-weight: bold;font-style: italic;">Brand</span>
+      <span style="font-size: medium;font-weight: bold;font-style: italic;">{{'Brand' | translate}}</span>
     </ion-col>
     <ion-col col-3>
-      <span style="font-size: medium;font-weight: bold;font-style: italic;">Bag Type</span>
+      <span style="font-size: medium;font-weight: bold;font-style: italic;">{{'Bag Type' | translate}}</span>
     </ion-col>
     <ion-col col-2>
-      <span style="font-size: medium;font-weight: bold;font-style: italic;"># bags</span>
+      <span style="font-size: medium;font-weight: bold;font-style: italic;"># {{'bags' | translate}}</span>
     </ion-col>
     <ion-col col-2>
-      <span style="font-size: medium;font-weight: bold;font-style: italic;">Cost</span>
+      <span style="font-size: medium;font-weight: bold;font-style: italic;">{{'Cost' | translate}}</span>
     </ion-col>
   </ion-row>
   <div *ngFor="let order of order_form">
     <ion-row [ngStyle]="{'font-weight': disabledFormStyle(order.disabled)}">
-      <ion-col col-4>{{order.copra_brand.name}}
+      <ion-col col-4>{{order.copra_brand.name  | translate}}
         <br>
         <span style="font-size: smaller;">{{order.copra_brand.notes}}</span>
       </ion-col>
-      <ion-col col-3>{{order.bag_type.name}}&nbsp;x
+      <ion-col col-3>{{order.bag_type.name | translate}}&nbsp;x
         <span style="color:darkslateblue;font-size: smaller;"> ₹{{order.rate}}</span>
       </ion-col>
       <ion-col col-1>
@@ -189,8 +203,7 @@
   <ion-row>
     <ion-col col-2></ion-col>
     <ion-col>
-      <span style="font-size: 13px;">*All rates are based upon gross weight (inclusive of weight of
-        <em>Gunny</em> bag)</span>
+      <span style="font-size: 13px;">*{{'All rates are based upon gross weight' | translate}} ({{'inclusive of weight of Gunny bag' | translate}})</span>
     </ion-col>
     <ion-col col-2></ion-col>
   </ion-row>
@@ -198,13 +211,13 @@
   <ion-row radio-group [(ngModel)]="transport">
     <ion-col>
       <ion-item>
-        <ion-label>Self-Pickup</ion-label>
+        <ion-label>{{'Self-Pickup' | translate}}</ion-label>
         <ion-radio checked='true' [value]="false"></ion-radio>
       </ion-item>
     </ion-col>
     <ion-col>
       <ion-item>
-        <ion-label>Truck Transport</ion-label>
+        <ion-label>{{'Truck Transport' | translate}}</ion-label>
         <ion-radio [value]="true"></ion-radio>
       </ion-item>
     </ion-col>
@@ -222,7 +235,7 @@
   <ion-row>
     <ion-col></ion-col>
     <ion-col>
-      <button ion-button (click)="registerOrderForBuyer(order_form, transport, transport_id)">Place Order</button>
+      <button ion-button (click)="registerOrderForBuyer(order_form, transport, transport_id)">{{'Place Order' | translate}}</button>
     </ion-col>
     <ion-col></ion-col>
   </ion-row>

@@ -30,6 +30,15 @@ import { FCM } from '@ionic-native/fcm';
 import { TimerComponent } from '../components/timer/timer';
 import { ConfirmOrderPage } from '../pages/confirm-order/confirm-order';
 
+import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+
+// AoT requires an exported function for factories
+export function HttpLoaderFactory(httpClient: HttpClient) {
+  return new TranslateHttpLoader(httpClient);
+}
+
 @NgModule({
   declarations: [
     MyApp,
@@ -52,7 +61,15 @@ import { ConfirmOrderPage } from '../pages/confirm-order/confirm-order';
     IonicModule.forRoot(MyApp),
     IonicStorageModule.forRoot(),
     HttpModule,
-    PipesModule
+    PipesModule,
+    HttpClientModule,
+    TranslateModule.forRoot({
+      loader: {
+        provide: TranslateLoader,
+        useFactory: HttpLoaderFactory,
+        deps: [HttpClient]
+      }
+    })
   ],
   bootstrap: [IonicApp],
   entryComponents: [

@@ -6,6 +6,7 @@ import { GlobalProvider } from '../../providers/global/global'
 import { FCM } from '@ionic-native/fcm';
 import { ConfirmOrderPage } from '../confirm-order/confirm-order';
 import { TimerComponent } from '../../components/timer/timer';
+import { TranslateService } from '@ngx-translate/core';
 
 @IonicPage()
 @Component({
@@ -32,7 +33,10 @@ export class MultiOrderPage {
   today_orders: any = [];
   show_today_orders: boolean = false;
   app_version: any = {};
-  gst_percentage: any = 0; 
+  gst_percentage: any = 0;
+  default_lang: any = 'english';
+  new_date_today: any;
+  restricted_time: any
 
   order_form = [
     {
@@ -106,14 +110,24 @@ export class MultiOrderPage {
   constructor(public navCtrl: NavController, public navParams: NavParams, private httpServerServiceProvider: HttpServerServiceProvider,
     private app: App, private storage: Storage, private toastCtrl: ToastController, private loadingCtrl: LoadingController,
     private alertCtrl: AlertController, private global: GlobalProvider, private fcm: FCM, private events: Events,
-    private ref: ChangeDetectorRef
-  ) {
+    private ref: ChangeDetectorRef, public translate: TranslateService) {
+
+    this.storage.get('language').then((lang) => {
+      console.log(lang);
+      if (lang != null) {
+        this.default_lang = lang;
+      }
+      this.translate.addLangs(['english', 'hindi']);
+      this.translate.setDefaultLang('english');
+      const browserLang = this.translate.getBrowserLang();
+      this.translate.use(browserLang.match(/english|hindi/) ? browserLang : this.default_lang);
+    });
 
     
     this.events.subscribe('today_quote', (data) => {
       this.doRefresh();
       this.displayToast('Your quote rate is updated!');
-    })
+    });
 
   }
 
@@ -128,7 +142,13 @@ export class MultiOrderPage {
     }, (error) => {
       console.log(error);
     });
+    
+    // this.translate.addLangs(['hi', 'en']);
+    // this.translate.setDefaultLang('hi');
+    // const browserLang = this.translate.getBrowserLang();
+    // this.translate.use(browserLang.match(/hi|en/) ? browserLang : 'hi');
   }
+
 
   doRefresh(event = null) {
     // this.getAppVersion();
@@ -137,8 +157,10 @@ export class MultiOrderPage {
       this.domestic_data = data;
       this.user_balance = data['user_payment_balance'];
       this.company_name = data['company_name'];
-
-
+      console.log(data['buyer_time_limit']);
+      this.restricted_time = new Date(data['buyer_time_limit']).toLocaleTimeString();
+      this.new_date_today = new Date().toLocaleTimeString();
+      
       if (data.hasOwnProperty('rate')) {
         this.domestic_quote_of_the_day = data.rate;
       }
@@ -261,51 +283,59 @@ export class MultiOrderPage {
   registerOrderForBuyer(order_confirmation, transport_by_spc, transport_id) {
     console.log(transport_by_spc);
     console.log(transport_id);
+    this.new_date_today = new Date().toLocaleTimeString();
     let sale_dict = {};
-    if (this.transport) {
-      if (this.transport_id == null) {
-        alert('Please select a transport!');
-        return false;
-      } else {
-      }
-    }
-    sale_dict['sale_group'] = { 'buyer_id': this.user['id'], 'transport_paid_by_spc': transport_by_spc, 'transport_id': transport_id }
-
-    sale_dict['sales'] = this.filterOrderBags();
-    console.log(sale_dict);
-    console.log('collected order bag');
-
-    if (this.gst_percentage == null) {
-      alert('Select the Purpose for dried coconuts!')
+    console.log('datime Now------->' + this.new_date_today);
+    console.log('Restricted Time----->' + this.restricted_time);
+    if (this.new_date_today >= this.restricted_time) {
+      alert('३ बजे के बाद आर्डर नहीं कर सकते है or contact 0141-4161787');
+      return false;
     } else {
-      if (this.maximum_weight_allowance < this.currnt_order_total_weight) {
-        alert('Requested weight is ' + (this.currnt_order_total_weight - this.maximum_weight_allowance) + ' kgs, more than orderable limit');
-      } else {
-        if (sale_dict['sales'].length != 0) {
-          let loading = this.loadingCtrl.create({
-            content: 'Please wait...'
-          });
-  
-          loading.present();
-          // this.navCtrl.push(ConfirmOrderPage, sale_dict);
-          this.httpServerServiceProvider.registerDirectOrderToSale(sale_dict).subscribe(data => {
-            console.log(data);
-            alert('Your order have been placed, Thank You for the order!');
-            loading.dismiss();
-            this.doRefresh();
-            this.product_cost = null;
-            this.order_form.forEach(element => {
-              element.bag_count = null;
-              element.cost = null;
-              element.total_quantity = 0;
-            });
-          }, (error) => {
-            console.log(error);
-            this.displayToast(error);
-            loading.dismiss();
-          });
+      if (this.transport) {
+        if (this.transport_id == null) {
+          alert('Please select a transport!');
+          return false;
         } else {
-          alert('Form shoud not be empty!');
+        }
+      }
+      sale_dict['sale_group'] = { 'buyer_id': this.user['id'], 'transport_paid_by_spc': transport_by_spc, 'transport_id': transport_id }
+
+      sale_dict['sales'] = this.filterOrderBags();
+      console.log(sale_dict);
+      console.log('collected order bag');
+
+      if (this.gst_percentage == null) {
+        alert('Select the Purpose for dried coconuts!')
+      } else {
+        if (this.maximum_weight_allowance < this.currnt_order_total_weight) {
+          alert('Requested weight is ' + (this.currnt_order_total_weight - this.maximum_weight_allowance) + ' kgs, more than orderable limit');
+        } else {
+          if (sale_dict['sales'].length != 0) {
+            let loading = this.loadingCtrl.create({
+              content: 'Please wait...'
+            });
+    
+            loading.present();
+            // this.navCtrl.push(ConfirmOrderPage, sale_dict);
+            this.httpServerServiceProvider.registerDirectOrderToSale(sale_dict).subscribe(data => {
+              console.log(data);
+              alert('Your order have been placed, Thank You for the order!');
+              loading.dismiss();
+              this.doRefresh();
+              this.product_cost = null;
+              this.order_form.forEach(element => {
+                element.bag_count = null;
+                element.cost = null;
+                element.total_quantity = 0;
+              });
+            }, (error) => {
+              console.log(error);
+              this.displayToast(error);
+              loading.dismiss();
+            });
+          } else {
+            alert('Form shoud not be empty!');
+          }
         }
       }
     }
@@ -410,5 +440,10 @@ export class MultiOrderPage {
       );
     }, (error) => {
     });
+  }
+
+  setDefaultLanguage(language) {
+    console.log(language);
+    this.storage.set('language', language);
   }
 }
