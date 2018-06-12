@@ -151,7 +151,7 @@ export class MultiOrderPage {
 
 
   doRefresh(event = null) {
-    // this.getAppVersion();
+    this.getAppVersion();
     this.httpServerServiceProvider.getTodayDomesticQuote().subscribe((data) => {
       console.log(data);
       this.domestic_data = data;
@@ -408,27 +408,27 @@ export class MultiOrderPage {
     });
   }
 
-  // getAppVersion() {
-  //   this.httpServerServiceProvider.getAppVersion().subscribe((data) => {
-  //     console.log(data);
-  //     // this.global.validateApp(data);
-  //     // this.validateApp(data);
-  //   }, (error) => {
-  //     console.log(error);
-  //   })
-  // }
+  getAppVersion() {
+    this.httpServerServiceProvider.getAppVersion().subscribe((data) => {
+      console.log(data);
+      // this.global.validateApp(data);
+      this.validateApp(data);
+    }, (error) => {
+      console.log(error);
+    })
+  }
 
-  // validateApp(data) {
-  //   if (data['version'] != this.global.app_version) {
-  //     alert('Please update latest version of your app from play store');
-  //     if (data['relogin']) {
-  //       this.logout();
-  //     }
-  //     window.open("https://play.google.com/store/apps/details?id=spc.exportcopra.buyer", "_system");
-  //   } else {
-  //     console.log('app validate');
-  //   }
-  // }
+  validateApp(data) {
+    if (data['version'] != this.global.app_version) {
+      alert('Please update latest version of your app from play store');
+      if (data['relogin']) {
+        this.logout();
+      }
+      window.open("https://play.google.com/store/apps/details?id=spc.exportcopra.buyer", "_system");
+    } else {
+      console.log('app validate');
+    }
+  }
 
 
   saveFcmDeviceTokenToServer() {
