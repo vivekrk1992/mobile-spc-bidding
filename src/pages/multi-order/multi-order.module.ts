@@ -11,7 +11,7 @@ import { TranslateModule } from '@ngx-translate/core';
   imports: [
     IonicPageModule.forChild(MultiOrderPage),
     PipesModule,
-    TranslateModule.forRoot()
+    TranslateModule.forChild()
   ],
 })
 export class MultiOrderPageModule {}

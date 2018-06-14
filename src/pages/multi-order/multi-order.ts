@@ -59,7 +59,7 @@ export class MultiOrderPage {
       quantity_in_kgs: 25,
       total_quantity: 0,
       cost: null,
-      disabled: false
+      disabled: true
     },
     {
       copra_brand: { 'id': 2, 'name': 'SPC', 'notes': '18-20 Pc/Kg' },
@@ -81,7 +81,7 @@ export class MultiOrderPage {
       quantity_in_kgs: 25,
       total_quantity: 0,
       cost: null,
-      disabled: false
+      disabled: true
     },
     {
       copra_brand: { 'id': 3, 'name': 'LABH', 'notes': '14-16 Pc/Kg' },
@@ -92,7 +92,7 @@ export class MultiOrderPage {
       quantity_in_kgs: 50,
       total_quantity: 0,
       cost: null,
-      disabled: false
+      disabled: true
     },
     {
       copra_brand: { 'id': 3, 'name': 'LABH', 'notes': '14-16 Pc/Kg' },
@@ -112,6 +112,11 @@ export class MultiOrderPage {
     private alertCtrl: AlertController, private global: GlobalProvider, private fcm: FCM, private events: Events,
     private ref: ChangeDetectorRef, public translate: TranslateService) {
 
+      this.events.subscribe('today_quote', (data) => {
+      this.doRefresh();
+      this.displayToast('Your quote rate is updated!');
+    });
+
     this.storage.get('language').then((lang) => {
       console.log(lang);
       if (lang != null) {
@@ -123,25 +128,20 @@ export class MultiOrderPage {
       this.translate.use(browserLang.match(/english|hindi/) ? browserLang : this.default_lang);
     });
 
-    
-    this.events.subscribe('today_quote', (data) => {
-      this.doRefresh();
-      this.displayToast('Your quote rate is updated!');
-    });
-
   }
 
-  ionViewWillEnter() {
+  ionViewCanEnter() {
     this.doRefresh();
     this.saveFcmDeviceTokenToServer()
     this.user_balance = null;
-    console.log('ionViewWillEnter MultiOrderPage');
+    console.log('ionViewCanEnter MultiOrderPage');
     this.httpServerServiceProvider.getDomesticTransportByCity().subscribe((data) => {
       console.log(data);
       this.transport_details = data;
     }, (error) => {
       console.log(error);
     });
+
     
     // this.translate.addLangs(['hi', 'en']);
     // this.translate.setDefaultLang('hi');
@@ -191,12 +191,15 @@ export class MultiOrderPage {
             if (quote_adjustment_rate.hasOwnProperty(obj.copra_brand['id'])) {
               obj.rate = quote_adjustment_rate[obj.copra_brand['id']][obj.bag_type['id']]['rate'];
             }
-            if (current_stock[obj.copra_brand['id']][obj.bag_type['id']] > 5) {
-              obj.disabled = false;
-            } else {
-              console.log('in disable')
-              obj.disabled = true;
-            }
+
+            // disable the field when less than 5 bags 
+
+            // if (current_stock[obj.copra_brand['id']][obj.bag_type['id']] > 5) {
+            //   obj.disabled = false;
+            // } else {
+            //   console.log('in disable')
+            //   obj.disabled = true;
+            // }
           })
           // for (let index in this.order_form) {
           //   if (this.current_stock[this.order_form[index]['copra_brand']['id']][this.order_form[index]['bag_type']['id']] >= 10) {

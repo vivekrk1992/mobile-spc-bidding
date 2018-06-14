@@ -9,7 +9,7 @@ import { TranslateModule } from '@ngx-translate/core';
   ],
   imports: [
     IonicPageModule.forChild(GrievancePage),
-    TranslateModule.forChild()
+    TranslateModule.forChild(),
   ],
 })
 export class GrievancePageModule {}
