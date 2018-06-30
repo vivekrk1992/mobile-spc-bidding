@@ -12,18 +12,267 @@
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
 
+  <!--Username, logout, internet status row-->
   <div class="dashboard-logout-row">
     <span (change)="setDefaultLanguage(langSelect.value)">
       <select #langSelect (change)="translate.use(langSelect.value)">
         <option *ngFor="let lang of translate.getLangs()" [value]="lang" [selected]="lang === translate.currentLang">{{ lang }}</option>
       </select>
     </span>
-    <span style="float:right; padding: 0px 30px 0px 0px; color:rgb(235, 52, 52); font-size: medium" (click)="logout()">{{'LogOut' | translate}}</span>
+    <!--internet connection-->
+    <span style="float:right; padding-right: 10px;">  <ion-icon name="planet" style="font-size: x-large"></ion-icon></span>
+    <!--logout-->
+    <span style="float:right; padding-right: 10px; color:rgb(235, 52, 52); font-size: medium" (click)="logout()">{{'LogOut' | translate}}</span>
+    <!--username-->
     <span style="float:right; padding: 0px 0px 0px 0px; color:rgb(17, 149, 255); font-family: cursive; font-size: medium" (click)="routeUserProfile()">{{company_name}}
-      <ion-icon name="contact"></ion-icon>&nbsp;&nbsp;|&nbsp;&nbsp;</span>
+      <ion-icon name="contact"></ion-icon>&nbsp;&nbsp;|&nbsp;&nbsp;
+    </span>
   </div>
-  <br>
-  <br>
+
+  <!--<br>-->
+  <!--<br>-->
+
+  <!--Copra rate area-->
+  <!--<ion-row><ion-col>Rate Now:</ion-col></ion-row>-->
+  <ion-card>
+    <ion-card-content>
+      <ion-row>
+        <!--<ion-col col-1>-->
+          <!--<span style="font-size: large; font-weight: 600; color: #8a4182">R</span><br>-->
+          <!--<span style="font-size: large; font-weight: 600; color: #8a4182">A</span><br>-->
+          <!--<span style="font-size: large; font-weight: 600; color: #8a4182">T</span><br>-->
+          <!--<span style="font-size: large; font-weight: 600; color: #8a4182">E</span>-->
+        <!--</ion-col>-->
+        <ion-col col-4>
+          <span style="font-size: large; font-weight: 600;">Shubh</span><br>
+          <span style="font-size: smaller">(50kg)</span><br>
+          <span style="font-size: large; font-weight: 600;"> ₹ {{domestic_quote_of_the_day}}</span>
+        </ion-col>
+        <ion-col col-4>
+          <span style="font-size: large; font-weight: 600;">SPC</span><br>
+          <span style="font-size: smaller">(50kg)</span><br>
+          <span style="font-size: large; font-weight: 600;"> ₹ {{domestic_quote_of_the_day}}</span>
+        </ion-col>
+        <ion-col col-4>
+          <span style="font-size: large; font-weight: 600;">Labh</span><br>
+          <span style="font-size: smaller">(50kg)</span><br>
+          <span style="font-size: large; font-weight: 600;"> ₹ {{domestic_quote_of_the_day}}</span>
+        </ion-col>
+
+      </ion-row>
+      <ion-row>
+        <ion-col style="font-size: xx-small;">
+          <span><em>EDIBLE DRY COCONUT PEELED & SHELLED,&nbsp;HSN: 08011920, GST: 0%</em></span>
+        </ion-col>
+      </ion-row>
+    </ion-card-content>
+  </ion-card>
+
+  <!--Account/remittance details-->
+  <!--<ion-card>-->
+    <!--<ion-card-content>-->
+      <ion-row>
+        <!--remittance-->
+        <ion-col>
+          <button ion-button (click)="routePaymentDetails()" style="font-size: small; padding: 5px 10px;">{{'RECORD REMMITTANCE' | translate}}</button>
+          <button ion-button color="light" (click)="showBankDetails()" style="font-size: small; padding: 5px 10px;">{{'RTGS/UPA Details' | translate}}</button>
+        </ion-col>
+        </ion-row>
+        <ion-row>
+        <!--account-->
+        <ion-col>
+          <span [ngStyle]="{'color': getBackgroundColor(user_balance)}" text-center style="font-weight: bold; font-size: larger; padding-top: 10px">
+          {{'Account Balance' | translate}}: {{user_balance | number: '.2'}} ₹</span>
+        </ion-col>
+      </ion-row>
+    <!--</ion-card-content>-->
+  <!--</ion-card>-->
+
+
+
+  <!--3 pm warning in red -->
+  <span *ngIf="new_date_today >= restricted_time">
+    <h6 text-center style="color: red;">{{'No Order will be taken after 3 PM!' | translate}}</h6>
+  </span>
+
+  <!--show todays orders if placed already-->
+  <span *ngIf="show_today_orders">
+    <ion-card>
+      <ion-card-content>
+        <h6 text-center>Today's Order(s)</h6>
+        <div style="max-height: 70px;overflow: auto;">
+          <ion-row>
+            <ion-col>
+              <span style="font-size: medium;font-weight: bold;font-style: italic;">Sl. No</span>
+            </ion-col>
+            <ion-col>
+              <span style="font-size: medium;font-weight: bold;font-style: italic;">Status</span>
+            </ion-col>
+            <ion-col>
+              <span style="font-size: medium;font-weight: bold;font-style: italic;">Cost</span>
+            </ion-col>
+          </ion-row>
+          <ion-row *ngFor="let today_order of today_orders; let timer_index = index" (click)="onClickDetailOrder(today_order)">
+            <!-- <ion-col>
+              <div style="width: 65%; font-size: 13px; padding: 0%; margin: 0%; float: left; height: 25px;">
+                <timer #timer [timeInSeconds]="today_order['time_in_second']"> {{timer | startTimer}}</timer>
+              </div>
+            </ion-col> -->
+            <!-- <ion-col>
+              <span style="text-transform: capitalize;">{{today_order['sale_date'] | date: 'dd-MMM'}}</span>
+            </ion-col> -->
+            <!-- <ion-col style="float: right;"> -->
+            <ion-col>
+              {{timer_index + 1}}
+            </ion-col>
+            <ion-col>
+              <span style="text-transform: capitalize;">{{today_order['sale_status']['name'] | rmUnderScore}}</span>
+            </ion-col>
+            <ion-col>
+              <span>{{today_order['order_total_cost'] | number: '.2'}}</span>
+            </ion-col>
+          <!-- </ion-col> -->
+          </ion-row>
+        </div>
+        <hr>
+      </ion-card-content>
+    </ion-card>
+  </span>
+
+  <!--order releated messages-->
+  <ion-card>
+    <ion-card-content>
+      <!--weight difference check -->
+      <!--if more than 0-->
+      <ion-row *ngIf="weight_difference > 0" [ngStyle]="{'color': getBackgroundColor(weight_difference)}">
+        <ion-col col-5>
+          <h6 style="font-size: small;">{{'Eligiblity' | translate}}:<em>{{ weight_difference }} kgs </em></h6>
+        </ion-col>
+        <ion-col col-2></ion-col>
+        <ion-col col-5>
+          <h6 style="font-size: small;"><span>{{'Product Cost' | translate}}: {{product_cost | number: '.2'}} ₹</span></h6>
+        </ion-col>
+      </ion-row>
+
+      <!--if less than or equal to 0-->
+      <ion-row *ngIf="weight_difference <= 0" [ngStyle]="{'color': getBackgroundColor(weight_difference)}">
+        <ion-col>
+          <h6 text-left style="font-size: small;">{{'You have reached/crossed the maximum orderable weight limit by' | translate}}<em>{{ weight_difference }} kgs </em>.</h6>
+        </ion-col>
+      </ion-row>
+
+      <!--user balance check-->
+      <ion-row *ngIf="user_balance <= 0">
+        <br>
+        <h6 text-left> {{'You have insufficient balance now' | translate}}. {{'Please transfer the amount first via' | translate}} <button ion-button clear style="margin: -20px -5px -10px -10px" padding-left="0px" (click)="showBankDetails()">{{'RTGS/UPI/Cash' | translate}}</button> {{' and record it at'}} <button ion-button clear style="margin: -10px -5px 0px 0px" padding-left="0px"  (click)="routePaymentDetails()">remmitance section</button></h6>
+      </ion-row>
+    </ion-card-content>
+  </ion-card>
+
+
+  <!--Order form-->
+  <ion-card>
+    <ion-card-header>
+      <h1 text-center>{{'Place Order' | translate}}</h1>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-row radio-group [(ngModel)]="gst_percentage">
+        <ion-col style="margin-left:10px;">
+          <ion-item style="margin: 0px">
+          <!-- <ion-item style="background-color: #9C9085; border-radius: 5px"> -->
+            <!-- <ion-radio item-left [value]="0" class="radio-button-style"></ion-radio> -->
+            <ion-radio item-left [value]="0"></ion-radio>
+            <ion-label style="margin-left: 0px; white-space: normal;font-size: small;">0% GST<br>{{'EDIBLE' | translate}}, {{'HUMAN CONSUMPTION' | translate}}
+            </ion-label>
+          </ion-item>
+        </ion-col>
+        <ion-col style="margin-left:10px;">
+          <ion-item style="margin: 0px">
+            <ion-radio item-left [value]="5"></ion-radio>
+            <ion-label style="margin-left: 0px;white-space: normal;font-size: small;">5% GST<br>{{'OIL MILLING' | translate}}<br><br>
+            </ion-label>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col col-4>
+          <span style="font-size: medium;font-weight: bold;font-style: italic;">{{'Brand' | translate}}</span>
+        </ion-col>
+        <ion-col col-3>
+          <span style="font-size: medium;font-weight: bold;font-style: italic;">{{'Bag Type' | translate}}</span>
+        </ion-col>
+        <ion-col col-2>
+          <span style="font-size: medium;font-weight: bold;font-style: italic;"># {{'bags' | translate}}</span>
+        </ion-col>
+        <ion-col col-2>
+          <span style="font-size: medium;font-weight: bold;font-style: italic;">{{'Cost' | translate}}</span>
+        </ion-col>
+      </ion-row>
+      <div *ngFor="let order of order_form">
+        <ion-row [ngStyle]="{'font-weight': disabledFormStyle(order.disabled)}">
+          <ion-col col-4>{{order.copra_brand.name  | translate}}
+            <br>
+            <span style="font-size: smaller;">{{order.copra_brand.notes}}</span>
+          </ion-col>
+          <ion-col col-3>{{order.bag_type.name | translate}}&nbsp;x
+            <span style="color:darkslateblue;font-size: smaller;"> ₹{{order.rate}}</span>
+          </ion-col>
+          <ion-col col-1>
+            <input type="number" class="custom-input-box" placeholder="# bags" [disabled]="order.disabled" (change)="calculateBagsToQuantity()"
+              [(ngModel)]="order.bag_count">
+          </ion-col>
+          <ion-col col-4 *ngIf="order.cost != null">
+            <span style="color: rosybrown;">=&nbsp;₹&nbsp;{{order.cost | number: '.2'}}</span>
+          </ion-col>
+          <!-- <ion-col>
+            <ion-input type="number" class="custom-input-box" step="0.01" placeholder="rate" [(ngModel)]="order.rate"></ion-input>
+          </ion-col> -->
+        </ion-row>
+      </div>
+      <ion-row>
+        <ion-col col-2></ion-col>
+        <ion-col>
+          <span style="font-size: 13px;">*{{'All rates are based upon gross weight' | translate}} ({{'inclusive of weight of Gunny bag' | translate}})</span>
+        </ion-col>
+        <ion-col col-2></ion-col>
+      </ion-row>
+      <br>
+      <ion-row radio-group [(ngModel)]="transport">
+        <ion-col>
+          <ion-item>
+            <ion-label>{{'Self-Pickup' | translate}}</ion-label>
+            <ion-radio checked='true' [value]="false"></ion-radio>
+          </ion-item>
+        </ion-col>
+        <ion-col>
+          <ion-item>
+            <ion-label>{{'Truck Transport' | translate}}</ion-label>
+            <ion-radio [value]="true"></ion-radio>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+      <ion-row *ngIf="transport">
+        <ion-col>
+          <ion-item>
+            <ion-label style="color: darkslategray;">Transport</ion-label>
+            <ion-select interface="popover" [(ngModel)]="transport_id">
+              <ion-option *ngFor="let transport of transport_details" [value]="transport.id">{{transport.name}}</ion-option>
+            </ion-select>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+    <ion-col></ion-col>
+    <ion-col>
+      <button ion-button (click)="registerOrderForBuyer(order_form, transport, transport_id)">{{'Place Order' | translate}}</button>
+    </ion-col>
+    <ion-col></ion-col>
+  </ion-row>
+    </ion-card-content>
+  </ion-card>
+
+<!--old system-->
+
   <ion-row>
     <ion-col class="rate-col">
       <!--Today's quote  -->
@@ -49,8 +298,7 @@
     </ion-col>
     <ion-col>
       <h3 text-center padding-top (click)="routePaymentDetails()">{{'Remittance' | translate}}</h3>
-      <button ion-button outline (click)="routePaymentDetails()">{{'RECORD REMMITTANCE' | translate}}
-      </button>
+      <button ion-button outline (click)="routePaymentDetails()">{{'RECORD REMMITTANCE' | translate}}</button>
       <br>
       <button ion-button outline (click)="showBankDetails()">{{'RTGS/UPA Details' | translate}}</button>
       <!-- <span style="color: darkslategrey; font-size: larger;"> </span><br><br> -->
@@ -68,169 +316,5 @@
       <button ion-button round (click)="onClickPayNow()">Pay Now</button>
     </ion-col>
   </ion-row> -->
-  <span *ngIf="new_date_today >= restricted_time">
-    <h6 text-center style="color: red;">{{'No Order will be taken after 3 PM!' | translate}}</h6>
-  </span><br>
-  <span *ngIf="show_today_orders">
-    <h6 text-center>Today's Order(s)</h6>
-    <div style="max-height: 70px;overflow: auto;">
-      <ion-row>
-        <!-- <ion-col>
-          <span style="font-size: medium;font-weight: bold;font-style: italic;">Date</span>
-        </ion-col> -->
-        <ion-col>
-          <span style="font-size: medium;font-weight: bold;font-style: italic;">Sl. No</span>
-        </ion-col>
-        <ion-col>
-          <span style="font-size: medium;font-weight: bold;font-style: italic;">Status</span>
-        </ion-col>
-        <ion-col>
-          <span style="font-size: medium;font-weight: bold;font-style: italic;">Cost</span>
-        </ion-col>
-      </ion-row>
-      <ion-row *ngFor="let today_order of today_orders; let timer_index = index" (click)="onClickDetailOrder(today_order)">
-        <!-- <ion-col>
-          <div style="width: 65%; font-size: 13px; padding: 0%; margin: 0%; float: left; height: 25px;">
-            <timer #timer [timeInSeconds]="today_order['time_in_second']"> {{timer | startTimer}}</timer>
-          </div>
-        </ion-col> -->
-        <!-- <ion-col>
-          <span style="text-transform: capitalize;">{{today_order['sale_date'] | date: 'dd-MMM'}}</span>
-        </ion-col> -->
-        <!-- <ion-col style="float: right;"> -->
-          <ion-col>
-            {{timer_index + 1}}
-          </ion-col>
-          <ion-col>
-            <span style="text-transform: capitalize;">{{today_order['sale_status']['name'] | rmUnderScore}}</span>
-          </ion-col>
-          <ion-col>
-            <span>{{today_order['order_total_cost'] | number: '.2'}}</span>
-          </ion-col>
-        <!-- </ion-col> -->
-      </ion-row>
-    </div>
-    <hr>
-  </span>
-
-
-  <h3 text-center padding-top>{{'Place Order' | translate}}</h3>
-  <ion-row *ngIf="weight_difference > 0" [ngStyle]="{'color': getBackgroundColor(weight_difference)}">
-    <ion-col col-5>
-      <h6 style="font-size: small;">
-        {{'Eligiblity' | translate}}:
-        <em>{{ weight_difference }} kgs </em>
-      </h6>
-    </ion-col>
-    <ion-col col-2></ion-col>
-    <ion-col col-5>
-      <h6 style="font-size: small;">
-        <span>{{'Product Cost' | translate}}: {{product_cost | number: '.2'}} ₹</span>
-      </h6>
-    </ion-col>
-  </ion-row>
-  <ion-row *ngIf="weight_difference <= 0" [ngStyle]="{'color': getBackgroundColor(weight_difference)}">
-    <ion-col>
-      <h6 style="font-size: small;">
-        {{'You have reached/crossed the maximum orderable weight limit by' | translate}}
-        <em>{{ weight_difference }} kgs </em>.
-      </h6>
-    </ion-col>
-  </ion-row>
-  <ion-row *ngIf="user_balance <= 0">
-    <h6 text-center>&nbsp;{{'Hello' | translate}}:<br> {{'You have insufficient balance to make orders now.' | translate}} <br>{{'Please transfer the amount via' | translate}} <button ion-button clear (click)="showBankDetails()">{{'RTGS/UPI/Cash' | translate}}</button> {{'before placing the order' | translate}}. <br>{{'Thank you very much for your business. If you have transferred, please record it' | translate}} <button ion-button clear (click)="routePaymentDetails()">here</button></h6>
-  </ion-row>
-  <ion-row radio-group [(ngModel)]="gst_percentage">
-    <ion-col style="margin-left:10px;">
-      <ion-item>
-      <!-- <ion-item style="background-color: #9C9085; border-radius: 5px"> -->
-        <!-- <ion-radio item-left [value]="0" class="radio-button-style"></ion-radio> -->
-        <ion-radio item-left [value]="0"></ion-radio>
-        <ion-label style="margin-left: 0px; white-space: normal;font-size: small;">0% GST<br>{{'EDIBLE' | translate}}, {{'HUMAN CONSUMPTION' | translate}}
-        </ion-label>
-      </ion-item>
-    </ion-col>
-    <ion-col style="margin-left:10px;">
-      <ion-item>
-        <ion-radio item-left [value]="5"></ion-radio>
-        <ion-label style="margin-left: 0px;white-space: normal;font-size: small;">5% GST<br>{{'OIL MILLING' | translate}}<br><br>
-        </ion-label>
-      </ion-item>
-    </ion-col>
-  </ion-row>
-  <ion-row>
-    <ion-col col-4>
-      <span style="font-size: medium;font-weight: bold;font-style: italic;">{{'Brand' | translate}}</span>
-    </ion-col>
-    <ion-col col-3>
-      <span style="font-size: medium;font-weight: bold;font-style: italic;">{{'Bag Type' | translate}}</span>
-    </ion-col>
-    <ion-col col-2>
-      <span style="font-size: medium;font-weight: bold;font-style: italic;"># {{'bags' | translate}}</span>
-    </ion-col>
-    <ion-col col-2>
-      <span style="font-size: medium;font-weight: bold;font-style: italic;">{{'Cost' | translate}}</span>
-    </ion-col>
-  </ion-row>
-  <div *ngFor="let order of order_form">
-    <ion-row [ngStyle]="{'font-weight': disabledFormStyle(order.disabled)}">
-      <ion-col col-4>{{order.copra_brand.name  | translate}}
-        <br>
-        <span style="font-size: smaller;">{{order.copra_brand.notes}}</span>
-      </ion-col>
-      <ion-col col-3>{{order.bag_type.name | translate}}&nbsp;x
-        <span style="color:darkslateblue;font-size: smaller;"> ₹{{order.rate}}</span>
-      </ion-col>
-      <ion-col col-1>
-        <input type="number" class="custom-input-box" placeholder="# bags" [disabled]="order.disabled" (change)="calculateBagsToQuantity()"
-          [(ngModel)]="order.bag_count">
-      </ion-col>
-      <ion-col col-4 *ngIf="order.cost != null">
-        <span style="color: rosybrown;">=&nbsp;₹&nbsp;{{order.cost | number: '.2'}}</span>
-      </ion-col>
-      <!-- <ion-col>
-        <ion-input type="number" class="custom-input-box" step="0.01" placeholder="rate" [(ngModel)]="order.rate"></ion-input>
-      </ion-col> -->
-    </ion-row>
-  </div>
-  <ion-row>
-    <ion-col col-2></ion-col>
-    <ion-col>
-      <span style="font-size: 13px;">*{{'All rates are based upon gross weight' | translate}} ({{'inclusive of weight of Gunny bag' | translate}})</span>
-    </ion-col>
-    <ion-col col-2></ion-col>
-  </ion-row>
-  <br>
-  <ion-row radio-group [(ngModel)]="transport">
-    <ion-col>
-      <ion-item>
-        <ion-label>{{'Self-Pickup' | translate}}</ion-label>
-        <ion-radio checked='true' [value]="false"></ion-radio>
-      </ion-item>
-    </ion-col>
-    <ion-col>
-      <ion-item>
-        <ion-label>{{'Truck Transport' | translate}}</ion-label>
-        <ion-radio [value]="true"></ion-radio>
-      </ion-item>
-    </ion-col>
-  </ion-row>
-  <ion-row *ngIf="transport">
-    <ion-col>
-      <ion-item>
-        <ion-label style="color: darkslategray;">Transport</ion-label>
-        <ion-select interface="popover" [(ngModel)]="transport_id">
-          <ion-option *ngFor="let transport of transport_details" [value]="transport.id">{{transport.name}}</ion-option>
-        </ion-select>
-      </ion-item>
-    </ion-col>
-  </ion-row>
-  <ion-row>
-    <ion-col></ion-col>
-    <ion-col>
-      <button ion-button (click)="registerOrderForBuyer(order_form, transport, transport_id)">{{'Place Order' | translate}}</button>
-    </ion-col>
-    <ion-col></ion-col>
-  </ion-row>
 
 </ion-content>

@@ -36,7 +36,9 @@ export class MultiOrderPage {
   gst_percentage: any = 0;
   default_lang: any = 'english';
   new_date_today: any;
-  restricted_time: any
+  restricted_time: any;
+
+  rate_now: any = {};
 
   order_form = [
     {
@@ -191,7 +193,7 @@ export class MultiOrderPage {
             if (quote_adjustment_rate.hasOwnProperty(obj.copra_brand['id'])) {
               obj.rate = quote_adjustment_rate[obj.copra_brand['id']][obj.bag_type['id']]['rate'];
             }
-
+          this.
             // disable the field when less than 5 bags 
 
             // if (current_stock[obj.copra_brand['id']][obj.bag_type['id']] > 5) {
