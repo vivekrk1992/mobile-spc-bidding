@@ -1,5 +1,5 @@
 import { Component, ChangeDetectorRef, ViewChild } from '@angular/core';
-import { IonicPage, NavController, NavParams, App, ToastController, LoadingController, AlertController, Events } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, App, ToastController, LoadingController, AlertController, Events, Platform } from 'ionic-angular';
 import { HttpServerServiceProvider } from '../../providers/http-server-service/http-server-service';
 import { Storage } from '@ionic/storage';
 import { GlobalProvider } from '../../providers/global/global'
@@ -7,6 +7,10 @@ import { FCM } from '@ionic-native/fcm';
 import { ConfirmOrderPage } from '../confirm-order/confirm-order';
 import { TimerComponent } from '../../components/timer/timer';
 import { TranslateService } from '@ngx-translate/core';
+import { Network } from '@ionic-native/network';
+
+declare var navigator: any;
+declare var Connection: any;
 
 @IonicPage()
 @Component({
@@ -37,8 +41,7 @@ export class MultiOrderPage {
   default_lang: any = 'english';
   new_date_today: any;
   restricted_time: any;
-
-  rate_now: any = {};
+  network_color: string;
 
   order_form = [
     {
@@ -112,7 +115,7 @@ export class MultiOrderPage {
   constructor(public navCtrl: NavController, public navParams: NavParams, private httpServerServiceProvider: HttpServerServiceProvider,
     private app: App, private storage: Storage, private toastCtrl: ToastController, private loadingCtrl: LoadingController,
     private alertCtrl: AlertController, private global: GlobalProvider, private fcm: FCM, private events: Events,
-    private ref: ChangeDetectorRef, public translate: TranslateService) {
+    private ref: ChangeDetectorRef, public translate: TranslateService, private platform: Platform, private network: Network) {
 
       this.events.subscribe('today_quote', (data) => {
       this.doRefresh();
@@ -130,6 +133,26 @@ export class MultiOrderPage {
       this.translate.use(browserLang.match(/english|hindi/) ? browserLang : this.default_lang);
     });
 
+    this.platform.resume.subscribe((data) => {
+      // alert('Alert when app minimized');
+      this.doRefresh();
+      document.addEventListener("offline", this.checkConnection, false);
+    });
+
+    // document.addEventListener("offline", this.checkConnection, false);
+    // document.addEventListener("online", this.checkConnection, false);
+
+    let disconnectSubscription = this.network.onDisconnect().subscribe(() => {
+      console.log('network was disconnected :-(');
+      this.checkConnection();
+    });
+    
+    
+    // watch network for a connection
+    let connectSubscription = this.network.onConnect().subscribe(() => {
+      console.log('network connected!');
+      this.checkConnection();
+    });
   }
 
   ionViewCanEnter() {
@@ -143,16 +166,43 @@ export class MultiOrderPage {
     }, (error) => {
       console.log(error);
     });
-
-    
     // this.translate.addLangs(['hi', 'en']);
     // this.translate.setDefaultLang('hi');
     // const browserLang = this.translate.getBrowserLang();
     // this.translate.use(browserLang.match(/hi|en/) ? browserLang : 'hi');
+    this.checkConnection();
   }
 
+  checkConnection() {
+    let networkState = navigator.connection.type;
+
+    let states = {};
+    states[Connection.UNKNOWN]  = 'Unknown connection';
+    states[Connection.ETHERNET] = 'Ethernet connection';
+    states[Connection.WIFI]     = 'WiFi connection';
+    states[Connection.CELL_2G]  = 'Cell 2G connection';
+    states[Connection.CELL_3G]  = 'Cell 3G connection';
+    states[Connection.CELL_4G]  = 'Cell 4G connection';
+    states[Connection.CELL]     = 'Cell generic connection';
+    states[Connection.NONE]     = 'No network connection';
+
+    // alert('Connection type: ' + states[networkState]);
+
+    if (states[networkState] == 'No network connection') {
+      this.network_color = 'red';
+      this.ref.detectChanges();    
+    } else {
+      this.network_color = 'green';
+      this.ref.detectChanges();    
+    }
+    // this.ref.detectChanges();    
+  }
 
   doRefresh(event = null) {
+    // this.checkConnection();
+    // document.addEventListener("offline", this.checkConnection, false);
+    // document.addEventListener("online", this.checkConnection, false);
+
     this.getAppVersion();
     this.httpServerServiceProvider.getTodayDomesticQuote().subscribe((data) => {
       console.log(data);
@@ -193,7 +243,7 @@ export class MultiOrderPage {
             if (quote_adjustment_rate.hasOwnProperty(obj.copra_brand['id'])) {
               obj.rate = quote_adjustment_rate[obj.copra_brand['id']][obj.bag_type['id']]['rate'];
             }
-          this.
+          // this.
             // disable the field when less than 5 bags 
 
             // if (current_stock[obj.copra_brand['id']][obj.bag_type['id']] > 5) {
@@ -451,4 +501,5 @@ export class MultiOrderPage {
     console.log(language);
     this.storage.set('language', language);
   }
+
 }

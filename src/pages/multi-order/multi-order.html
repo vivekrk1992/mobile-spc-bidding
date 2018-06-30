@@ -20,7 +20,7 @@
       </select>
     </span>
     <!--internet connection-->
-    <span style="float:right; padding-right: 10px;">  <ion-icon name="planet" style="font-size: x-large"></ion-icon></span>
+    <span style="float:right; padding-right: 10px;">  <ion-icon name="planet" style="font-size: x-large" [style.color]="network_color"></ion-icon></span>
     <!--logout-->
     <span style="float:right; padding-right: 10px; color:rgb(235, 52, 52); font-size: medium" (click)="logout()">{{'LogOut' | translate}}</span>
     <!--username-->
@@ -46,17 +46,17 @@
         <ion-col col-4>
           <span style="font-size: large; font-weight: 600;">Shubh</span><br>
           <span style="font-size: smaller">(50kg)</span><br>
-          <span style="font-size: large; font-weight: 600;"> ₹ {{domestic_quote_of_the_day}}</span>
+          <span style="font-size: large; font-weight: 600;"> ₹ {{order_form[0]['rate']}}</span>
         </ion-col>
         <ion-col col-4>
           <span style="font-size: large; font-weight: 600;">SPC</span><br>
           <span style="font-size: smaller">(50kg)</span><br>
-          <span style="font-size: large; font-weight: 600;"> ₹ {{domestic_quote_of_the_day}}</span>
+          <span style="font-size: large; font-weight: 600;"> ₹ {{order_form[2]['rate']}}</span>
         </ion-col>
         <ion-col col-4>
           <span style="font-size: large; font-weight: 600;">Labh</span><br>
           <span style="font-size: smaller">(50kg)</span><br>
-          <span style="font-size: large; font-weight: 600;"> ₹ {{domestic_quote_of_the_day}}</span>
+          <span style="font-size: large; font-weight: 600;"> ₹ {{order_form[4]['rate']}}</span>
         </ion-col>
 
       </ion-row>
@@ -273,9 +273,8 @@
 
 <!--old system-->
 
-  <ion-row>
+  <!-- <ion-row>
     <ion-col class="rate-col">
-      <!--Today's quote  -->
       <h3 text-center padding-top>{{ 'Rate' | translate}}
         <br>
         <span style="font-size: x-small;">({{'SPC' | translate}} 50 Kg)</span>
@@ -301,11 +300,10 @@
       <button ion-button outline (click)="routePaymentDetails()">{{'RECORD REMMITTANCE' | translate}}</button>
       <br>
       <button ion-button outline (click)="showBankDetails()">{{'RTGS/UPA Details' | translate}}</button>
-      <!-- <span style="color: darkslategrey; font-size: larger;"> </span><br><br> -->
       <span [ngStyle]="{'color': getBackgroundColor(user_balance)}" text-center style="font-weight: bold; font-size: larger;">{{'Account Balance' | translate}}: {{user_balance | number: '.2'}} ₹</span>
     </ion-col>
   </ion-row>
-  <hr>
+  <hr> -->
   <!-- <ion-row [ngStyle]="{'color': getBackgroundColor(user_balance)}">
     <ion-col *ngIf="user_balance >= 0">
       <span text-center style="font-weight: bold">Advance Amount: {{user_balance | number: '.2'}} ₹</span>
