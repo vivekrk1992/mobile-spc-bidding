@@ -30,14 +30,14 @@
 }
 
 page-login {
-    // .scroll-content {
-    //   background-color: transparent;
-    // }
+    .scroll-content {
+      background-color: transparent;
+    }
 
     .spc-text-header{
         text-align: center;
         margin-top: 15px;
-        color: steelblue;
+        // color: steelblue;
         font-size: xx-large;
         // font-family: Impact;
         font-weight: bold;

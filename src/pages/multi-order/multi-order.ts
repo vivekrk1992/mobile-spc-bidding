@@ -48,7 +48,7 @@ export class MultiOrderPage {
       quantity_in_kgs: 50,
       total_quantity: 0,
       cost: null,
-      disabled: false
+      disabled: true
     },
     {
       copra_brand: { 'id': 1, 'name': 'SHUBH', 'notes': '22-25 Pc/Kg' },
@@ -70,7 +70,7 @@ export class MultiOrderPage {
       quantity_in_kgs: 50,
       total_quantity: 0,
       cost: null,
-      disabled: false
+      disabled: true
     },
     {
       copra_brand: { 'id': 2, 'name': 'SPC', 'notes': '18-20 Pc/Kg' },
@@ -103,7 +103,7 @@ export class MultiOrderPage {
       quantity_in_kgs: 25,
       total_quantity: 0,
       cost: null,
-      disabled: false
+      disabled: true
     }
   ];
 
@@ -184,23 +184,26 @@ export class MultiOrderPage {
         console.log(data);
         let quote_adjustment_rate = data;
         // get current status to enable/disable the form
-        this.httpServerServiceProvider.getCurrentStock({ 'ddp_id': 1 }).subscribe((data) => {
-          let current_stock = data;
-          this.order_form.forEach((obj) => {
-            obj.buyer_id = this.user['id'];
-            if (quote_adjustment_rate.hasOwnProperty(obj.copra_brand['id'])) {
-              obj.rate = quote_adjustment_rate[obj.copra_brand['id']][obj.bag_type['id']]['rate'];
+        this.order_form.forEach((obj) => {
+          obj.buyer_id = this.user['id'];
+          if (quote_adjustment_rate.hasOwnProperty(obj.copra_brand['id'])) {
+            obj.rate = quote_adjustment_rate[obj.copra_brand['id']][obj.bag_type['id']]['rate'];
+            if (quote_adjustment_rate[obj.copra_brand['id']][obj.bag_type['id']]['is_active']) {
+              obj.disabled = false;
             }
+          }
+        // this.httpServerServiceProvider.getCurrentStock({ 'ddp_id': 1 }).subscribe((data) => {
+        //   let current_stock = data;
 
-            // disable the field when less than 5 bags 
+        //     // disable the field when less than 5 bags 
 
-            // if (current_stock[obj.copra_brand['id']][obj.bag_type['id']] > 5) {
-            //   obj.disabled = false;
-            // } else {
-            //   console.log('in disable')
-            //   obj.disabled = true;
-            // }
-          })
+        //     // if (current_stock[obj.copra_brand['id']][obj.bag_type['id']] > 5) {
+        //     //   obj.disabled = false;
+        //     // } else {
+        //     //   console.log('in disable')
+        //     //   obj.disabled = true;
+        //     // }
+        //   });
           // for (let index in this.order_form) {
           //   if (this.current_stock[this.order_form[index]['copra_brand']['id']][this.order_form[index]['bag_type']['id']] >= 10) {
           //     this.order_form[index]['disabled'] = false;
@@ -211,10 +214,11 @@ export class MultiOrderPage {
           //     this.order_form[index]['disabled'] = true;
           //   }
           // }
+          
           this.ref.detectChanges();
-
         }, (error) => {
           console.log(error);
+          console.log(JSON.stringify(error))
         });
         let buyer_dict = { 'buyer_id': this.user['id'] }
         this.httpServerServiceProvider.getTodayOrderHistory(buyer_dict).subscribe((data) => {
