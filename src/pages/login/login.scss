@@ -3,11 +3,6 @@
 //     margin: 35% 20% 10% 20%;
 // }
 
-.button-center {
-    margin-top: 25px;
-    margin-left: 40%;
-}
-
 .input{
     margin: 5px;
     border-radius:5px; 
@@ -30,14 +25,14 @@
 }
 
 page-login {
-    // .scroll-content {
-    //   background-color: transparent;
-    // }
+    .scroll-content {
+      background-color: transparent;
+    }
 
     .spc-text-header{
         text-align: center;
         margin-top: 15px;
-        color: steelblue;
+        // color: steelblue;
         font-size: xx-large;
         // font-family: Impact;
         font-weight: bold;
@@ -57,6 +52,16 @@ page-login {
         height: 35px;
         width: 200px;
         padding-left: 10px;
+    }
+
+    .button-md {
+        font-size: 2.4rem;
+        background-color: #BF360C;
+    }
+
+    .button-center {
+        margin-top: 25px;
+        margin-left: 20%;
     }
     
 }

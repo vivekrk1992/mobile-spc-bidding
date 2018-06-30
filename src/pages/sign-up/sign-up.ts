@@ -19,7 +19,7 @@ export class SignUpPage {
 
   constructor(public navCtrl: NavController, public navParams: NavParams, private formBuilder: FormBuilder, private httpServerServiceProvider: HttpServerServiceProvider, private alertController: AlertController, private toastCtrl: ToastController) {
     this.sign_up_form = this.formBuilder.group({
-      username: [null, Validators.compose([Validators.required])],
+      username: [null],
       first_name: [null],
       last_name: [null],
       email: [null, Validators.compose([Validators.email])],
@@ -39,6 +39,7 @@ export class SignUpPage {
   onSignup(signup_value) {
     console.log(signup_value);
     if (signup_value.password === signup_value.confirm_password) {
+      signup_value['username'] = signup_value['mobile'];
       this.httpServerServiceProvider.signUp(signup_value).subscribe((data) => {
         console.log(data);
         // this.show_otp_field = true;

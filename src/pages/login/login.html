@@ -1,19 +1,22 @@
 <!-- <ion-title> -->
 <!-- </ion-title> -->
-<ion-content padding>
-  <ion-row>
+<ion-content padding style="background-image:url('assets/icon/login.jpeg'); background-position: center center; width:100%; height:100%;
+display: flex; justify-content:center; align-items:center; background-repeat: repeat-y;">
+  <ion-row style="background-color: white">
     <ion-col>
-      <span class="spc-text-header">Shree Prashwanath Corporation</span><br>
-      <span class="spc-text-content">Trading in Coconut Products</span>
+      <span class="spc-text-header" style="color:#00838F">Shree Prashwanath Corporation</span><br>
+      <span class="spc-text-content" style="color: #795548">Trading in Coconut Products</span>
     </ion-col>
   </ion-row>
-  <form [formGroup]="login_form" (ngSubmit)="logIn()">
-    <input class="input-field" type="text" placeholder="User Name" formControlName="user_name">
-    <br>
-    <input class="input-field" type="password" placeholder="Password" formControlName="password">
-    <button ion-button type="submit" class="button-center" [disabled]="terms_conditions">Log In</button>
-  </form>
-  <div padding text-center style="margin-top:75%;">
+  <ion-row style="margin-top: 40px; margin-left: 75px;">
+    <form [formGroup]="login_form" (ngSubmit)="logIn()">
+      <input class="input-field" type="text" placeholder="User Name" formControlName="user_name">
+      <br>
+      <input class="input-field" type="password" placeholder="Password" formControlName="password">
+      <button ion-button type="submit" class="button-center" [disabled]="terms_conditions">Log In</button>
+    </form>
+  </ion-row>
+  <div padding text-center style="margin-top:55%;">
     <span style='color: orangered; font-weight: bold;'>Forget Password</span>
     <span margin-left style='color: saddlebrown; font-weight: bold;' (click)="routeSignUp()">SignUp</span>
   </div>
@@ -22,7 +25,7 @@
       <ion-checkbox checked (click)="disableToggle()"></ion-checkbox>
     </ion-col>
     <!-- <span style='color: orangered; font-weight: bold;'>Trems & Condition</span> -->
-    <span style='color: orangered; font-weight: bold;' (click)="openTermsAndConditions()">Trems & Condition</span>
+    <span style='color: orangered; font-weight: bold;' (click)="openTermsAndConditions()">Terms & Condition</span>
     <br><br>
     <a style="text-decoration:none" href="tel:+917538812444">
       <ion-icon name="call"></ion-icon>

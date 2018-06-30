@@ -238,4 +238,9 @@ export class HttpServerServiceProvider {
     return this.http.post(this.global.base_url + 'main/serve/today/order/history/for/buyer/', data, { headers: this.headers })
       .map((res) => res.json());
   }
+
+  getPaymentTransactionByBuyer(data) {
+    return this.http.post(this.global.base_url + 'main/serve/payment/transactions/', data, { headers: this.headers })
+      .map((res) => res.json());
+  }
 }
