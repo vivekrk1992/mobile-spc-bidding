@@ -36,7 +36,9 @@ export class MultiOrderPage {
   gst_percentage: any = 0;
   default_lang: any = 'english';
   new_date_today: any;
-  restricted_time: any
+  restricted_time: any;
+
+  rate_now: any = {};
 
   order_form = [
     {
