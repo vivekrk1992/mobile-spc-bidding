@@ -243,4 +243,17 @@ export class HttpServerServiceProvider {
     return this.http.post(this.global.base_url + 'main/serve/payment/transactions/', data, { headers: this.headers })
       .map((res) => res.json());
   }
+
+  getOTPForForgetPassword(data) {
+    return this.http.post(this.global.base_url + 'main/send/otp/for/forget/password/', data)
+      .map((res) => res.json());
+  }
+
+  confirmForgetPasswordOTP(data) {
+    return this.http.post(this.global.base_url + 'main/confirm/forget/password/otp/', data);
+  }
+
+  resetPassword(data) {
+    return this.http.post(this.global.base_url + 'main/reset/password/', data);
+  }
 }
