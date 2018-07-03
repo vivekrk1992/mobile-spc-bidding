@@ -65,6 +65,13 @@
           <span><em>EDIBLE DRY COCONUT PEELED & SHELLED,&nbsp;HSN: 08011920, GST: 0%</em></span>
         </ion-col>
       </ion-row>
+      <ion-row>
+        <ion-col>
+          Contact:&nbsp;&nbsp;
+          <a style="color:black" href="tel:01414161787">01414161787</a>,&nbsp;
+          <a style="color:black" href="tel:7538812444">7538812444</a>
+        </ion-col>
+      </ion-row>
     </ion-card-content>
   </ion-card>
 
@@ -97,7 +104,7 @@
 
   <!--show todays orders if placed already-->
   <span *ngIf="show_today_orders">
-    <ion-card>
+    <ion-card style="background-color: beige">
       <ion-card-content>
         <h6 text-center>Today's Order(s)</h6>
         <div style="max-height: 70px;overflow: auto;">
@@ -140,7 +147,7 @@
   </span>
 
   <!--order releated messages-->
-  <ion-card>
+  <ion-card style="background-color: #FEF0D3">
     <ion-card-content>
       <!--weight difference check -->
       <!--if more than 0-->
@@ -171,7 +178,7 @@
 
 
   <!--Order form-->
-  <ion-card>
+  <ion-card style="background-color: #C3D6DD">
     <ion-card-header>
       <h1 text-center>{{'Place Order' | translate}}</h1>
     </ion-card-header>
@@ -222,7 +229,7 @@
               [(ngModel)]="order.bag_count">
           </ion-col>
           <ion-col col-4 *ngIf="order.cost != null">
-            <span style="color: rosybrown;">=&nbsp;₹&nbsp;{{order.cost | number: '.2'}}</span>
+            <span style="color: rosybrown;padding-left: 20px;padding-top: 10px;">=&nbsp;₹&nbsp;{{order.cost | number: '.2'}}</span>
           </ion-col>
           <!-- <ion-col>
             <ion-input type="number" class="custom-input-box" step="0.01" placeholder="rate" [(ngModel)]="order.rate"></ion-input>
@@ -270,49 +277,5 @@
   </ion-row>
     </ion-card-content>
   </ion-card>
-
-<!--old system-->
-
-  <!-- <ion-row>
-    <ion-col class="rate-col">
-      <h3 text-center padding-top>{{ 'Rate' | translate}}
-        <br>
-        <span style="font-size: x-small;">({{'SPC' | translate}} 50 Kg)</span>
-      </h3>
-      <h1 text-center>
-        <span>
-          ₹ {{domestic_quote_of_the_day}}
-        </span>
-      </h1>
-
-      <ion-row>
-        <ion-col style="font-size: x-small;">
-          <span>
-            <em>EDIBLE DRY COCONUT PEELED & SHELLED,&nbsp;</em>
-          </span>
-          <span>HSN: 08011920,&nbsp;</span>
-          <span>GST: 0%</span>
-        </ion-col>
-      </ion-row>
-    </ion-col>
-    <ion-col>
-      <h3 text-center padding-top (click)="routePaymentDetails()">{{'Remittance' | translate}}</h3>
-      <button ion-button outline (click)="routePaymentDetails()">{{'RECORD REMMITTANCE' | translate}}</button>
-      <br>
-      <button ion-button outline (click)="showBankDetails()">{{'RTGS/UPA Details' | translate}}</button>
-      <span [ngStyle]="{'color': getBackgroundColor(user_balance)}" text-center style="font-weight: bold; font-size: larger;">{{'Account Balance' | translate}}: {{user_balance | number: '.2'}} ₹</span>
-    </ion-col>
-  </ion-row>
-  <hr> -->
-  <!-- <ion-row [ngStyle]="{'color': getBackgroundColor(user_balance)}">
-    <ion-col *ngIf="user_balance >= 0">
-      <span text-center style="font-weight: bold">Advance Amount: {{user_balance | number: '.2'}} ₹</span>
-      <button ion-button round (click)="onClickPayNow()">Pay Now</button>
-    </ion-col>
-    <ion-col *ngIf="user_balance < 0">
-      <span text-center style="font-weight: bold; font-size: medium;">Payment Due: {{ - user_balance | number: '.2'}} ₹</span>
-      <button ion-button round (click)="onClickPayNow()">Pay Now</button>
-    </ion-col>
-  </ion-row> -->
 
 </ion-content>

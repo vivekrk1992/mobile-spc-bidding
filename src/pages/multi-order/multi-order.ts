@@ -509,4 +509,8 @@ export class MultiOrderPage {
     this.storage.set('language', language);
   }
 
+  ionViewCanLeave() {
+    this.ref.detach();
+  }
+
 }

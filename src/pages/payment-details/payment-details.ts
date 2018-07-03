@@ -60,13 +60,16 @@ export class PaymentDetailsPage {
       let previous_transaction_string_length = previous_transaction_id.length
       if (previous_transaction_string_length > input_string_length) {
         if (previous_transaction_id.slice(0, input_string_length) == input_transaction_id || Math.round(object['amount']) == Math.round(payment_amount)) {
-          is_transaction_made = confirm('Remittance is already made. Do you want to proceed!');
+          alert('WARNING! This is a DUPLICATE Entry! for ' + payment_amount + ' !. Contact 7538812444 to proceed!');
+          is_transaction_made = false;
+          // is_transaction_made = confirm('WARNING! This is a DUPLICATE Entry! Do you want to proceed!');
           break;
         }
       } 
       else {
         if (previous_transaction_id == input_transaction_id.slice(0, previous_transaction_string_length) || Math.round(object['amount']) == Math.round(payment_amount)) {
-          is_transaction_made = confirm('Remittance is already made. Do you want to proceed!');
+          alert('WARNING! This is a DUPLICATE Entry! for ' + payment_amount + ' !. Contact 7538812444 to proceed!');
+          is_transaction_made = false;
           break;
         }
       }
@@ -77,7 +80,8 @@ export class PaymentDetailsPage {
         console.log(data);
         loading.dismiss();
         this.displayToast('Remittance Recorded! Please wait for Approval!');
-        this.navCtrl.pop();
+        // this.navCtrl.pop();
+        this.doRefresh();
       }, (error) => {
         loading.dismiss();      
         console.log(error);

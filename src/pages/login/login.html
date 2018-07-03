@@ -8,7 +8,7 @@ display: flex; justify-content:center; align-items:center; background-repeat: re
       <span class="spc-text-content" style="color: #795548">Trading in Coconut Products</span>
     </ion-col>
   </ion-row>
-  <ion-row style="margin-top: 40px; margin-left: 75px;">
+  <ion-row style="margin-top: 120px; margin-left: 75px;">
     <form [formGroup]="login_form" (ngSubmit)="logIn()">
       <input class="input-field" type="text" placeholder="User Name" formControlName="user_name">
       <br>
@@ -16,11 +16,11 @@ display: flex; justify-content:center; align-items:center; background-repeat: re
       <button ion-button type="submit" class="button-center" [disabled]="terms_conditions">Log In</button>
     </form>
   </ion-row>
-  <div padding text-center style="margin-top:55%;">
+  <div padding text-center style="margin-top:20%; background-color: white">
     <span style='color: orangered; font-weight: bold;' (click)="forgetPassword()">Forget Password</span>
-    <span margin-left style='color: saddlebrown; font-weight: bold;' (click)="routeSignUp()">SignUp</span>
-  </div>
-  <div padding text-center>
+    <span margin-left style='color: saddlebrown; font-weight: bold;' (click)="routeSignUp()">SignUp</span><br><br>
+  <!-- </div> -->
+  <!-- <div padding text-center style="background-color: white"> -->
     <ion-col col-1 ([ngModel])="terms_conditions">
       <ion-checkbox checked (click)="disableToggle()"></ion-checkbox>
     </ion-col>

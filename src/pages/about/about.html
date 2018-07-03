@@ -189,7 +189,7 @@
       </span>
     </ion-col>
     <ion-col col-3>
-      <span style="font-size: smaller">{{order_transaction['order_total_cost']}}</span>
+      <span style="font-size: smaller">{{order_transaction['order_total_cost'] | number: '.2'}}</span>
       <span *ngIf="order_transaction['payment_status']['name']=='fully_paid'">
         <ion-icon name="checkmark" style="font-size: x-small; color:green"></ion-icon>
       </span>
@@ -207,9 +207,12 @@
     <ion-col col-2></ion-col>
     <ion-col col-3>
       <span style="font-size: smaller">
-        {{payment_transaction['amount']}}
+        {{payment_transaction['amount'] | number: '.2'}}
         <span *ngIf="payment_transaction['payment_status']['name']=='complete'">
           <ion-icon name="done-all" style="font-size: x-small; color:green"></ion-icon>
+        </span>
+        <span *ngIf="payment_transaction['payment_status']['name']=='initiated'">
+          <ion-icon name="help" style="font-size: x-small; color:red"></ion-icon>
         </span>
       </span>
     </ion-col>
@@ -227,7 +230,7 @@
     <ion-col col-2></ion-col>
     <ion-col col-3>
       <span style="font-size: smaller">
-        {{remittance['amount']}}
+        {{remittance['amount'] | number: '.2'}}
         <span *ngIf="remittance['remittance_status']['name']=='complete'">
           <ion-icon name="done-all" style="font-size: x-small; color:green"></ion-icon>
         </span>
