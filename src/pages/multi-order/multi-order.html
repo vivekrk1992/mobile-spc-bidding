@@ -35,6 +35,11 @@
   <!--Copra rate area-->
   <!--<ion-row><ion-col>Rate Now:</ion-col></ion-row>-->
   <ion-card>
+    <ion-row>
+      <ion-col>
+        <span style="font-size: 13px;">{{'Bill will be made for 50kg net and 25 kg net respectively'| translate}}</span>
+      </ion-col>
+    </ion-row>
     <ion-card-content>
       <ion-row>
         <!--<ion-col col-1>-->
@@ -236,13 +241,6 @@
           </ion-col> -->
         </ion-row>
       </div>
-      <ion-row>
-        <ion-col col-2></ion-col>
-        <ion-col>
-          <span style="font-size: 13px;">*{{'All rates are based upon gross weight' | translate}} ({{'inclusive of weight of Gunny bag' | translate}})</span>
-        </ion-col>
-        <ion-col col-2></ion-col>
-      </ion-row>
       <br>
       <ion-row radio-group [(ngModel)]="transport">
         <ion-col>

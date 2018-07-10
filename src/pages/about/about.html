@@ -180,7 +180,7 @@
     <ion-col col-2>
       {{date_wise_transactions['transaction_date'] | date: 'dd-MMM'}}</ion-col>
     <ion-col col-5>
-      Sale-{{order_transaction['invoice_number']}}
+      Invoice-{{order_transaction['invoice_number']}}
       <br>
       <span *ngFor="let particular_string of order_transaction['particular_strings']">
         <span style="font-size: x-small">{{particular_string}}
