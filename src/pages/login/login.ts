@@ -1,11 +1,15 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectorRef } from '@angular/core';
 import { IonicPage, NavController, NavParams, Platform, AlertController, ToastController } from 'ionic-angular';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { TabsPage } from '../tabs/tabs';
 import { OrderTabsPage } from '../order-tabs/order-tabs';
 import { Storage } from '@ionic/storage';
 import { HttpServerServiceProvider } from '../../providers/http-server-service/http-server-service';
+import { Network } from '@ionic-native/network';
 // import { DocumentViewer, DocumentViewerOptions } from '@ionic-native/document-viewer';
+
+declare var navigator: any;
+declare var Connection: any;
 
 @IonicPage()
 @Component({
@@ -15,9 +19,10 @@ import { HttpServerServiceProvider } from '../../providers/http-server-service/h
 export class LoginPage {
   login_form: FormGroup;
   terms_conditions: any;
+  network_offline: boolean = false;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, private formBuilder: FormBuilder, private storage: Storage, private httpServerServiceProvider: HttpServerServiceProvider, private platform: Platform,
-     private alertCtrl: AlertController, private toastCtrl: ToastController) {
+    private alertCtrl: AlertController, private toastCtrl: ToastController, private network: Network, private ref: ChangeDetectorRef) {
     this.login_form = this.formBuilder.group({
       user_name: [''],
       password: [''],
@@ -30,11 +35,48 @@ export class LoginPage {
       }
     });
 
+    let disconnectSubscription = this.network.onDisconnect().subscribe(() => {
+      console.log('network was disconnected :-(');
+      this.checkConnection();
+    });
+
+
+    // watch network for a connection
+    let connectSubscription = this.network.onConnect().subscribe(() => {
+      console.log('network connected!');
+      this.checkConnection();
+    });
+
+  }
+
+  checkConnection() {
+    let networkState = navigator.connection.type;
+
+    let states = {};
+    states[Connection.UNKNOWN] = 'Unknown connection';
+    states[Connection.ETHERNET] = 'Ethernet connection';
+    states[Connection.WIFI] = 'WiFi connection';
+    states[Connection.CELL_2G] = 'Cell 2G connection';
+    states[Connection.CELL_3G] = 'Cell 3G connection';
+    states[Connection.CELL_4G] = 'Cell 4G connection';
+    states[Connection.CELL] = 'Cell generic connection';
+    states[Connection.NONE] = 'No network connection';
+
+    // alert('Connection type: ' + states[networkState]);
+ 
+    if (states[networkState] == 'No network connection') {
+      this.network_offline = true;
+      this.ref.detectChanges();    
+    } else {
+      this.network_offline = false;
+      this.ref.detectChanges();    
+    }
   }
 
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad LoginPage');
+    this.checkConnection();
   }
 
   openTermsAndConditions() {
@@ -76,6 +118,11 @@ export class LoginPage {
       this.storage.set('user_properties', data.user_properties);
       this.readyPlatform();
       this.httpServerServiceProvider.setTokenHeader(data.token);
+    }, (error) => {
+      console.log(error);
+      let detailed_error = JSON.parse(error._body);
+      console.log(detailed_error.detail);
+      alert(JSON.stringify(detailed_error.detail));
     });
   }
 

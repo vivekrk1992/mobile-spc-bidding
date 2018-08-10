@@ -42,6 +42,7 @@ export class MultiOrderPage {
   new_date_today: any;
   restricted_time: any;
   network_color: string;
+  button_offline: boolean = false;
 
   order_form = [
     {
@@ -145,6 +146,12 @@ export class MultiOrderPage {
     let disconnectSubscription = this.network.onDisconnect().subscribe(() => {
       console.log('network was disconnected :-(');
       this.checkConnection();
+      this.order_form.forEach((obj) => {
+        obj.rate = null;
+        obj.disabled = true;
+      });
+      this.button_offline = true;
+      this.ref.detectChanges();
     });
     
     
@@ -152,6 +159,9 @@ export class MultiOrderPage {
     let connectSubscription = this.network.onConnect().subscribe(() => {
       console.log('network connected!');
       this.checkConnection();
+      this.button_offline = false;
+      this.ref.detectChanges();
+      this.doRefresh();
     });
   }
 
@@ -190,10 +200,10 @@ export class MultiOrderPage {
 
     if (states[networkState] == 'No network connection') {
       this.network_color = 'red';
-      this.ref.detectChanges();    
+      // this.ref.detectChanges();    
     } else {
       this.network_color = 'green';
-      this.ref.detectChanges();    
+      // this.ref.detectChanges();    
     }
     // this.ref.detectChanges();    
   }
@@ -350,7 +360,7 @@ export class MultiOrderPage {
     console.log('datime Now------->' + this.new_date_today);
     console.log('Restricted Time----->' + this.restricted_time);
     if (this.new_date_today >= this.restricted_time) {
-      alert('३ बजे के बाद आर्डर नहीं कर सकते है or contact 0141-4161787');
+      alert('4 बजे के बाद आर्डर नहीं कर सकते है or contact 0141-4161787');
       return false;
     } else {
       if (this.transport) {

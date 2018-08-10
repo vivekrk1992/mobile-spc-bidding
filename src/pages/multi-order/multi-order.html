@@ -24,7 +24,7 @@
     <!--logout-->
     <span style="float:right; padding-right: 10px; color:rgb(235, 52, 52); font-size: medium" (click)="logout()">{{'LogOut' | translate}}</span>
     <!--username-->
-    <span style="float:right; padding: 0px 0px 0px 0px; color:rgb(17, 149, 255); font-family: cursive; font-size: medium" (click)="routeUserProfile()">{{company_name}}
+    <span style="float:right; padding: 0px 0px 0px 0px; color:rgb(17, 149, 255); text-decoration: underline; font-size: medium" (click)="routeUserProfile()">{{company_name}}
       <ion-icon name="contact"></ion-icon>&nbsp;&nbsp;|&nbsp;&nbsp;
     </span>
   </div>
@@ -104,7 +104,7 @@
 
   <!--3 pm warning in red -->
   <span *ngIf="new_date_today >= restricted_time">
-    <h6 text-center style="color: red;">{{'No Order will be taken after 3 PM!' | translate}}</h6>
+    <h6 text-center style="color: red;">{{'No Order will be taken after 4 PM!' | translate}}</h6>
   </span>
 
   <!--show todays orders if placed already-->
@@ -269,7 +269,7 @@
       <ion-row>
     <ion-col></ion-col>
     <ion-col>
-      <button ion-button (click)="registerOrderForBuyer(order_form, transport, transport_id)">{{'Place Order' | translate}}</button>
+      <button ion-button (click)="registerOrderForBuyer(order_form, transport, transport_id)" [disabled]="button_offline">{{'Place Order' | translate}}</button>
     </ion-col>
     <ion-col></ion-col>
   </ion-row>

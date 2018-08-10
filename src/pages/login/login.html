@@ -13,11 +13,16 @@ display: flex; justify-content:center; align-items:center; background-repeat: re
       <input class="input-field" type="text" placeholder="User Name" formControlName="user_name">
       <br>
       <input class="input-field" type="password" placeholder="Password" formControlName="password">
-      <button ion-button type="submit" class="button-center" [disabled]="terms_conditions">Log In</button>
+      <span *ngIf="!network_offline">
+        <button ion-button type="submit" class="button-center" [disabled]="terms_conditions">Log In</button>
+      </span>
+      <span *ngIf="network_offline">
+        <button ion-button style="margin-top: 25px; background-color: white; color: red" disabled="true">No Network</button>
+      </span>
     </form>
   </ion-row>
   <div padding text-center style="margin-top:20%; background-color: white">
-    <span style='color: orangered; font-weight: bold;' (click)="forgetPassword()">Forget Password</span>
+    <span style='color: orangered; font-weight: bold;' (click)="forgetPassword()">Forgot Password</span>
     <span margin-left style='color: saddlebrown; font-weight: bold;' (click)="routeSignUp()">SignUp</span><br><br>
   <!-- </div> -->
   <!-- <div padding text-center style="background-color: white"> -->
