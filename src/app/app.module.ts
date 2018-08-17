@@ -30,6 +30,7 @@ import { FCM } from '@ionic-native/fcm';
 import { TimerComponent } from '../components/timer/timer';
 import { ConfirmOrderPage } from '../pages/confirm-order/confirm-order';
 import { Network } from '@ionic-native/network';
+import { LocalNotifications } from '@ionic-native/local-notifications';
 
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
@@ -99,7 +100,8 @@ export function HttpLoaderFactory(httpClient: HttpClient) {
     File,
     FileTransfer,
     FCM,
-    Network
+    Network,
+    LocalNotifications
   ]
 })
 export class AppModule {}

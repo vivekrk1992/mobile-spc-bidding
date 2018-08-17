@@ -11,7 +11,8 @@ import { MultiOrderPage } from './../multi-order/multi-order';
 })
 export class OrderTabsPage {
 
-  tab1Root = MultiOrderPage;
+  tab1Root = 'ChatPage';
+  // tab1Root = MultiOrderPage;
   tab2Root = AboutPage;
   tab3Root = ContactPage;
   tab4Root = GrievancePage;

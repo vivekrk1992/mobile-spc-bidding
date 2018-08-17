@@ -19,8 +19,11 @@ export class MyApp {
     platform.ready().then(() => {
       statusBar.styleDefault();  
       this.fcm.onNotification().subscribe(data => {
+        // alert(JSON.stringify(data));
         if(data.wasTapped) {
+          this.events.publish('fcm_message', data);
         } else {
+          this.events.publish('fcm_message', data);
           this.events.publish('today_quote', data)
         }
       }, (error) => {

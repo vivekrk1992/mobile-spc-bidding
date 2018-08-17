@@ -256,4 +256,18 @@ export class HttpServerServiceProvider {
   resetPassword(data) {
     return this.http.post(this.global.base_url + 'main/reset/password/', data);
   }
+
+  createConversation(data) {
+    return this.http.post(this.global.base_url + 'interact/conversation/', data, {headers: this.headers})
+      .map((res) => res.json());
+  }
+
+  getConversationDetails() {
+    return this.http.get(this.global.base_url + 'interact/get/conversation/by/user/', {headers: this.headers})
+      .map((res) => res.json());
+  }
+
+  sendMessage(data) {
+    return this.http.post(this.global.base_url + 'interact/send/message/', data, {headers: this.headers});
+  }
 }
