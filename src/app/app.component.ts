@@ -27,7 +27,7 @@ export class MyApp {
           this.events.publish('today_quote', data)
         }
       }, (error) => {
-        console.log('error');
+        console.log(error);
       });
     });
   }

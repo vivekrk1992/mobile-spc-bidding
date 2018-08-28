@@ -267,7 +267,26 @@ export class HttpServerServiceProvider {
       .map((res) => res.json());
   }
 
+  getConversationFor3Days(data) {
+    return this.http.post(this.global.base_url + 'interact/get/conversation/by/user/', data, {headers: this.headers})
+      .map((res) => res.json());
+  }
+
   sendMessage(data) {
     return this.http.post(this.global.base_url + 'interact/send/message/', data, {headers: this.headers});
+  }
+
+  getPreDefinedQuestions() {
+    return this.http.get(this.global.base_url + 'interact/get/pre/defined/questions/', {headers: this.headers})
+      .map((res) => res.json());
+  }
+
+  postPredefinedQuestion(data) {
+    return this.http.post(this.global.base_url + 'interact/reply/for/pre/defined/question/', data, {headers: this.headers})
+      .map((res) => res.json());
+  }
+  
+  saveAttachments(data) {
+    return this.http.post(this.global.base_url + 'interact/save/attachments/from/chat/', data, { headers: this.headers });
   }
 }

@@ -1,0 +1,78 @@
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>
+      <span class="navbar-title">Bid</span>
+    </ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+  <ion-fab top right edge>
+    <button ion-fab mini color="danger" (click)="dismiss()"><ion-icon name="close-circle"></ion-icon></button>
+  </ion-fab>
+
+  <ion-slides #slides class="content-slider">
+    <ion-slide class="swiper-no-swiping">
+      <div style="padding: 0 25px 30px 25px">
+        <div style="height:250px; overflow: auto;">
+          <ion-row radio-group [(ngModel)]="selected_brand">
+            <ion-col *ngFor="let copra_brand of domestic_copra_brands">
+              <ion-item style="background-color: #9C9085; border-radius: 5px">
+                <ion-radio item-left [value]="copra_brand" class="radio-button-style" (click)="slideNext()"></ion-radio>
+                <ion-label style="margin-left: 0px; color: white;">{{copra_brand.name}}<br><span>{{copra_brand.notes}}</span></ion-label>
+              </ion-item>
+            </ion-col>
+          </ion-row>
+        </div>
+      </div>
+    </ion-slide>
+    <ion-slide class="swiper-no-swiping">
+      <ion-row *ngIf="selected_brand != null">
+        <button ion-button clear (click)="slidePrevious()" color="secondary" class="goback-button"><ion-icon name="arrow-back"></ion-icon>
+          &nbsp;{{selected_brand['name']}}</button>
+      </ion-row>
+      <div style="padding: 0 25px 30px 25px">
+        <div style="height:250px; overflow: auto;">
+          <ion-row radio-group [(ngModel)]="selected_bag_type">
+            <ion-col style="margin-left:10px;" *ngFor="let bag_type of domestic_bag_types">
+              <ion-item style="background-color: #9C9085; border-radius: 5px">
+                <ion-radio item-left [value]="bag_type" class="radio-button-style" (click)="slideNext()"></ion-radio>
+                <ion-label style="margin-left: 0px; color: white;">{{bag_type.name | rmUnderScore}}&nbsp;({{bag_type.common_name}})</ion-label>
+              </ion-item>
+            </ion-col>
+          </ion-row>
+        </div>
+      </div>
+    </ion-slide>
+    <ion-slide class="swiper-no-swiping">
+      <ion-row *ngIf="selected_bag_type != null">
+        <button ion-button clear (click)="slidePrevious()" color="secondary" class="goback-button"><ion-icon name="arrow-back"></ion-icon>
+          &nbsp;{{selected_brand['name']}}&nbsp;{{selected_bag_type['name'] | rmUnderScore}}</button>
+      </ion-row>
+      <div style="padding: 0 25px 30px 25px">
+        <ion-row>
+          <ion-col>
+            <ion-item>
+              <ion-label>Quantity in Bags</ion-label>
+              <ion-input style="color: black;" [(ngModel)]="bid_quantity" type="number" placeholder="#Bags"></ion-input>
+            </ion-item>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col>
+            <ion-item>
+              <ion-label>Rate</ion-label>
+              <ion-input style="color: black;" [(ngModel)]="bid_rate" type="number" step="0.01" placeholder="Rate"></ion-input>
+            </ion-item>
+          </ion-col>
+        </ion-row><br>
+        <ion-row>
+          <button ion-button full [disabled]="disableInput()" (click)="dismiss()">Bid</button>
+        </ion-row>
+      </div>
+    </ion-slide>
+  </ion-slides>
+</ion-content>

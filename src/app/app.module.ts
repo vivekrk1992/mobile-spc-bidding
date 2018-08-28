@@ -31,6 +31,7 @@ import { TimerComponent } from '../components/timer/timer';
 import { ConfirmOrderPage } from '../pages/confirm-order/confirm-order';
 import { Network } from '@ionic-native/network';
 import { LocalNotifications } from '@ionic-native/local-notifications';
+import { ImagePicker } from '@ionic-native/image-picker';
 
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
@@ -101,7 +102,8 @@ export function HttpLoaderFactory(httpClient: HttpClient) {
     FileTransfer,
     FCM,
     Network,
-    LocalNotifications
+    LocalNotifications,
+    ImagePicker
   ]
 })
 export class AppModule {}

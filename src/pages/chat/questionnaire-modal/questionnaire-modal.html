@@ -1,0 +1,73 @@
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>
+      <span class="navbar-title">Select Question</span>
+    </ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+  <ion-fab top right edge>
+    <button ion-fab mini color="danger" (click)="dismiss()"><ion-icon name="close-circle"></ion-icon></button>
+  </ion-fab>
+
+  <ion-slides #innerSlider class="content-slider">
+    <ion-slide class="swiper-no-swiping">
+      <div style="padding: 16% 25px 30px 25px">
+        <ion-row radio-group [(ngModel)]="selected_question">
+          <ion-col *ngFor="let question of questions">
+            <ion-item style="background-color: #9C9085; border-radius: 5px">
+              <ion-radio item-left [value]="question" class="radio-button-style" (click)="slideNext()"></ion-radio>
+              <ion-label style="margin-left: 0px; color: white;">{{question.name}}</ion-label>
+            </ion-item>
+          </ion-col>
+        </ion-row>
+      </div>
+    </ion-slide>
+    <ion-slide class="swiper-no-swiping">
+      <ion-row *ngIf="selected_question != null">
+        <button ion-button clear (click)="slidePrevious()" color="secondary" class="goback-button"><ion-icon name="arrow-back"></ion-icon>
+          {{selected_question['name']}}</button>
+      </ion-row>
+      <div style="padding: 0 25px 30px 25px">
+        <div style="height:250px; overflow: auto;">
+          <ion-row radio-group [(ngModel)]="selected_brand">
+            <ion-col *ngFor="let copra_brand of copra_brands_for_questionnarie">
+              <ion-item style="background-color: #9C9085; border-radius: 5px">
+                <ion-radio item-left [value]="copra_brand" class="radio-button-style" (click)="slideNext()"></ion-radio>
+                <ion-label style="margin-left: 0px; color: white;">{{copra_brand.name}}<br><span>{{copra_brand.notes}}</span></ion-label>
+              </ion-item>
+            </ion-col>
+          </ion-row>
+        </div>
+      </div>
+    </ion-slide>
+    <ion-slide class="swiper-no-swiping">
+      <ion-row *ngIf="selected_brand != null">
+        <button ion-button clear (click)="slidePrevious()" color="secondary" class="goback-button"><ion-icon name="arrow-back"></ion-icon>
+          {{selected_brand['name']}}</button>
+      </ion-row>
+      <div style="padding: 0 25px 30px 25px">
+        <div style="height:250px; overflow: auto;">
+          <ion-row radio-group [(ngModel)]="selected_bag_type">
+            <ion-col style="margin-left:10px;" *ngFor="let bag_type of bag_types_for_questionnarie">
+              <ion-item style="background-color: #9C9085; border-radius: 5px">
+                <ion-radio item-left [value]="bag_type" class="radio-button-style" (click)="dismiss()"></ion-radio>
+                <ion-label style="margin-left: 0px; color: white;">{{bag_type.name | rmUnderScore}}&nbsp;({{bag_type.common_name}})</ion-label>
+              </ion-item>
+            </ion-col>
+          </ion-row>
+        </div>
+      </div>
+    </ion-slide>
+  </ion-slides>
+
+
+</ion-content>
+<!-- <ion-footer>
+  <button ion-button full color="danger" (click)="dismiss()">Okay
+  </button>
+</ion-footer> -->

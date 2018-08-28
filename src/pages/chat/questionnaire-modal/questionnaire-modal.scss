@@ -1,0 +1,58 @@
+page-questionnaire-modal {
+    ion-footer button {
+        margin: 0 !important;
+    }
+  // Slider
+//   .content-slider {
+//     ion-slides,
+//     .swiper-container {
+//       height: 100%;
+//       width: auto;
+//     }
+//   }
+//   .text-slider {
+//     ion-slides,
+//     .swiper-container {
+//       height: 20vh;
+//       width: auto;
+//     }
+//   }
+//   .zoom .slide-zoom {
+//     height: 100%;
+//   }
+  // Content
+  .scroll-content {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+.goback-button {
+    font-weight: bold;
+    float: left;
+    ion-icon {
+      padding-right: 10px;
+      font-size: 2.2rem;
+    }
+  }
+  
+  ion-row {
+    align-items: center;
+    text-align: center;
+  }
+  ion-col {
+    padding: 0 20px;
+  }
+
+  .item-md {
+    padding-left: 12px;
+    font-size: 1.3rem;
+  }
+
+  .radio-md .radio-inner {
+    background-color: white;
+  }
+  .radio-md .radio-checked {
+    border-color: white;
+  }
+}
