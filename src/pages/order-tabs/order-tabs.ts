@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
 import { AboutPage } from '../about/about';
 import { ContactPage } from '../contact/contact';
-import { HomePage } from '../home/home';
+// import { HomePage } from '../home/home';
 import { GrievancePage } from './../grievance/grievance';
 // import { OrderPage } from './../order/order';
-import { MultiOrderPage } from './../multi-order/multi-order';
+// import { MultiOrderPage } from './../multi-order/multi-order';
 
 @Component({
   templateUrl: 'order-tabs.html'
