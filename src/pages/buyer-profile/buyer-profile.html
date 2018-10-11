@@ -10,7 +10,7 @@
 
 
 <ion-content padding>
-  <span *ngIf="complete_percentage != 75 || complete_percentage == null">
+  <span *ngIf="complete_percentage != 25 || complete_percentage == null">
     <h4 class="page-title">Please Submit documents for KYC check</h4>
     <form [formGroup]="business_form" (ngSubmit)="updateUserCVPropertity(business_form.value, address_form.value, gst_form.value)">
   
@@ -81,7 +81,7 @@
     </form>
   </span>
 
-  <span *ngIf="complete_percentage == 75">
+  <span *ngIf="complete_percentage == 25">
     <ion-row style="margin: 200px 0 0px 10px;">
       <ion-col>
         <h5 style="text-align: center;">Dear User, Documents that you have uploaded for <strong><em>{{company_name}}</em></strong> have been sent to <em>SPC for Approval</em>. Please wait for the approval message via SMS. Once approved re-login to use the application</h5>
@@ -89,14 +89,14 @@
     </ion-row>
     <br>
     <br>
-    <ion-row>
+    <!-- <ion-row>
       <ion-col style="padding:20px;">
         Please contact Shravan(7538812444) for if you need assistance
         <a style="text-decoration:none" href="tel:+917538812444">
           <ion-icon name="call"></ion-icon>
         </a>
       </ion-col>
-    </ion-row>
+    </ion-row> -->
   </span>
   <button ion-button small color="dark" outline (click)="routeLoginPage()">
     Back

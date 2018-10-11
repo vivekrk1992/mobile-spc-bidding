@@ -51,17 +51,17 @@
         <ion-col col-4>
           <span style="font-size: large; font-weight: 600;">Shubh</span><br>
           <span style="font-size: smaller">(50kg)</span><br>
-          <span style="font-size: large; font-weight: 600;"> ₹ {{order_form[0]['rate']}}</span>
+          <span style="font-size: large; font-weight: 600;"> ₹ NA</span>
         </ion-col>
         <ion-col col-4>
           <span style="font-size: large; font-weight: 600;">SPC</span><br>
           <span style="font-size: smaller">(50kg)</span><br>
-          <span style="font-size: large; font-weight: 600;"> ₹ {{order_form[2]['rate']}}</span>
+          <span style="font-size: large; font-weight: 600;"> ₹ NA</span>
         </ion-col>
         <ion-col col-4>
           <span style="font-size: large; font-weight: 600;">Labh</span><br>
           <span style="font-size: smaller">(50kg)</span><br>
-          <span style="font-size: large; font-weight: 600;"> ₹ {{order_form[4]['rate']}}</span>
+          <span style="font-size: large; font-weight: 600;"> ₹ NA</span>
         </ion-col>
 
       </ion-row>
@@ -227,7 +227,7 @@
             <span style="font-size: smaller;">{{order.copra_brand.notes}}</span>
           </ion-col>
           <ion-col col-3>{{order.bag_type.name | translate}}&nbsp;x
-            <span style="color:darkslateblue;font-size: smaller;"> ₹{{order.rate}}</span>
+            <span style="color:darkslateblue;font-size: smaller;"> ₹ NA</span>
           </ion-col>
           <ion-col col-1>
             <input type="number" class="custom-input-box" placeholder="# bags" [disabled]="order.disabled" (change)="calculateBagsToQuantity()"
